@@ -1,0 +1,20 @@
+[package]
+name = "authdoc"
+version = "0.2.0"
+authors = ["jredrado <jesus.redrado@gmail.com>"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib","lib"]
+
+[dependencies]
+
+serde = { version = "1.0", features = ["derive"] }
+
+indextree = {git ="https://github.com/jredrado/indextree.git", branch="master", default-features=false, features=["std","deser"]}
+
+minicbor = {git='https://github.com/jredrado/minicbor.git', branch="master", version="0.11.1", default-features = false, features = ["std","derive"]}
+
+nanoserde = {version="0.1.29", git="https://github.com/jredrado/nanoserde.git",branch="master",features = ["std"]}
+
+authcomp = { path = "../authcomp", version= "0.2.0"}

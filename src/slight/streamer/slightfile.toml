@@ -1,0 +1,26 @@
+specversion = "0.2"
+
+[[secret_settings]]
+name = "FILEPATH"
+value = "ZhGH1wrW-G93uTWDa8-jXH-o"
+
+[[secret_settings]]
+name = "STREAMER_API"
+value = "p43KaeCuurc4P7ALKdaVJpwLjRtAr9YoD0OsX3mmyoRPO9wLfa-_wB9K2W4J1--kCjKsF03L69xGX_hPPN6_jSIw"
+
+[[capability]]
+resource = "http"
+name = "streamer-rest-api"
+
+[[capability]]
+resource = "messaging.mosquitto"
+name = "messages"
+
+[capability.configs]
+MOSQUITTO_PORT = "1883"
+MOSQUITTO_HOST = "localhost"
+
+[[capability]]
+resource = "configs.usersecrets"
+name = "config-store"
+

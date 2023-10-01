@@ -1,0 +1,46 @@
+{
+  "name": "locator",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "locator": {
+      "name": "locator",
+      "inputs": {
+        "source": {
+          "type": "bytes"
+        },
+        "href": {
+          "type": "string"
+        },
+        "mediatype": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      },
+      "outputs": {
+        "proofs": {
+          "type": "bytes"
+        }
+      }
+    }
+  },
+  "config": {
+    "locator": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

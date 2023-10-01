@@ -1,0 +1,21 @@
+specversion = "0.2"
+
+[[secret_settings]]
+name = "INSTANCE"
+value = "zv_rxPg8FCX19r87nGfTM79qr"
+
+[[secret_settings]]
+name = "MANIFESTINSTANCE"
+value = "E-nY0PEZ2Frlr4g"
+
+[[capability]]
+resource = "messaging.mosquitto"
+name = "messages"
+
+[capability.configs]
+MOSQUITTO_PORT = "1883"
+MOSQUITTO_HOST = "localhost"
+
+[[capability]]
+resource = "configs.usersecrets"
+name = "config-store"

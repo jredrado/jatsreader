@@ -1,0 +1,43 @@
+{
+  "name": "manifestverifier",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "manifestverifier": {
+      "name": "manifestverifier",
+      "inputs": {
+        "contenttype": {
+          "type": "string"
+        },
+        "id": {
+          "type": "bytes"
+        },
+        "proofs": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "contenttype": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "config": {
+    "manifestverifier": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

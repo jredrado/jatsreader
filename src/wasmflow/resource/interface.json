@@ -1,0 +1,37 @@
+{
+  "name": "resource",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "resource": {
+      "name": "resource",
+      "inputs": {
+        "path": {
+          "type": "string"
+        },
+        "source": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "proofs": {
+          "type": "bytes"
+        }
+      }
+    }
+  },
+  "config": {
+    "resource": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

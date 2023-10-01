@@ -1,0 +1,22 @@
+[workspace]
+
+resolver = "2"
+
+members = [
+    "storage/main",
+    "storage/test",
+    "register/main",
+    "register/test",
+    "manifest/main",
+    "manifest/test",
+    "resource/main",
+    "resource/test",
+    "manifestverifier/main",
+    "manifestverifier/test",
+    "resourceverifier/main",
+    "resourceverifier/test",    
+    "resolver/main",
+    "resolver/test",   
+    "resolver-rest-api", 
+    "streamer"
+]

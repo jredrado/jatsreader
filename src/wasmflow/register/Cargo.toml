@@ -1,0 +1,38 @@
+[package]
+name = "register"
+version = "0.0.0"
+description = "Register"
+authors = ["Jesús Redrado"]
+edition = "2018"
+license = "BSD-3-Clause"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+default = ["host", "guest"]
+host = []
+guest = []
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+async-trait = "0.1"
+wasmflow-sdk = { version = "0.10.0", features = ["v1"] }
+
+
+authcomp = { path = "../../authcomp", version = "0.1.0"}
+epubcontract = { path = "../../epubcontract", version= "0.1.0" }
+
+hex = { version = "0.4", default-features = false, features=["alloc"] }
+
+tracing = "0.1"
+
+
+
+[dev-dependencies]
+
+
+
+[workspace]

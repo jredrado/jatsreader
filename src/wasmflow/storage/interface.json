@@ -1,0 +1,51 @@
+{
+  "name": "storage",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "get": {
+      "name": "get",
+      "inputs": {
+        "key": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "value": {
+          "type": "bytes"
+        }
+      }
+    },
+    "put": {
+      "name": "put",
+      "inputs": {
+        "key": {
+          "type": "bytes"
+        },
+        "value": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "config": {
+    "get": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    },
+    "put": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

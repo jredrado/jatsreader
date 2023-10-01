@@ -1,0 +1,11 @@
+flask
+EbookLib
+requests
+beautifulsoup4
+spacy
+spacy-langdetect
+pytidylib
+htmlst
+networkx
+chardet
+argparse

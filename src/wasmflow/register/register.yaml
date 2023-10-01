@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=https://wasmflow.com/schema.json
+---
+version: 1
+external:
+  storage_code:
+    kind: GrpcUrl
+    url: http://127.0.0.1:8082
+
+  register_code: 
+    kind: Wasm
+    reference: ./build/register.signed.wasm
+    permissions:
+      dirs:
+        "/": "/workspace/urschain/src/epubcontract/assets"
+
+  hex_code: 
+    kind: Wasm
+    reference: ../hex/build/hex.signed.wasm
+
+  manifest_code: 
+    kind: Wasm
+    reference: ../manifest/build/manifest.signed.wasm
+
+  manifest_verifier_code: 
+    kind: Wasm
+    reference: ../manifestverifier/build/manifestverifier.signed.wasm
+
+  resource_code: 
+    kind: Wasm
+    reference: ../resource/build/resource.signed.wasm
+
+  resource_verifier_code: 
+    kind: Wasm
+    reference: ../resourceverifier/build/resourceverifier.signed.wasm
+
+  locator_code: 
+    kind: Wasm
+    reference: ../locator/build/locator.signed.wasm
+
+  locator_verifier_code: 
+    kind: Wasm
+    reference: ../locatorverifier/build/locatorverifier.signed.wasm
+
+
+components:
+
+  epubtest:
+    collections:
+      - test
+    instances:
+      filereader: register_code::filereader
+
+    flow:
+      - <>.filename -> filereader.filename
+      - filereader.contents -> <>
+
+  epubregister:
+    collections: 
+      - api
+    instances:
+      filereader: register_code::filereader
+      register: register_code::register
+      put: storage_code::put
+      encode: hex_code::encode
+
+    flow:
+      - <>.filename -> filereader.filename
+      - <>.filename -> register.name
+      - filereader.contents -> register.source
+      - register.id -> put.key
+      - register.value -> put.value
+      - register.id -> encode.input
+      - encode.output -> <>
+
+  epubmanifest:
+    collections:
+      - api      
+    instances:
+      get: storage_code::get
+      manifest: manifest_code::manifest
+      verifier: manifest_verifier_code::manifestverifier
+      decode: hex_code::decode
+
+    flow:
+      - <>.id -> decode.input
+      - decode.output -> get.key 
+      - get.value -> manifest.source
+      - manifest.contenttype -> verifier.contenttype
+      - manifest.proofs -> verifier.proofs
+      - decode.output -> verifier.id
+      - verifier.contenttype -> <>.contenttype
+      - verifier.data -> <>.data
+
+  epubresource:
+    collections:
+      - api      
+    instances:
+      get: storage_code::get
+      resource: resource_code::resource
+      decode: hex_code::decode
+      verifier: resource_verifier_code::resourceverifier
+
+    flow:
+      - <>.id -> decode.input
+      - decode.output -> get.key 
+      - <>.path -> resource.path
+      - get.value -> resource.source
+      - resource.proofs -> verifier.proofs
+      - decode.output -> verifier.id
+      - <>.path -> verifier.path
+      - verifier.contenttype -> <>.contenttype
+      - verifier.data -> <>.data
+
+
+  epublocator:
+    collections:
+      - api      
+    instances:
+      get: storage_code::get
+      locator: locator_code::locator
+      decode: hex_code::decode
+      verifier: locator_verifier_code::locatorverifier
+
+    flow:
+      - <>.id -> decode.input
+      - decode.output -> get.key 
+      - <>.href -> locator.href
+      - <>.mediatype -> locator.mediatype
+      - <>.from -> locator.from
+      - <>.to -> locator.to
+      - get.value -> locator.source
+      - locator.proofs -> verifier.proofs
+      - decode.output -> verifier.id
+      - <>.href -> verifier.href
+      - <>.mediatype -> verifier.mediatype
+      - <>.from -> verifier.from
+      - <>.to -> verifier.to
+      - verifier.output -> <>.output

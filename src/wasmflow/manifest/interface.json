@@ -1,0 +1,37 @@
+{
+  "name": "manifest",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "manifest": {
+      "name": "manifest",
+      "inputs": {
+        "source": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "contenttype": {
+          "type": "string"
+        },
+        "proofs": {
+          "type": "bytes"
+        }
+      }
+    }
+  },
+  "config": {
+    "manifest": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

@@ -1,0 +1,25 @@
+[package]
+name = "streamer"
+version = "0.2.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1"
+# ^^^ Flexible concrete Error type built on std::error::Error
+wit-bindgen-rust = { git = "https://github.com/fermyon/wit-bindgen-backport" }
+# ^^^ A language binding generator for WebAssembly interface types
+wit-error-rs = { git = "https://github.com/danbugs/wit-error-rs", rev = "05362f1a4a3a9dc6a1de39195e06d2d5d6491a5e" }
+# ^^^ Convenience error-related trait implementations for types generated from a wit-bindgen import
+slight-http-handler-macro = { git = "https://github.com/deislabs/spiderlightning", tag = "v0.5.1" }
+# ^^^ Macro for creating http request handlers when using SpiderLightning's http interface
+slight-http-server-macro = { git = "https://github.com/deislabs/spiderlightning", tag = "v0.5.1" }
+
+manifestverifier = { path = "../manifestverifier/main" }
+resourceverifier = { path = "../resourceverifier/main" }
+
+resolver = { path = "../resolver/main" }
+
+urlencoding = "2.1.2"

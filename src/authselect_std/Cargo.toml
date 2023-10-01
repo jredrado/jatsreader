@@ -1,0 +1,26 @@
+[package]
+name = "authselect"
+version = "0.2.0"
+authors = ["jredrado <jesus.redrado@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+authcomp = { path = "../authcomp", version = "0.2.0"}
+authdoc = { path = "../authdoc", version = "0.2.0"}
+authparser = {path = "../authparser", version = "0.2.0"}
+
+indextree = {git ="https://github.com/jredrado/indextree.git", branch="master", default-features=false, features=["std","deser"]}
+
+selectors = "0.22.0"
+
+html5ever = "0.25.1"
+
+cssparser = "0.27.0"
+
+smallvec = "1.5.1"

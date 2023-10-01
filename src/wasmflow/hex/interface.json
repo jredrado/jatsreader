@@ -1,0 +1,52 @@
+{
+  "name": "hex",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "decode": {
+      "name": "decode",
+      "inputs": {
+        "input": {
+          "type": "string"
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "bytes"
+        }
+      }
+    },
+    "encode": {
+      "name": "encode",
+      "inputs": {
+        "input": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "config": {
+    "decode": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    },
+    "encode": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

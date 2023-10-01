@@ -1,0 +1,54 @@
+[package]
+name = "epubcontract"
+version = "0.2.0"
+authors = ["jredrado <jesus.redrado@gmail.com>"]
+edition = "2021"
+
+
+[lib]
+crate-type = ["cdylib","lib"]
+
+[dependencies]
+
+authcomp = { path = "../authcomp", version = "0.2.0"}
+authdoc = { path = "../authdoc", version = "0.2.0"}
+authparser = { path = "../authparser", version = "0.2.0"}
+authselect = { path = "../authselect", version = "0.2.0"}
+
+corepack = "~0.4.0"
+
+indextree = {git ="https://github.com/jredrado/indextree.git", branch="master", default-features=false, features=["std","deser"]}
+
+minicbor = {git='https://github.com/jredrado/minicbor.git', branch="master", version="0.11.1", default-features = false, features = ["std","derive"]}
+
+nanoserde = {version="0.1.29", git="https://github.com/jredrado/nanoserde.git",branch="master",features = ["std"]}
+
+byteorder = "1.4.3"
+
+compression = {version="0.1.5",features=["deflate"]}
+
+zip_structs = "0.2.0"
+
+anyhow = { version = "1.0", default-features = false }
+
+serde = { version = "1.0", features = ["derive"] }
+
+lazy_static = { version="1.4.0"}
+
+spin = {version="0.9.0",features=["spin_mutex"]}
+
+strong-xml = {version="0.6.4", git="https://github.com/jredrado/strong-xml.git", branch="master"}
+
+#json_minimal = {git="https://github.com/jredrado/json_minimal-rust.git", branch="master"}
+
+json_minimal = "0.1.3"
+
+is_type = "0.2.1"
+typed_key = "0.1.1"
+
+unix_path = {version="1.0.1"}
+
+
+[build-dependencies]
+capnpc = "0.14.3"
+anyhow = { version = "1.0", default-features = false }

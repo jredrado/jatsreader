@@ -1,0 +1,274 @@
+
+use crate::lexer::{Tokens,Location,LexicalError};
+
+
+use std::vec::Vec;
+use std::string::String;
+
+use authcomp::{AuthT,Computation,AuthType,ProofStream};
+use authdoc::{Node,Element,Comment,ProcessingInstruction,Text,Doctype,Attribute,Str,QualName,NodeString};
+
+use indextree::{NodeId,Arena};
+
+
+grammar<'source>(input: &'source str,document: &mut Arena <Node>,root: &mut Option<NodeId>);
+        
+//Lexer
+
+
+extern {
+    type Location = Location;
+    type Error = LexicalError;
+
+    enum Tokens<'source> {
+        HTML_COMMENT => Tokens::HtmlComment(<&'source str>),
+        XML => Tokens::XmlDeclarationOrPi(<&'source str>),
+        CDATA => Tokens::CdataDeclaration(<&'source str>),
+        HTML_CONDITIONAL_COMMENT=> Tokens::HtmlConditionalComment(<&'source str>),
+        DTD => Tokens::DtdDeclaration(<&'source str>),
+        SCRIPTLET => Tokens::ScripletDeclaration(<&'source str>),
+        //SEA_WS => Tokens::SeaWS(<&'source str>),
+        SCRIPT_OPEN => Tokens::ScriptOpen(<&'source str>),
+        STYLE_OPEN => Tokens::StyleOpen(<&'source str>),
+        TAG_OPEN => Tokens::TagOpen(<&'source str>),
+        HTML_TEXT => Tokens::HtmlText(<&'source str>),
+
+        TAG_CLOSE => Tokens::TagClose(<&'source str>),
+        TAG_SLASH_CLOSE => Tokens::TagSlashClose(<&'source str>),
+        TAG_SLASH => Tokens::TagSlash(<&'source str>),
+        TAG_EQUALS => Tokens::TagEquals(<&'source str>),
+        TAG_NAME => Tokens::TagName(<&'source str>),
+    
+
+        SCRIPT_BODY => Tokens::ScriptBody(<&'source str>),
+        SCRIPT_SHORT_BODY => Tokens::ScriptShortBody(<&'source str>),
+    
+
+        STYLE_BODY=> Tokens::StyleBody(<&'source str>),
+        STYLE_SHORT_BODY => Tokens::StyleShortBody(<&'source str>),
+    
+   
+        ATTVALUE_VALUE => Tokens::AttributeValue(<&'source str>),
+    }
+}
+
+// Parser
+
+
+pub xmlDocument :NodeId =   XML? DTD? <root_element:Node> => {
+
+        let inner_document = Node::Document;
+
+        let root_id = document.new_node(inner_document);
+        
+        root_id.append(root_element,document);
+
+        *root = Some(root_id);
+
+        root_id
+
+};
+
+pub AttrValue = ATTVALUE_VALUE;
+
+pub Attr  : Attribute = <name:TAG_NAME> TAG_EQUALS <value:AttrValue> => Attribute {
+                        name : QualName::new(None,NodeString::from(""),NodeString::from(name)),
+                        value: NodeString::from(value)
+                    };
+
+
+pub Attrs : Vec<Attribute> = Attr* => <>.into();
+
+pub OpeningTag : (QualName,Vec<Attribute>) = TAG_OPEN <name:TAG_NAME> <attrs:Attrs> TAG_CLOSE => (QualName::new(None,NodeString::from(""),NodeString::from(name)),attrs);
+
+pub ClosingTag : QualName = TAG_OPEN TAG_SLASH <name:TAG_NAME> TAG_CLOSE => QualName::new(None,NodeString::from(""),NodeString::from(name));
+
+
+pub SingleTag :NodeId = TAG_OPEN <name:TAG_NAME> <attrs:Attrs> TAG_SLASH_CLOSE => {
+
+
+
+    let inner_element = Node::Element(Element::new(QualName::new(None,NodeString::from(""),NodeString::from(name)),attrs));
+
+    document.new_node(inner_element)
+
+};
+
+pub ParentTag : NodeId = <opening:OpeningTag> <children:Node*> <closing:ClosingTag> => {
+
+
+    let inner_element = Node::Element(Element::new(opening.0,opening.1));
+
+
+    let parent_id = document.new_node(inner_element);
+
+    for child_id in children {
+        parent_id.append(child_id,document);
+    }
+    
+    parent_id
+
+};
+
+pub Element : NodeId = {
+    SingleTag,
+    ParentTag,
+};
+
+
+pub HtmlComment : NodeId = {
+    <comment:HTML_COMMENT> => {
+        let inner_element = Node::Comment(Comment{
+            comment: NodeString::from(comment),
+        });
+    
+    
+        document.new_node(inner_element)
+    },
+    <comment:HTML_CONDITIONAL_COMMENT> => {
+        let inner_element = Node::Comment(Comment{
+            comment: NodeString::from(comment),
+        });
+
+    
+        document.new_node(inner_element)
+    }
+}
+
+
+TextNode: NodeId = <text:HTML_TEXT> => {
+
+    let inner_element = Node::Text(Text{
+        text: NodeString::from(text),
+    });
+
+    document.new_node(inner_element)
+};
+
+XMLorPINode: NodeId = <pi:XML> => {
+
+    let inner_element = Node::ProcessingInstruction(ProcessingInstruction{
+        target: NodeString::from(""),
+        data: NodeString::from(pi),
+    });
+
+    document.new_node(inner_element)
+};
+
+pub Node: NodeId = {
+    Element,
+    TextNode,
+    HtmlComment,
+    scriptlet,
+    cdata,
+    //seaws,
+    script,
+    style,
+    XMLorPINode
+};
+
+pub cdata : NodeId = <text:CDATA> => {
+
+    let inner_element = Node::Text(Text{
+        text: NodeString::from(text),
+    });
+
+    document.new_node(inner_element)
+};
+
+//pub seaws : NodeId = <text:SEA_WS> => {
+//
+//    let inner_element = Node::Text(Text{
+//        text: NodeString::from(text),
+//    });
+//
+//    document.new_node(inner_element)
+//};
+
+pub scriptlet : NodeId = <pi:SCRIPTLET> => {
+
+    let inner_element = Node::ProcessingInstruction(ProcessingInstruction{
+        target: NodeString::from(""),
+        data: NodeString::from(pi),
+    });
+
+    document.new_node(inner_element)
+};
+
+
+pub script : NodeId = SCRIPT_OPEN <script_inner>;
+
+pub script_inner : NodeId = {
+    <text:SCRIPT_BODY> => {
+       let script_body_text = Node::Text(Text{
+            text: NodeString::from(text),
+        });
+    
+        let script_body_id = document.new_node(script_body_text);
+
+        let script_element = Node::Element(Element::new(QualName::new(None,NodeString::from(""),NodeString::from("script")),Vec::new()));
+        let script_element_id = document.new_node(script_element);
+
+        script_element_id.append(script_body_id,document);    
+        
+        script_element_id
+
+    },
+    <text:SCRIPT_SHORT_BODY> => {
+       let script_body_text = Node::Text(Text{
+            text: NodeString::from(text),
+        });
+    
+        let script_body_id = document.new_node(script_body_text);
+
+        let script_element = Node::Element(Element::new(QualName::new(None,NodeString::from(""),NodeString::from("script")),Vec::new()));
+        let script_element_id = document.new_node(script_element);
+
+        script_element_id.append(script_body_id,document);    
+        
+        script_element_id
+
+    }
+
+};
+
+
+pub style : NodeId =STYLE_OPEN <style_inner>;
+
+
+pub style_inner : NodeId =  {
+    <text:STYLE_BODY> => {
+      let style_body_text = Node::Text(Text{
+            text: NodeString::from(text),
+        });
+    
+        let style_body_id = document.new_node(style_body_text);
+
+        let style_element = Node::Element(Element::new(QualName::new(None,NodeString::from(""),NodeString::from("style")),Vec::new()));
+
+        let style_element_id = document.new_node(style_element);
+
+        style_element_id.append(style_body_id,document);    
+        
+        style_element_id
+
+    },
+    <text:STYLE_SHORT_BODY> => {
+      let style_body_text = Node::Text(Text{
+            text: NodeString::from(text),
+        });
+    
+        let style_body_id = document.new_node(style_body_text);
+
+        let style_element = Node::Element(Element::new(QualName::new(None,NodeString::from(""),NodeString::from("style")),Vec::new()));
+
+        let style_element_id = document.new_node(style_element);
+
+        style_element_id.append(style_body_id,document);    
+        
+        style_element_id
+
+    }
+
+};
+

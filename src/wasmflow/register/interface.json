@@ -1,0 +1,53 @@
+{
+  "name": "register",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "filereader": {
+      "name": "filereader",
+      "inputs": {
+        "filename": {
+          "type": "string"
+        }
+      },
+      "outputs": {
+        "contents": {
+          "type": "bytes"
+        }
+      }
+    },
+    "register": {
+      "name": "register",
+      "inputs": {
+        "source": {
+          "type": "bytes"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "outputs": {
+        "id": {
+          "type": "bytes"
+        },
+        "value": {
+          "type": "bytes"
+        }
+      }
+    }
+  },
+  "config": {
+    "register": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

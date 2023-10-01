@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://wasmflow.com/schema.json
+---
+version: 1
+external:
+
+  register_code: 
+    kind: Wasm
+    reference: ./build/register.signed.wasm
+    permissions:
+      dirs:
+        "/": "/workspace/urschain/src/epubcontract/assets"
+
+
+components:
+
+  epubtest:
+    collections:
+      - test
+    instances:
+      filereader: register_code::filereader
+      register: register_code::register
+
+    flow:
+
+      - <>.filename -> filereader.filename
+      - <>.filename -> register.name
+      - filereader.contents -> register.source
+      - register.id -> <>
+      - register.value -> <>
+  

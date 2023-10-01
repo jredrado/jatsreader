@@ -1,0 +1,10 @@
+specversion = "0.2"
+
+
+[[capability]]
+resource = "messaging.mosquitto"
+name = "messages"
+
+[capability.configs]
+MOSQUITTO_PORT = "1883"
+MOSQUITTO_HOST = "localhost"

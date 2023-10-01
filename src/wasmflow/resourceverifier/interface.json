@@ -1,0 +1,43 @@
+{
+  "name": "resourceverifier",
+  "features": {
+    "stateful": false,
+    "streaming": false,
+    "version": 0
+  },
+  "version": "0.0.0",
+  "format": 1,
+  "wellknown": [],
+  "types": {},
+  "components": {
+    "resourceverifier": {
+      "name": "resourceverifier",
+      "inputs": {
+        "id": {
+          "type": "bytes"
+        },
+        "path": {
+          "type": "string"
+        },
+        "proofs": {
+          "type": "bytes"
+        }
+      },
+      "outputs": {
+        "contenttype": {
+          "type": "string"
+        },
+        "data": {
+          "type": "bytes"
+        }
+      }
+    }
+  },
+  "config": {
+    "resourceverifier": {
+      "type": "struct",
+      "name": "Config",
+      "fields": {}
+    }
+  }
+}

@@ -1,0 +1,20 @@
+[package]
+name = "authallocator"
+version = "0.1.0"
+authors = ["jredrado <jesus.redrado@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[lib]
+crate-type = ["cdylib","lib"]
+
+[dependencies]
+wee_alloc = { version = "0.4.5"}
+#wapc-guest = {git="https://github.com/jredrado/wapc-guest-rust.git", branch="master"}
+#corepack = { version = "~0.4.0", default-features = false, features = ["alloc"] }
+
+[features]
+default = ["panic_handler"]
+panic_handler = []
