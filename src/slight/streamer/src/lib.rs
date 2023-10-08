@@ -281,17 +281,160 @@ const document_url : &str = r#"
 <!DOCTYPE html>
 <html>
 <head>
+    <title>JATS Viewer for Books and Journal articles</title>
+    
+    <link rel="stylesheet" type="text/css" media="all"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
+
+    <link rel='stylesheet' type='text/css' href="https://$HOST$/static/reader/lib/fonts.css"/>
+
+
+    <!-- A combined lens.css will be generated in the bundling process -->
+    <!-- While in development, separate links for each CSS file are added, so we don't need a source map -->
+    <link rel="stylesheet" href="https://$HOST$/static/reader/lens.css"/>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <!-- MathJax Configuration -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          jax: ["input/TeX", "input/MathML","output/HTML-CSS"],
+          SVG: { linebreaks: { automatic: true }, EqnChunk: 9999  },
+          "displayAlign": "left",
+          styles: {".MathJax_Display": {padding: "0em 0em 0em 3em" },".MathJax_SVG_Display": {padding: "0em 0em 0em 3em" }}
+        });
+      </script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <!-- MathJax Configuration 
+    <script type="text/x-mathjax-config">
+       MathJax.Hub.Config({
+         jax: ["input/TeX", "input/MathML","output/HTML-CSS"],
+         extensions: ["MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+         "HTML-CSS": { linebreaks: { automatic: true }, EqnChunk: 9999 },
+         SVG: { linebreaks: { automatic: true }, EqnChunk: 9999  },
+         TeX: {
+           extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+         },
+         "displayAlign": "left",
+         styles: {".MathJax_Display": {padding: "0em 0em 0em 3em" },".MathJax_SVG_Display": {padding: "0em 0em 0em 3em" },}
+          });
+
+
+    </script>
+    
+
+    <script type="text/javascript"     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=MML_HTMLorMML-full"></script>
+-->
+
+    <script type="text/javascript">
+        let locales = {
+            'Author': 'Author',
+            'Back': 'Back',
+            'Contents': 'Contents',
+            'CopyRightAndLicenses': 'Copyright & License',
+            'Figures': 'Figures',
+            'Focus': 'Focus',
+            'Reference': '',
+            'References': 'References',
+        };
+      const  submissionID=7;
+      const  fileID=7;
+
+    </script>
+
+    <script src='https://$HOST$/static/reader/prelude.js'></script>
+
+    <script type="text/javascript">
+
+        if ('registerProtocolHandler' in navigator) {
+           console.log('registerProtocolHandler');
+           navigator.registerProtocolHandler('web+urs', '/urs?url=%s');
+        }
+
+        // This document gets loaded by default
+        // --------
+
+        var documentURL = "$DOCUMENT_URL$";
+
+        $(function() {
+
+            // Create a new Lens app instance
+            // --------
+            //
+            // Injects itself into body
+
+            var app = new window.Lens({
+                document_url: documentURL
+
+            });
+
+            app.start();
+
+            window.app = app;
+
+        });
+    </script>
+
+    <script src='https://$HOST$/static/reader/lens.js'></script>
+<style type="text/css">
+    .sc-pinned-message {
+        display: flex;
+        max-width: 600px;
+        margin: 7px auto;
+        color: #000;
+        text-align: center;
+    }
+    .sc-pinned-message > .se-msg-wrap {
+        color: #ff0000;
+        font-size: 26px;
+        margin-right: 20px;
+    }
+    .sc-pinned-message > .se-msg-wrap > .se-icon {
+        text-decoration: underline;
+    }
+    .fa {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .sc-pinned-message > .se-msg-wrap > .se-msg {
+        content: attr(data-placeholder);
+        position: absolute;
+        color: #ccc;
+        font-weight: 400;
+    }
+</style>
+</head>
+<body class="loading">
+
+</body>
+
+</html>"#;
+
+const document_url_old : &str = r#"
+<!DOCTYPE html>
+<html>
+<head>
     <title>Lens Viewer for Books and Journal articles</title>
 
     <link rel="stylesheet" type="text/css" media="all"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
 
-    <link rel='stylesheet' type='text/css' href="/static/reader/lib/fonts.css"/>
+    <link rel='stylesheet' type='text/css' href="https://$HOST$/static/reader/lib/fonts.css"/>
 
 
     <!-- A combined lens.css will be generated in the bundling process -->
     <!-- While in development, separate links for each CSS file are added, so we don't need a source map -->
-    <link rel="stylesheet" type="text/css" href="/static/reader/lens.css"/>
+    <link rel="stylesheet" type="text/css" href="https://$HOST$/static/reader/lens.css"/>
 
     <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/3.2.1/jquery.js"></script>
 
@@ -343,6 +486,7 @@ const document_url : &str = r#"
       const  fileID=7;
 
     </script>
+
     <script type="text/javascript">
 
         if ('registerProtocolHandler' in navigator) {
@@ -375,7 +519,8 @@ const document_url : &str = r#"
         });
     </script>
 
-    <script src='/static/reader/lens.js'></script>
+    <script src='https://$HOST$/static/reader/lens.js'></script>
+
 <style type="text/css">
     .sc-pinned-message {
         display: flex;
@@ -586,6 +731,7 @@ fn handle_resource(request: handle_resource_or_manifest_mod::Request) -> Result<
             let new_url = urlencoding::encode(&unencode_url);
 
             let body = document_url.replace("$DOCUMENT_URL$",&unencode_url);
+            let body = body.replace("$HOST$",&host.1);
 
             return Ok(handle_resource_or_manifest_mod::Response {
                 headers: Some(headers),
