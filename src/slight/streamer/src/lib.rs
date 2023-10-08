@@ -17,12 +17,21 @@ wit_error_rs::impl_error!(ConfigsError);
 use manifestverifier::ManifestVerifierClient;
 use resourceverifier::ResourceVerifierClient;
 use resolver::{ResolverClient,StreamerInfo};
+use register::RegisterClient;
 
 use std::borrow::BorrowMut;
 use std::sync::{Mutex, Once};
 
 use std::path::Path;
 use std::ffi::OsStr;
+use std::io::Cursor;
+use std::io::Read;
+
+use multipart_2021 as multipart;
+
+use multipart::server::{Multipart};
+use serde::{Deserialize, Serialize};
+
 
 static mut CONFIG_INSTANCE: Option<Mutex<String>> = None;
 static INIT: Once = Once::new();
@@ -68,6 +77,25 @@ fn streamer_api<'a>() -> &'a Mutex<String> {
     // giving out read-only borrow here is safe because it is guaranteed no more mutable
     // references will exist at this point or in the future.
     unsafe { API_CONFIG_INSTANCE.as_ref().unwrap() }
+}
+
+fn extract_boundary(content_type: &str) -> Option<&str> {
+    // Buscar el parámetro "boundary" en la cabecera Content-Type
+    if let Some(start) = content_type.find("boundary=") {
+        let boundary_start = &content_type[start + "boundary=".len()..];
+        let boundary_end = boundary_start.find(';').unwrap_or(boundary_start.len());
+        Some(&boundary_start[..boundary_end])
+    } else {
+        None
+    }
+}
+
+
+#[derive(Serialize, Deserialize,Default)]
+struct EPubForm {
+    pub name: Option<String>,
+    pub tel: Option<String>,
+    pub epub: Vec<u8>
 }
 
 const p : &str = r#"
@@ -395,7 +423,8 @@ fn main() -> Result<()> {
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
         .get("/urs/:locator","handle_urs")?
-        .get("/static/*","handle_file")?;
+        .get("/static/*","handle_file")?
+        .post("/add", "handle_add")?;
 
     println!("Starting server");
     let _ = Server::serve("0.0.0.0:3000", &router_with_route)?;
@@ -412,6 +441,73 @@ fn handle_hello(req: Request) -> Result<Response, HttpError> {
         body: Some("hello".as_bytes().to_vec()),
         status: 200,
     })
+}
+
+#[register_handler]
+fn handle_add(request: Request) -> Result<Response, HttpError> {
+    assert_eq!(request.method, Method::Post);
+
+    let empty_body = Vec::<u8>::new();
+    let binding = ("".into(), "".into());
+
+    let content_type = request.headers.iter().find(|x| x.0 == "content-type").unwrap_or(&binding);
+
+    let boundary_opt = extract_boundary(&content_type.1);
+
+    if let Some(boundary) = boundary_opt {
+        
+        let body = Cursor::new(request.body.as_ref().unwrap_or(&empty_body));
+        let mut multipart = Multipart::with_body(body,boundary);
+        let mut form = EPubForm::default();
+
+        multipart.foreach_entry(| mut entry| match &*entry.headers.name {
+            "name" => {
+                let mut vec = Vec::new();
+                entry.data.read_to_end(&mut vec).expect("can't read");
+                form.name = String::from_utf8(vec).ok();
+                println!("name got");
+            }
+    
+            "tel" => {
+                let mut vec = Vec::new();
+                entry.data.read_to_end(&mut vec).expect("can't read");
+                form.tel = String::from_utf8(vec).ok();
+                println!("tel got");
+            }
+    
+            "epub" => {
+                let mut vec = Vec::new();
+                entry.data.read_to_end(&mut vec).expect("can't read");
+                form.epub = vec;
+
+                println!("file got");
+            }
+    
+            _ => {
+                // as multipart has a bug https://github.com/abonander/multipart/issues/114
+                // we manually do read_to_end here
+                //let mut _vec = Vec::new();
+                //entry.data.read_to_end(&mut _vec).expect("can't read");
+                println!("key neglected");
+            }
+        })
+        .expect("Unable to iterate multipart?");
+
+        let client = RegisterClient::new("register_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+        let id = client.register(form.epub).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        
+        let mut headers = Vec::new();
+        headers.push((String::from("content-type"),"application/json".to_string()));
+
+        Ok(Response {
+            headers: Some(headers),
+            body: serde_json::to_vec(&id).ok(),
+            status: 200,
+        })
+    } else {
+        Err(HttpError::UnexpectedError(std::format!("Boundary {} not found in header",content_type.1)))
+    }
 }
 
 #[register_handler]

@@ -21,5 +21,10 @@ manifestverifier = { path = "../manifestverifier/main" }
 resourceverifier = { path = "../resourceverifier/main" }
 
 resolver = { path = "../resolver/main" }
+register = { path = "../register/main"}
 
 urlencoding = "2.1.2"
+multipart-2021 = { version = "0.19.0", default-features = false, features = ["server"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

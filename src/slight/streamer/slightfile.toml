@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "FILEPATH"
-value = "ZhGH1wrW-G93uTWDa8-jXH-o"
+value = "bBRlzhCNG2xIhDjkyU4s1Fmo"
 
 [[secret_settings]]
 name = "STREAMER_API"
-value = "p43KaeCuurc4P7ALKdaVJpwLjRtAr9YoD0OsX3mmyoRPO9wLfa-_wB9K2W4J1--kCjKsF03L69xGX_hPPN6_jSIw"
+value = "hHPJlcY7fzdBKCoiXFuUQCJibgWYCyoKR2jJBoRMPzZBbyoahhHXDlB2cwWYassLTWgtBJ9QlR4gYfDsndFGOQdo"
 
 [[capability]]
 resource = "http"
@@ -17,8 +17,8 @@ resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_PORT = "1883"
 MOSQUITTO_HOST = "localhost"
+MOSQUITTO_PORT = "1883"
 
 [[capability]]
 resource = "configs.usersecrets"
