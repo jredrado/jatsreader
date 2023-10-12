@@ -57,5 +57,22 @@ impl RegisterClient {
 
     }
 
+    pub fn register_with(&self,epub:Vec<u8>, storage:String) -> Result<String> {
+
+        let request = Request::RegisterEpubWith(epub,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::RegisterEpub(id) => Ok(id),
+            _ => anyhow::bail!("Register lib Unexpected response: {:?}", response)
+        }
+
+    }
 
 }

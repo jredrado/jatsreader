@@ -64,13 +64,45 @@ fn main() -> Result<()> {
                         if let Some(ApiResponse::VecAndString(sdata, contenttype)) = comp.get() {
                             Response::ResourceVerifier(contenttype.to_owned(),sdata.to_owned())
                         }else {
-                            anyhow::bail!("Resource _ Unexpected reesult: {:?}", comp) 
+                            anyhow::bail!("Resource _ Unexpected result: {:?}", comp) 
                         }
                     }                    
-                    _ => { anyhow::bail!("Resource _ Unexpected reesult: {:?}", rcomputation)  }
+                    _ => { anyhow::bail!("Resource _ Unexpected result: {:?}", rcomputation)  }
                 }
                 
             }
+
+            Request::ResourceVerifierWith(hex_id,path,resource,storage) => {
+
+                let resource_client_with = resource::ResourceClient::new(&resource)?;
+                let resource = resource_client_with.resource_with(hex_id.clone(),path.clone(),storage)?;
+
+                let proofs: ProofStream =authcomp::from_bytes(&resource.2).expect("Unable to get proofs");
+    
+                let id = hex::decode(hex_id).map_err(|e| anyhow!(e.to_string()))?;
+
+                let s = HashType {
+                    data: id.try_into().expect("Unable to get id"),
+                };
+
+                let rcomputation = Api::<Verifier<ApiResponse, ApiError>>::api_resource_verifier(
+                    &s,
+                    path,
+                    proofs,
+                );
+        
+                match rcomputation {
+                    Ok(comp) => {
+                        if let Some(ApiResponse::VecAndString(sdata, contenttype)) = comp.get() {
+                            Response::ResourceVerifier(contenttype.to_owned(),sdata.to_owned())
+                        }else {
+                            anyhow::bail!("Resource _ Unexpected result: {:?}", comp) 
+                        }
+                    }                    
+                    _ => { anyhow::bail!("Resource _ Unexpected result: {:?}", rcomputation)  }
+                }
+                
+            }            
         };
 
         let raw_output = rmp_serde::to_vec(&output)?;

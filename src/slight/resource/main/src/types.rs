@@ -10,6 +10,7 @@ pub const TOPIC_OUTPUTS :&str = "resource-outputs";
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
     Resource(String,Vec<u8>), //Id,Path
+    ResourceWith(String,Vec<u8>,String), //Id,Path,Storage
 }
 
 #[derive(Debug,Serialize,Deserialize)]

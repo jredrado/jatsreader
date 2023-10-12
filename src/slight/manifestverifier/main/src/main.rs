@@ -71,6 +71,38 @@ fn main() -> Result<()> {
                 }
                 
             }
+
+            Request::ManifestVerifierWith(hex_id,manifest,storage) => {
+
+                let manifest_client_with = manifest::ManifestClient::new(&manifest)?;
+                //Retrieve from storage
+                let manifest = manifest_client_with.manifest_with(hex_id.clone(),storage)?;
+
+                let proofs: ProofStream =authcomp::from_bytes(&manifest.2).expect("Unable to get proofs");
+    
+                let id = hex::decode(hex_id).map_err(|e| anyhow!(e.to_string()))?;
+
+                let s = HashType {
+                    data: id.try_into().expect("Unable to get id"),
+                };
+        
+                let rcomputation =
+                    Api::<Verifier<ApiResponse, ApiError>>::api_manifest_verifier(&s, Some(proofs));
+        
+                match rcomputation {
+                    Ok(comp) => {
+                        if let Some(ApiResponse::String(data_ref)) = comp.get() {
+       
+                            Response::ManifestVerifier(manifest.0,data_ref.to_owned())
+
+                        }else {
+                            anyhow::bail!("ManifestVerifier _ Unexpected computation response: {:?}", comp)
+                        }
+                    }
+                    _ => { anyhow::bail!("ManifestVerifier _ Unexpected computation: {:?}", rcomputation)  }
+                }
+                
+            }            
         };
 
         let raw_output = rmp_serde::to_vec(&output)?;

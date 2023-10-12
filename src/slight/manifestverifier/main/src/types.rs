@@ -10,6 +10,7 @@ pub const TOPIC_OUTPUTS :&str = "manifestverifier-outputs";
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
     ManifestVerifier(String), //ID
+    ManifestVerifierWith(String,String,String), //ID, Manifest provider, Storage provider
 }
 
 #[derive(Debug,Serialize,Deserialize)]

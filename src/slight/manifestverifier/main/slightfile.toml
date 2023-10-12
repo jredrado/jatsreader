@@ -2,19 +2,19 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "P9OLC6-eNBg2LVtmjDY2v4VKX"
+value = "ffVqKqP5oc_mKmHgo2Pal_9T2"
 
 [[secret_settings]]
 name = "MANIFESTINSTANCE"
-value = "QLUbEM-B_Zv39FA"
+value = "d_DjFwungs3C1PA"
 
 [[capability]]
 resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_PORT = "1883"
 MOSQUITTO_HOST = "localhost"
+MOSQUITTO_PORT = "1883"
 
 [[capability]]
 resource = "configs.usersecrets"

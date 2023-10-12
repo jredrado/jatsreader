@@ -1,16 +1,12 @@
 specversion = "0.2"
 
 [[secret_settings]]
-name = "FILEPATH"
-value = "1XX469MG3sL9rKe23bzHi754"
-
-[[secret_settings]]
-name = "STREAMER_API"
-value = "4T47DPNe5sHrMrWanIq23JJfpIufLdOrzfKtzs6cz6uPXrWbAsm7099C8P-8ie-jyPqFhvskv_7ZmtiWiYC70uHc"
+name = "INSTANCE"
+value = "Z8m71-OIQs2Mu"
 
 [[capability]]
-resource = "http"
-name = "streamer-rest-api"
+resource = "keyvalue.filesystem"
+name = "storage_2"
 
 [[capability]]
 resource = "messaging.mosquitto"

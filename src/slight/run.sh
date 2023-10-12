@@ -8,6 +8,8 @@ STREAMER_API_URL=https://$STREAMERPORT-$HOSTNAME.$GITPOD_WORKSPACE_CLUSTER_HOST
 echo $STREAMER_API_URL
 
 slight -c $ROOT/storage/main/slightfile.toml secret -k "INSTANCE" -v "storage_1"
+slight -c $ROOT/storage/main/slightfile2.toml secret -k "INSTANCE" -v "storage_2"
+
 slight -c $ROOT/register/main/slightfile.toml secret -k "INSTANCE" -v "register_1"
 
 slight -c $ROOT/register/main/slightfile.toml secret -k "RESOLVER" -v "resolver_1"
@@ -38,6 +40,8 @@ slight -c $ROOT/streamer/slightfile.toml  secret -k "FILEPATH" -v "./streamer/st
 slight -c $ROOT/streamer/slightfile.toml  secret -k "STREAMER_API" -v "$STREAMER_API_URL"
 
 nohup slight -c $ROOT/storage/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/storage.wasm &
+nohup slight -c $ROOT/storage/main/slightfile2.toml run $ROOT/target/wasm32-wasi/debug/storage.wasm &
+
 nohup slight -c $ROOT/register/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/register.wasm & 
 nohup slight -c $ROOT/manifest/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/manifest.wasm &
 nohup slight -c $ROOT/resource/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resource.wasm &

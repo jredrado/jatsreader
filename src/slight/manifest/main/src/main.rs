@@ -68,6 +68,37 @@ fn main() -> Result<()> {
           
                 
             }
+
+            Request::ManifestWith(id,storage) => {
+
+                let storage_client_with = storage::StorageClient::new(&storage)?;
+                //Retrieve from storage
+                let source = storage_client_with.get(id)?;
+
+                //Get Auth Publication
+                let authpub : AuthTProver<Publication<Prover<ApiResponse, ApiError>>> = authcomp::from_bytes(&source)
+                    .expect("Unable to decode");
+          
+                let comp = Api::<Prover<ApiResponse,ApiError>>::manifest(&authpub, None).expect("Unable to get manifest");
+          
+                let result = Computation::get(&comp);
+          
+
+                let proofs = authcomp::to_vec(Computation::get_proofs(&comp));
+              
+                match result {
+          
+                    Some(ApiResponse::String(response)) => {
+
+                        Response::Manifest(String::from("application/webpub+json"),response.to_string(),proofs)
+          
+                    }
+                    None => { anyhow::bail!("Manifest Unexpected result: {:?}", result) }
+                    _ => { anyhow::bail!("Manifest _ Unexpected reesult: {:?}", result)  }
+                }
+          
+                
+            }            
         };
 
         let raw_output = rmp_serde::to_vec(&output)?;

@@ -14,6 +14,20 @@
     <script>
      
       $(document).ready(function() { 
+
+          var urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.has('storage')) {
+              console.log(urlParams.get('storage')); 
+
+              $("<input>").attr({ 
+                    name: "storage", 
+                    id: "storageField", 
+                    type: "hidden", 
+                    value:  urlParams.get('storage')
+                }).appendTo('#jatsform'); 
+          }
+
+
           // bind form using ajaxForm 
           $('#jatsform').ajaxForm({ 
               // dataType identifies the expected content type of the server response 

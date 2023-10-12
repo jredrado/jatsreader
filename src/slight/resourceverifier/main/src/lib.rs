@@ -55,5 +55,24 @@ impl ResourceVerifierClient {
 
     }
 
+    pub fn resource_with(&self,id:String,path:Vec<u8>,resource:String,storage:String) -> Result<(Option<String>,Vec<u8>)> {
+
+        let queue = format!("{}-{}",&resource,TOPIC_INPUTS);
+
+        let request = Request::ResourceVerifierWith(id,path,resource,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &queue)?;
+
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::ResourceVerifier(contenttype,data) => Ok((contenttype,data)),
+            _ => anyhow::bail!("Resource lib Unexpected response: {:?}", response)
+        }
+
+    }
 
 }

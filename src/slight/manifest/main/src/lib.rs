@@ -55,5 +55,22 @@ impl ManifestClient {
 
     }
 
+    pub fn manifest_with(&self,id:String,storage:String) -> Result<(String,String,Vec<u8>)> {
+
+        let request = Request::ManifestWith(id,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::Manifest(contenttype,data,proofs) => Ok((contenttype,data,proofs)),
+            _ => anyhow::bail!("Manifest lib Unexpected response: {:?}", response)
+        }
+
+    }
 
 }

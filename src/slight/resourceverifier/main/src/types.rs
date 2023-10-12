@@ -10,6 +10,7 @@ pub const TOPIC_OUTPUTS :&str = "resourceverifier-outputs";
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
     ResourceVerifier(String,Vec<u8>), //Id,Path
+    ResourceVerifierWith(String,Vec<u8>,String,String), //Id,Path,Resource service, Storage service
 }
 
 #[derive(Debug,Serialize,Deserialize)]

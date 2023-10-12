@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "STORAGEINSTANCE"
-value = "g5CfA9-0VCtLh"
+value = "nXHB9XCWt3zil"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "_4W7Xf0JBMOTJkQ"
+value = "c_Mp-rsQ2qunp4Q"
 
 [[capability]]
 resource = "messaging.mosquitto"

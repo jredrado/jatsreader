@@ -55,5 +55,22 @@ impl ResourceClient {
 
     }
 
+    pub fn resource_with(&self,id:String,path:Vec<u8>,storage: String) -> Result<(Option<String>,Vec<u8>,Vec<u8>)> {
+
+        let request = Request::ResourceWith(id,path,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::Resource(contenttype,data,proofs) => Ok((contenttype,data,proofs)),
+            _ => anyhow::bail!("Resource lib Unexpected response: {:?}", response)
+        }
+
+    }
 
 }

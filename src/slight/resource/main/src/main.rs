@@ -63,11 +63,42 @@ fn main() -> Result<()> {
                         Response::Resource(contenttype.to_owned(),data.to_owned(),proofs)
                     }
                     None => { anyhow::bail!("Resource Unexpected result: {:?}", result) }
-                    _ => { anyhow::bail!("Resource _ Unexpected reesult: {:?}", result)  }
+                    _ => { anyhow::bail!("Resource _ Unexpected result: {:?}", result)  }
                 }
           
                 
             }
+
+            Request::ResourceWith(id,path,storage) => {
+
+                //Retrieve from storage
+                let storage_client_with = storage::StorageClient::new(&storage)?;
+                let source = storage_client_with.get(id)?;
+    
+                let authpub : AuthTProver<Publication<Prover<ApiResponse, ApiError>>> = authcomp::from_bytes(&source)
+                                                                                            .expect("Unable to decode");
+
+                let comp = Api::<Prover<ApiResponse, ApiError>>::resource(
+                    &authpub,
+                    path,
+                    None,
+                ).expect("Unable to get resource");
+        
+                let result = Computation::get(&comp);
+        
+                let proofs = authcomp::to_vec(Computation::get_proofs(&comp));
+                
+                match result {
+                    Some(ApiResponse::VecAndString(data, contenttype)) => {
+    
+                        Response::Resource(contenttype.to_owned(),data.to_owned(),proofs)
+                    }
+                    None => { anyhow::bail!("Resource Unexpected result: {:?}", result) }
+                    _ => { anyhow::bail!("Resource _ Unexpected reesult: {:?}", result)  }
+                }
+          
+                
+            }            
         };
 
         let raw_output = rmp_serde::to_vec(&output)?;

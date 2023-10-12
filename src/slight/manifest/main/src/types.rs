@@ -10,6 +10,7 @@ pub const TOPIC_OUTPUTS :&str = "manifest-outputs";
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
     Manifest(String),
+    ManifestWith(String,String) //ID, storage service
 }
 
 #[derive(Debug,Serialize,Deserialize)]

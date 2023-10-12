@@ -95,7 +95,8 @@ fn extract_boundary(content_type: &str) -> Option<&str> {
 struct EPubForm {
     pub name: Option<String>,
     pub tel: Option<String>,
-    pub epub: Vec<u8>
+    pub epub: Vec<u8>,
+    pub storage: Option<String>
 }
 
 const p : &str = r#"
@@ -627,6 +628,14 @@ fn handle_add(request: Request) -> Result<Response, HttpError> {
 
                 println!("file got");
             }
+
+            "storage" => {
+                let mut vec = Vec::new();
+                entry.data.read_to_end(&mut vec).expect("can't read");
+                form.storage =  String::from_utf8(vec).ok();
+
+                println!("storage got");
+            }
     
             _ => {
                 // as multipart has a bug https://github.com/abonander/multipart/issues/114
@@ -640,14 +649,22 @@ fn handle_add(request: Request) -> Result<Response, HttpError> {
 
         let client = RegisterClient::new("register_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
-        let id = client.register(form.epub).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        let (id,st) = if let Some(storage)=form.storage {
+            let st = storage.clone();
+            (client.register_with(form.epub,storage).map_err( |e| HttpError::UnexpectedError(e.to_string()))?,st)
+        }
+        else {
+            (client.register(form.epub).map_err( |e| HttpError::UnexpectedError(e.to_string()))?,"default".to_string())
+        };
         
         let mut headers = Vec::new();
         headers.push((String::from("content-type"),"application/json".to_string()));
 
+        let message = format!("{} on {}",&id,&st);
+
         Ok(Response {
             headers: Some(headers),
-            body: serde_json::to_vec(&id).ok(),
+            body: serde_json::to_vec(&message).ok(),
             status: 200,
         })
     } else {
@@ -678,6 +695,8 @@ fn handle_urs(request: Request) -> Result<Response, HttpError> {
 fn handle_resource_or_manifest(request: Request) -> Result<Response, HttpError> {
 
     let binding = ("".into(), "".into());
+
+    println!("{:?}",request);
 
     let id = request.params.iter().find(|x| x.0 == "id").unwrap_or(&binding);
     let path = request.params.iter().find(|x| x.0 == "*").unwrap_or(&binding);

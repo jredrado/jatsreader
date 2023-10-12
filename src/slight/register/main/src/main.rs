@@ -55,10 +55,31 @@ fn main() -> Result<()> {
 
                 let cids = vec![hex_id.clone()];
 
-                resolver_client.add_content(resolver::StreamerInfo{ id: streamer_name.clone(),endpoint: streamer_public_api.clone()},cids)?;
+                //resolver_client.add_content(resolver::StreamerInfo{ id: streamer_name.clone(),endpoint: streamer_public_api.clone()},cids)?;
+
+                resolver_client.add_content(resolver::StreamerInfo{ id: storage_instance.clone(),endpoint: storage_instance.clone()},cids)?;
 
                 Response::RegisterEpub(hex_id)
-            }
+            },
+            Request::RegisterEpubWith(ref epub, ref storage) => {
+
+                let (id,authepub) = Api::<Prover<ApiResponse,ApiError>>::register("prover",epub).expect("Fail to register!");
+
+                let authepub_bytes = authcomp::to_vec(&authepub);
+        
+                info!("Authpub bytes: {:?}", authepub_bytes.len());
+
+                let storage_client_with = storage::StorageClient::new(&storage)?;
+
+                let hex_id = hex::encode(&id);
+                storage_client_with.put(hex_id.clone(),authepub_bytes)?;
+
+                let cids = vec![hex_id.clone()];
+
+                resolver_client.add_content(resolver::StreamerInfo{ id: storage_instance.clone(),endpoint: storage_instance.clone()},cids)?;
+
+                Response::RegisterEpub(hex_id)
+            }            
             _ => { anyhow::bail!("Register Unexpected request: {:?}", request ) }
         };
 

@@ -9,7 +9,8 @@ pub const TOPIC_OUTPUTS :&str = "register-outputs";
 
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
-    RegisterEpub(Vec<u8>),
+    RegisterEpub(Vec<u8>), //Default storage
+    RegisterEpubWith(Vec<u8>,String), //epub, storage name
 }
 
 #[derive(Debug,Serialize,Deserialize)]
