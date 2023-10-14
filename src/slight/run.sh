@@ -16,6 +16,9 @@ slight -c $ROOT/register/main/slightfile.toml secret -k "RESOLVER" -v "resolver_
 slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER" -v "streamer_1"
 slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER_API" -v "$STREAMER_API_URL"
 
+slight -c $ROOT/metadata/main/slightfile.toml secret -k "INSTANCE" -v "metadata_1"
+slight -c $ROOT/metadata/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
+
 slight -c $ROOT/manifest/main/slightfile.toml secret -k "INSTANCE" -v "manifest_1"
 slight -c $ROOT/resource/main/slightfile.toml secret -k "INSTANCE" -v "resource_1"
 slight -c $ROOT/manifestverifier/main/slightfile.toml secret -k "INSTANCE" -v "manifestverifier_1"
@@ -35,6 +38,9 @@ slight -c $ROOT/manifestverifier/main/slightfile.toml secret -k "MANIFESTINSTANC
 slight -c $ROOT/resourceverifier/main/slightfile.toml secret -k "RESOURCEINSTANCE" -v "resource_1"
 
 slight -c $ROOT/resolver-rest-api/slightfile.toml secret -k "RESOLVERINSTANCE" -v "resolver_1"
+
+slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "INSTANCE" -v "metadataverifier_1"
+slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "METADATAINSTANCE" -v "metadata_1"
 
 slight -c $ROOT/streamer/slightfile.toml  secret -k "FILEPATH" -v "./streamer/static"
 slight -c $ROOT/streamer/slightfile.toml  secret -k "STREAMER_API" -v "$STREAMER_API_URL"

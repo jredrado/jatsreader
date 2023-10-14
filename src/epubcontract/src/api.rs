@@ -334,7 +334,7 @@ impl<C> Api<C>
        
         Ok(comp)
     }
-    /*
+    
     pub fn metadata (doc: & AuthT<Publication<C>,C>,proof_stream : Option<ProofStream>) -> Result<C>
 
 
@@ -368,6 +368,7 @@ impl<C> Api<C>
         Ok(comp)
     }
 
+    /*
     pub fn api_metadata_prover (binding: &str,doc: &ID,proof_stream : Option<ProofStream>) -> Result<C>
     {
 
@@ -388,8 +389,8 @@ impl<C> Api<C>
         
                 
     }
-
-    pub fn api_metadata_verifier (binding: &str,doc: &ID,proof_stream : Option<ProofStream>) -> Result<C>
+    */
+    pub fn api_metadata_verifier (doc: &ID,proof_stream : ProofStream) -> Result<C>
     where
         AuthTVerifier<Publication<C>> : Is< Type=<C as AuthType<Publication<C>>>::AuthT>
          
@@ -397,11 +398,12 @@ impl<C> Api<C>
         let aepub_verifier = AuthTVerifier::<Publication<C>>::from(doc);
         let aepub : &<C as AuthType<Publication<C>>>::AuthT = aepub_verifier.into_ref();
 
-        Api::<C>::metadata(aepub, proof_stream)
+        Api::<C>::metadata(aepub, Some(proof_stream))
         
                 
     }
 
+    /*
     pub fn cover (doc: & AuthT<Publication<C>,C>,proof_stream : Option<ProofStream>) -> Result<C>
 
 

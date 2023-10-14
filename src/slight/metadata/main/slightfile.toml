@@ -1,0 +1,6 @@
+specversion = "0.2"
+
+
+[[capability]]
+resource = "configs.usersecrets"
+name = "config-store"

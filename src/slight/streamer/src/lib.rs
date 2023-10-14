@@ -20,6 +20,8 @@ wit_error_rs::impl_error!(KeyvalueError);
 
 use manifestverifier::ManifestVerifierClient;
 use resourceverifier::ResourceVerifierClient;
+use metadataverifier::MetadataVerifierClient;
+
 use resolver::{ResolverClient,StreamerInfo};
 use register::RegisterClient;
 
@@ -596,6 +598,7 @@ fn main() -> Result<()> {
     let router_with_route = router
         .get("/hello", "handle_hello")?
         .get("/pub/:id/*","handle_resource_or_manifest")?
+        .get("/pub/metadata/:id/*","handle_metadata")?        
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
         .get("/urs/:locator","handle_urs")?
@@ -795,6 +798,54 @@ fn handle_resource_or_manifest(request: Request) -> Result<Response, HttpError> 
     }
 }
 
+
+#[register_handler]
+fn handle_metadata(request: Request) -> Result<Response, HttpError> {
+
+    let binding = ("".into(), "".into());
+
+    let id = request.params.iter().find(|x| x.0 == "id").unwrap_or(&binding);
+    let path = request.params.iter().find(|x| x.0 == "*").unwrap_or(&binding);
+
+    let host = request.headers.iter().find(|x| x.0 == "host").unwrap_or(&binding);
+
+    let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+    let metadata = if reference.has_query() {
+        let query = reference.query().ok_or( HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
+
+        let qs = QString::from(query.as_str());
+        let service_param = qs.get("service");
+        let storage_param = qs.get("storage");
+
+        if let (Some(service),Some(storage)) = (service_param, storage_param) {
+            println!("{} {} ",&service,&storage);
+            
+            let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+            mclient.metadata_with(id.1.to_owned(),service.to_string(),storage.to_string()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+
+        }else {
+            let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+            mclient.metadata(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+        }
+
+    } else {
+
+        let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        mclient.metadata(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+
+    };
+
+
+    let mut headers = Vec::new();
+    headers.push((String::from("content-type"),"application/json".to_string()));
+
+    Ok(Response {
+        headers: Some(headers),
+        body: Some(metadata.into()),
+        status: 200,
+    })
+}
 
 fn handle_manifest(request: handle_resource_or_manifest_mod::Request) -> Result<handle_resource_or_manifest_mod::Response, handle_resource_or_manifest_mod::HttpError> {
     let id = request.params.into_iter().find(|x| x.0 == "id").unwrap_or(("".into(), "".into()));
