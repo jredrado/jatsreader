@@ -28,3 +28,5 @@ multipart-2021 = { version = "0.19.0", default-features = false, features = ["se
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+uriparse = "0.6.4"
+qstring = "0.7.2"

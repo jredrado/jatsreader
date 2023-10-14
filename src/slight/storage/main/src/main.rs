@@ -42,6 +42,10 @@ fn main() -> Result<()> {
             Request::Put(ref key,ref value) => { 
                 my_kv.set(key, value)?;
                 Response::Put
+            },
+            Request::List => {
+                let raw_response = my_kv.keys()?;
+                Response::List(raw_response)
             }
         };
 

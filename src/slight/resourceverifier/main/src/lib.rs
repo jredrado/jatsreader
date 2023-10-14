@@ -57,12 +57,10 @@ impl ResourceVerifierClient {
 
     pub fn resource_with(&self,id:String,path:Vec<u8>,resource:String,storage:String) -> Result<(Option<String>,Vec<u8>)> {
 
-        let queue = format!("{}-{}",&resource,TOPIC_INPUTS);
-
         let request = Request::ResourceVerifierWith(id,path,resource,storage);
         let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
 
-        self.inputs.publish(&raw_request, &queue)?;
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
 
         let raw_response = self.outputs.receive(&self.outputs_token)?;
 

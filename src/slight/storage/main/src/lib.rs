@@ -70,4 +70,19 @@ impl StorageClient {
             _ => anyhow::bail!("Storage Lib Put Unexpected response: {:?}", response)
         }
     }
+
+    pub fn list(&self) -> Result<Vec<String>> {
+        let request = Request::List;
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::List(value) => Ok(value),
+            _ => anyhow::bail!("Storage Lib Put Unexpected response: {:?}", response)
+        }
+    }    
 }

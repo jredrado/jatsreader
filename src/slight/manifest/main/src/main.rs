@@ -71,6 +71,8 @@ fn main() -> Result<()> {
 
             Request::ManifestWith(id,storage) => {
 
+                println!("ManifestWith");
+                
                 let storage_client_with = storage::StorageClient::new(&storage)?;
                 //Retrieve from storage
                 let source = storage_client_with.get(id)?;

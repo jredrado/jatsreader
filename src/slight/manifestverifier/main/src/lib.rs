@@ -57,12 +57,11 @@ impl ManifestVerifierClient {
 
     pub fn manifest_with(&self,id:String,manifest:String, storage:String) -> Result<(String,String)> {
 
-        let queue = format!("{}-{}",&manifest,TOPIC_INPUTS);
 
         let request = Request::ManifestVerifierWith(id,manifest,storage);
         let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
 
-        self.inputs.publish(&raw_request, &queue )?;
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
 
         let raw_response = self.outputs.receive(&self.outputs_token)?;
 

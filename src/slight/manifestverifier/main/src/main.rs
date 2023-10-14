@@ -74,6 +74,8 @@ fn main() -> Result<()> {
 
             Request::ManifestVerifierWith(hex_id,manifest,storage) => {
 
+                println!("ManifestVerifierWith {} {}",manifest,storage);
+
                 let manifest_client_with = manifest::ManifestClient::new(&manifest)?;
                 //Retrieve from storage
                 let manifest = manifest_client_with.manifest_with(hex_id.clone(),storage)?;

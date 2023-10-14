@@ -14,6 +14,10 @@ use configs::*;
 wit_bindgen_rust::import!("../wit/configs.wit");
 wit_error_rs::impl_error!(ConfigsError);
 
+use keyvalue::*;
+wit_bindgen_rust::import!("../wit/keyvalue.wit");
+wit_error_rs::impl_error!(KeyvalueError);
+
 use manifestverifier::ManifestVerifierClient;
 use resourceverifier::ResourceVerifierClient;
 use resolver::{ResolverClient,StreamerInfo};
@@ -32,6 +36,9 @@ use multipart_2021 as multipart;
 use multipart::server::{Multipart};
 use serde::{Deserialize, Serialize};
 
+use std::convert::TryFrom;
+use uriparse::RelativeReference;
+use qstring::QString;
 
 static mut CONFIG_INSTANCE: Option<Mutex<String>> = None;
 static INIT: Once = Once::new();
@@ -79,6 +86,23 @@ fn streamer_api<'a>() -> &'a Mutex<String> {
     unsafe { API_CONFIG_INSTANCE.as_ref().unwrap() }
 }
 
+static mut KEYVALUE_INSTANCE: Option<Mutex<Keyvalue>> = None;
+static KEYVALUE_INIT: Once = Once::new();
+
+fn keyvalue<'a>() -> &'a Mutex<Keyvalue> {
+    KEYVALUE_INIT.call_once(|| {
+
+        if let Ok(kv) = Keyvalue::open("streamer") {
+                unsafe {
+                    *KEYVALUE_INSTANCE.borrow_mut() = Some(Mutex::new(kv));
+                }
+        }
+
+    });
+
+    unsafe { KEYVALUE_INSTANCE.as_ref().unwrap() }
+}
+
 fn extract_boundary(content_type: &str) -> Option<&str> {
     // Buscar el parámetro "boundary" en la cabecera Content-Type
     if let Some(start) = content_type.find("boundary=") {
@@ -98,6 +122,12 @@ struct EPubForm {
     pub epub: Vec<u8>,
     pub storage: Option<String>
 }
+
+#[derive(Serialize, Deserialize,Default)]
+struct AddStorageForm {
+    pub storage: Option<String>,
+}
+
 
 const p : &str = r#"
 
@@ -278,7 +308,7 @@ const p_xml : &str = r#"<?xml version="1.0" encoding="UTF-8"?>
 "#;
 
 
-const document_url : &str = r#"
+const DOCUMENT_URL : &str = r#"
 <!DOCTYPE html>
 <html>
 <head>
@@ -570,7 +600,8 @@ fn main() -> Result<()> {
         .get("/opds2/publications.json","handle_opds2")?
         .get("/urs/:locator","handle_urs")?
         .get("/static/*","handle_file")?
-        .post("/add", "handle_add")?;
+        .post("/add", "handle_add")?
+        .post("/addstorage","handle_add_storage")?;
 
     println!("Starting server");
     let _ = Server::serve("0.0.0.0:3000", &router_with_route)?;
@@ -673,6 +704,62 @@ fn handle_add(request: Request) -> Result<Response, HttpError> {
 }
 
 #[register_handler]
+fn handle_add_storage(request: Request) -> Result<Response, HttpError> {
+    assert_eq!(request.method, Method::Post);
+
+    let empty_body = Vec::<u8>::new();
+    let binding = ("".into(), "".into());
+
+    let content_type = request.headers.iter().find(|x| x.0 == "content-type").unwrap_or(&binding);
+
+    let boundary_opt = extract_boundary(&content_type.1);
+
+    if let Some(boundary) = boundary_opt {
+        
+        let body = Cursor::new(request.body.as_ref().unwrap_or(&empty_body));
+        let mut multipart = Multipart::with_body(body,boundary);
+        let mut form = AddStorageForm::default();
+
+        multipart.foreach_entry(| mut entry| match &*entry.headers.name {
+            "storage" => {
+                let mut vec = Vec::new();
+                entry.data.read_to_end(&mut vec).expect("can't read");
+                form.storage = String::from_utf8(vec).ok();
+                println!("storage got");
+            }
+    
+            _ => {
+                // as multipart has a bug https://github.com/abonander/multipart/issues/114
+                // we manually do read_to_end here
+                //let mut _vec = Vec::new();
+                //entry.data.read_to_end(&mut _vec).expect("can't read");
+                println!("key neglected");
+            }
+        })
+        .expect("Unable to iterate multipart?");
+
+
+        let mut headers = Vec::new();
+        headers.push((String::from("content-type"),"application/json".to_string()));
+
+        let message = if let Some(storage) = &form.storage {
+            (&*keyvalue().lock().unwrap()).set(storage,&[]).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+            "Ok".to_string()
+        }else {
+            "No content provider".to_string()
+        };
+
+        Ok(Response {
+            headers: Some(headers),
+            body: serde_json::to_vec(&message).ok(),
+            status: 200,
+        })
+    } else {
+        Err(HttpError::UnexpectedError(std::format!("Boundary {} not found in header",content_type.1)))
+    }
+}
+
+#[register_handler]
 fn handle_urs(request: Request) -> Result<Response, HttpError> {
 
     let locator = request.params.into_iter().find(|x| x.0 == "locator").unwrap_or(("".into(), "".into()));
@@ -712,8 +799,31 @@ fn handle_resource_or_manifest(request: Request) -> Result<Response, HttpError> 
 fn handle_manifest(request: handle_resource_or_manifest_mod::Request) -> Result<handle_resource_or_manifest_mod::Response, handle_resource_or_manifest_mod::HttpError> {
     let id = request.params.into_iter().find(|x| x.0 == "id").unwrap_or(("".into(), "".into()));
 
-    let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-    let manifest = mclient.manifest(id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+    let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+
+    let manifest = if reference.has_query() {
+        let query = reference.query().ok_or( handle_resource_or_manifest_mod::HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
+
+        let qs = QString::from(query.as_str());
+        let service_param = qs.get("service");
+        let storage_param = qs.get("storage");
+
+        if let (Some(service),Some(storage)) = (service_param, storage_param) {
+            println!("{} {} ",&service,&storage);
+
+            let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            mclient.manifest_with(id.1,service.to_string(),storage.to_string()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+        }else {
+            let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            mclient.manifest(id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+        }
+
+    } else {
+
+        let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+        mclient.manifest(id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+
+    };
 
     let mut headers = request.headers.clone();
     headers.push((String::from("Content-Type"),manifest.0));
@@ -735,8 +845,33 @@ fn handle_resource(request: handle_resource_or_manifest_mod::Request) -> Result<
 
     let host = request.headers.iter().find(|x| x.0 == "host").unwrap_or(&binding);
 
-    let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-    let resource = rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+    let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+
+    let resource = if reference.has_query() {
+        let query = reference.query().ok_or( handle_resource_or_manifest_mod::HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
+
+        let qs = QString::from(query.as_str());
+        let service_param = qs.get("service");
+        let storage_param = qs.get("storage");
+
+        if let (Some(service),Some(storage)) = (service_param, storage_param) {
+            println!("{} {} ",&service,&storage);
+            
+            let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            rclient.resource_with(id.1.to_owned(),path.1.to_owned().into_bytes(),service.to_string(),storage.to_string()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+
+        }else {
+            let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+        }
+
+    } else {
+
+        let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+        rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+
+    };
+
 
     let mut headers = request.headers.clone();
 
@@ -749,7 +884,7 @@ fn handle_resource(request: handle_resource_or_manifest_mod::Request) -> Result<
             let unencode_url = format!("https://{}/raw/{}/{}",&host.1,&id.1,&path.1);
             let new_url = urlencoding::encode(&unencode_url);
 
-            let body = document_url.replace("$DOCUMENT_URL$",&unencode_url);
+            let body = DOCUMENT_URL.replace("$DOCUMENT_URL$",&unencode_url);
             let body = body.replace("$HOST$",&host.1);
 
             return Ok(handle_resource_or_manifest_mod::Response {

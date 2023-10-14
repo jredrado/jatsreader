@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://malsup.github.io/jquery.form.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+     
+      $(document).ready(function() { 
+
+          // bind form using ajaxForm 
+          $('#jatsform').ajaxForm({ 
+              // dataType identifies the expected content type of the server response 
+              dataType:  'json', 
+      
+              // success identifies the function to invoke when the server response 
+              // has been received 
+              success:   processResponse
+          }); 
+      });
+
+      function processResponse(data) { 
+          // 'data' is the json object returned from the server 
+          Swal.fire('Contenido', data, 'success');
+      }
+    </script>
+  </head>
+  <body>
+
+  <form id="jatsform" method="post" enctype="multipart/form-data" action="/addstorage">
+   <p><label>Provedor de contenido: <input name="storage"></label></p>
+
+   <p><button>Enviar</button></p>
+  </form>
+  </body>
+</html>
