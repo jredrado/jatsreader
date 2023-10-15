@@ -76,7 +76,7 @@ fn main() -> Result<()> {
 
                 let cids = vec![hex_id.clone()];
 
-                resolver_client.add_content(resolver::StreamerInfo{ id: storage_instance.clone(),endpoint: storage_instance.clone()},cids)?;
+                resolver_client.add_content(resolver::StreamerInfo{ id: storage.clone(),endpoint: storage.clone()},cids)?;
 
                 Response::RegisterEpub(hex_id)
             }            

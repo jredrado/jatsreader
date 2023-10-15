@@ -44,6 +44,9 @@ use std::convert::TryFrom;
 use uriparse::RelativeReference;
 use qstring::QString;
 
+mod policy;
+use policy::Policy;
+
 static mut CONFIG_INSTANCE: Option<Mutex<String>> = None;
 static INIT: Once = Once::new();
 
@@ -119,7 +122,7 @@ fn extract_boundary(content_type: &str) -> Option<&str> {
 }
 
 
-#[derive(Serialize, Deserialize,Default)]
+#[derive(Serialize, Deserialize,Default,Debug)]
 struct EPubForm {
     pub name: Option<String>,
     pub tel: Option<String>,
@@ -127,7 +130,7 @@ struct EPubForm {
     pub storage: Option<String>
 }
 
-#[derive(Serialize, Deserialize,Default)]
+#[derive(Serialize, Deserialize,Default,Debug)]
 struct AddStorageForm {
     pub storage: Option<String>,
 }
@@ -636,6 +639,8 @@ fn handle_add(request: Request) -> Result<Response, HttpError> {
 
     let boundary_opt = extract_boundary(&content_type.1);
 
+    let policy = Policy::default();
+
     if let Some(boundary) = boundary_opt {
         
         let body = Cursor::new(request.body.as_ref().unwrap_or(&empty_body));
@@ -683,7 +688,9 @@ fn handle_add(request: Request) -> Result<Response, HttpError> {
         })
         .expect("Unable to iterate multipart?");
 
-        let client = RegisterClient::new("register_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        let client = RegisterClient::new(&policy.register_provider).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+        println!("Form: {:?}",&form.storage);
 
         let (id,st) = if let Some(storage)=form.storage {
             let st = storage.clone();
@@ -813,6 +820,8 @@ fn handle_metadata(request: Request) -> Result<Response, HttpError> {
 
     let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
+    let policy = Policy::new(&id.1).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+
     let metadata = if reference.has_query() {
         let query = reference.query().ok_or( HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
 
@@ -823,18 +832,20 @@ fn handle_metadata(request: Request) -> Result<Response, HttpError> {
         if let (Some(service),Some(storage)) = (service_param, storage_param) {
             println!("{} {} ",&service,&storage);
             
-            let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+            let mclient = MetadataVerifierClient::new(&policy.metadata_verifier_service).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
             mclient.metadata_with(id.1.to_owned(),service.to_string(),storage.to_string()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
         }else {
-            let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
-            mclient.metadata(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+            let mclient = MetadataVerifierClient::new(&policy.metadata_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;            
+            mclient.metadata_with(id.1.to_owned(),policy.metadata_service,policy.storage_provider)
+                            .map_err( |e| HttpError::UnexpectedError(e.to_string()))?
         }
 
     } else {
 
-        let mclient = MetadataVerifierClient::new("metadataverifier_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
-        mclient.metadata(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+        let mclient = MetadataVerifierClient::new(&policy.metadata_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        mclient.metadata_with(id.1.to_owned(),policy.metadata_service,policy.storage_provider)
+                            .map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
     };
 
@@ -853,6 +864,8 @@ fn handle_manifest(request: handle_resource_or_manifest_mod::Request) -> Result<
     let id = request.params.into_iter().find(|x| x.0 == "id").unwrap_or(("".into(), "".into()));
 
     let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+    
+    let policy = Policy::new(&id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
 
     let manifest = if reference.has_query() {
         let query = reference.query().ok_or( handle_resource_or_manifest_mod::HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
@@ -864,17 +877,21 @@ fn handle_manifest(request: handle_resource_or_manifest_mod::Request) -> Result<
         if let (Some(service),Some(storage)) = (service_param, storage_param) {
             println!("{} {} ",&service,&storage);
 
-            let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            let mclient = ManifestVerifierClient::new(&policy.manifest_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
             mclient.manifest_with(id.1,service.to_string(),storage.to_string()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
         }else {
-            let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-            mclient.manifest(id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+            let mclient = ManifestVerifierClient::new(&policy.manifest_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+
+            mclient.manifest_with(id.1,policy.manifest_service,policy.storage_provider)
+                    .map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
         }
 
     } else {
 
-        let mclient = ManifestVerifierClient::new("manifestverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-        mclient.manifest(id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+        let mclient = ManifestVerifierClient::new(&policy.manifest_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+        
+        mclient.manifest_with(id.1,policy.manifest_service,policy.storage_provider)
+                    .map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
 
     };
 
@@ -900,6 +917,8 @@ fn handle_resource(request: handle_resource_or_manifest_mod::Request) -> Result<
 
     let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
 
+    let policy = Policy::new(&id.1).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+
     let resource = if reference.has_query() {
         let query = reference.query().ok_or( handle_resource_or_manifest_mod::HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
 
@@ -910,22 +929,26 @@ fn handle_resource(request: handle_resource_or_manifest_mod::Request) -> Result<
         if let (Some(service),Some(storage)) = (service_param, storage_param) {
             println!("{} {} ",&service,&storage);
             
-            let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            let rclient = ResourceVerifierClient::new(&policy.resource_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
             rclient.resource_with(id.1.to_owned(),path.1.to_owned().into_bytes(),service.to_string(),storage.to_string()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
 
         }else {
-            let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-            rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+            let rclient = ResourceVerifierClient::new(&policy.resource_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+            
+            rclient.resource_with(id.1.to_owned(),path.1.to_owned().into_bytes(),policy.resource_service,policy.storage_provider)
+                    .map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
         }
 
     } else {
 
-        let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
-        rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
+        let rclient = ResourceVerifierClient::new(&policy.resource_verifier_service).map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?;
+        
+        rclient.resource_with(id.1.to_owned(),path.1.to_owned().into_bytes(),policy.resource_service,policy.storage_provider)
+            .map_err( |e| handle_resource_or_manifest_mod::HttpError::UnexpectedError(e.to_string()))?
 
     };
 
-
+    //TO FIX. Get the content-type of the resource in a separate call
     let mut headers = request.headers.clone();
 
     if let Some(ctype) = resource.0 {        
@@ -1013,8 +1036,11 @@ fn handle_raw_resource(request: Request) -> Result<Response,HttpError> {
     let id = request.params.iter().find(|x| x.0 == "id").unwrap_or(&binding);
     let path = request.params.iter().find(|x| x.0 == "*").unwrap_or(&binding);
 
-    let rclient = ResourceVerifierClient::new("resourceverifier_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
-    let resource = rclient.resource(id.1.to_owned(),path.1.to_owned().into_bytes()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+    let policy = Policy::new(&id.1).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+
+    let rclient = ResourceVerifierClient::new(&policy.resource_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+    let resource = rclient.resource_with(id.1.to_owned(),path.1.to_owned().into_bytes(),policy.resource_service,policy.storage_provider)
+            .map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
     let mut headers = request.headers.clone();
 
@@ -1069,9 +1095,14 @@ fn handle_file(request: Request) -> Result<Response, HttpError> {
 #[register_handler]
 fn handle_opds2(request: Request) -> Result<Response,HttpError> {
 
+    let binding = ("".into(), "".into());
+    let host = request.headers.iter().find(|x| x.0 == "host").unwrap_or(&binding);
+
     let storages = (&*keyvalue().lock().unwrap()).keys().map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
-   let m : HashMap<String,Vec<String>> =  
+    let policy = Policy::default();
+
+    let m : HashMap<String,Vec<String>> =  
         storages.iter().flat_map ( |storage: &String| -> Vec<(String,String)> {
                 if let Ok(storage_client) = storage::StorageClient::new(storage) {
                     if let Ok(list_of_pub_ids) = storage_client.list() {
@@ -1086,12 +1117,59 @@ fn handle_opds2(request: Request) -> Result<Response,HttpError> {
 
         }).fold ( HashMap::new() , |mut acc, (key,value) |  { acc.entry(key).or_insert_with(Vec::new).push(value); acc });
 
+    println!("Publications {:?}", m);
+
+    let publications = m.iter().map( |(key,value)| {
+            if let Ok(metadata_verifier) = metadataverifier::MetadataVerifierClient::new(&policy.metadata_verifier_service) {
+
+                println!("Getting ... {}",key);
+                if let Some(first_storage) = value.get(0){
+
+                    if let Ok(metadata) = metadata_verifier.metadata_with(key.to_string(),
+                                                                            policy.metadata_service.to_owned(),
+                                                                            first_storage.to_string()) {
+                        
+                        let links = format!(",\"links\":[
+                            {{
+                            \"type\":\"application/webpub+json\",
+                            \"rel\":\"http://opds-spec.org/acquisition\",
+                            \"href\":\"https://{}/pub/{}/manifest.json\"
+                            }}
+                        ]",&host.1,key);
+
+                        format!("{{ \"metadata\": {} {} }}",metadata,links)
+
+                    }else {
+                        String::from("")
+                    }
+                }else {
+                    String::from("")
+                }
+            }else {
+                String::from("")
+            }
+    }).collect::<Vec<String>>().join(",");
+    
+    let message = format!("{{
+        \"metadata\":{{
+           \"title\":\"OPDS 2.0 Catalog\"
+        }},
+        \"links\":[
+           {{
+              \"type\":\"application/opds+json\",
+              \"rel\":\"self\",
+              \"href\":\"https://{}/opds2/publications.json\"
+           }}
+        ],
+        \"publications\":[ {} ]}}",
+        &host.1,&publications);
+
     let mut headers = request.headers.clone();
 
     headers.push((String::from("Content-Type"),String::from("application/opds+json")));
     //headers.push((String::from("Content-Type"),String::from("application/xml")));
 
-    let message = format!("{:?}",&m);
+    //let message = format!("{:?}",&m);
 
     Ok(Response {
         headers: Some(headers),
