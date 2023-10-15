@@ -3,10 +3,6 @@ use anyhow::Result;
 mod types;
 use types::*;
 
-use keyvalue::*;
-wit_bindgen_rust::import!("../../wit/keyvalue.wit");
-wit_error_rs::impl_error!(KeyvalueError);
-
 use messaging::*;
 wit_bindgen_rust::import!("../../wit/messaging.wit");
 wit_error_rs::impl_error!(messaging::MessagingError);
@@ -23,13 +19,18 @@ use epubcontract::{Api, ApiError, ApiResponse, EPubParser, Publication};
 
 fn main() -> Result<()> {
 
+    println!("Main");
     let configs = Configs::open("config-store")?;
-
+    println!("Config");
     let instance = String::from_utf8(configs.get(&"INSTANCE")?)?;
+    println!("Instance {}", &instance);
     let storage_instance = String::from_utf8(configs.get(&"STORAGEINSTANCE")?)?;
+    println!("Storage {}",storage_instance);
 
     let inputs = Sub::open(MESSAGES)?;
     let outputs = Pub::open(MESSAGES)?;
+
+    println!("Messages");
 
     let inputs_token = inputs.subscribe(&format!("{}-{}",&instance,TOPIC_INPUTS))?;
 

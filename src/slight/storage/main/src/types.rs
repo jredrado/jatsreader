@@ -18,5 +18,6 @@ pub enum Request {
 pub enum Response {
     Get(Vec<u8>),
     Put,
-    List(Vec<String>)
+    List(Vec<String>),
+    Error(String)
 }

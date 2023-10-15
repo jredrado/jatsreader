@@ -36,8 +36,11 @@ fn main() -> Result<()> {
 
         let output = match request {
             Request::Get(ref key) => {
-                let raw_response = my_kv.get(key)?;
-                Response::Get(raw_response)
+                let raw_response = my_kv.get(key);
+                match raw_response {
+                    Ok(response) => Response::Get(response),
+                    Err(e) => Response::Error(e.to_string())
+                }      
             },
             Request::Put(ref key,ref value) => { 
                 my_kv.set(key, value)?;

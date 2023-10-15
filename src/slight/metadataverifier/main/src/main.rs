@@ -23,9 +23,14 @@ use tracing::{debug,info};
 
 fn main() -> Result<()> {
 
+    println!("Main");
+
     let configs = Configs::open("config-store")?;
+    println!("Config");
     let instance = String::from_utf8(configs.get(&"INSTANCE")?)?;
+    println!("Instance");
     let metadata_instance = String::from_utf8(configs.get(&"METADATAINSTANCE")?)?;
+    println!("Metadata");
 
     let inputs = Sub::open(MESSAGES)?;
     let outputs = Pub::open(MESSAGES)?;

@@ -25,6 +25,8 @@ use metadataverifier::MetadataVerifierClient;
 use resolver::{ResolverClient,StreamerInfo};
 use register::RegisterClient;
 
+use std::collections::HashMap;
+
 use std::borrow::BorrowMut;
 use std::sync::{Mutex, Once};
 
@@ -598,7 +600,7 @@ fn main() -> Result<()> {
     let router_with_route = router
         .get("/hello", "handle_hello")?
         .get("/pub/:id/*","handle_resource_or_manifest")?
-        .get("/pub/metadata/:id/*","handle_metadata")?        
+        .get("/metadata/:id","handle_metadata")?        
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
         .get("/urs/:locator","handle_urs")?
@@ -1066,14 +1068,34 @@ fn handle_file(request: Request) -> Result<Response, HttpError> {
 
 #[register_handler]
 fn handle_opds2(request: Request) -> Result<Response,HttpError> {
+
+    let storages = (&*keyvalue().lock().unwrap()).keys().map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+   let m : HashMap<String,Vec<String>> =  
+        storages.iter().flat_map ( |storage: &String| -> Vec<(String,String)> {
+                if let Ok(storage_client) = storage::StorageClient::new(storage) {
+                    if let Ok(list_of_pub_ids) = storage_client.list() {
+                        list_of_pub_ids.iter().map(|value| (value.clone(),storage.clone())).collect()
+                    }else {
+                        Vec::new()
+                    }
+                }else {
+                    Vec::new()
+                }
+                
+
+        }).fold ( HashMap::new() , |mut acc, (key,value) |  { acc.entry(key).or_insert_with(Vec::new).push(value); acc });
+
     let mut headers = request.headers.clone();
 
     headers.push((String::from("Content-Type"),String::from("application/opds+json")));
     //headers.push((String::from("Content-Type"),String::from("application/xml")));
 
+    let message = format!("{:?}",&m);
+
     Ok(Response {
         headers: Some(headers),
-        body: Some(p.as_bytes().to_vec()),
+        body: Some(message.into()),
         status: 200,
     })
 }

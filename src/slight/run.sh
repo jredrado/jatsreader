@@ -51,9 +51,14 @@ nohup slight -c $ROOT/storage/main/slightfile2.toml run $ROOT/target/wasm32-wasi
 nohup slight -c $ROOT/register/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/register.wasm & 
 nohup slight -c $ROOT/manifest/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/manifest.wasm &
 nohup slight -c $ROOT/resource/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resource.wasm &
+
+nohup slight -c $ROOT/metadata/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/metadata.wasm & 
+
 nohup slight -c $ROOT/manifestverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/manifestverifier.wasm &
 
 nohup slight -c $ROOT/resourceverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resourceverifier.wasm &
+
+nohup slight -c $ROOT/metadataverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/metadataverifier.wasm &
 
 nohup slight -c $ROOT/resolver/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resolver.wasm &
 
