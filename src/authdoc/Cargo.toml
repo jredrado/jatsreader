@@ -18,3 +18,5 @@ minicbor = {git='https://github.com/jredrado/minicbor.git', branch="master", ver
 nanoserde = {version="0.1.29", git="https://github.com/jredrado/nanoserde.git",branch="master",features = ["std"]}
 
 authcomp = { path = "../authcomp", version= "0.2.0"}
+
+selectors = "0.22.0"

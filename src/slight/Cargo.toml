@@ -20,5 +20,7 @@ members = [
     "resolver-rest-api", 
     "metadata/main",
     "metadataverifier/main",
+    "locate/main",
+    "locateverifier/main",
     "streamer"
 ]

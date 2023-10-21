@@ -1,5 +1,5 @@
 [package]
-name = "authselect"
+name = "authselect_html5ever"
 version = "0.2.0"
 authors = ["jredrado <jesus.redrado@gmail.com>"]
 edition = "2021"

@@ -19,6 +19,9 @@ slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER_API" -v "$STRE
 slight -c $ROOT/metadata/main/slightfile.toml secret -k "INSTANCE" -v "metadata_1"
 slight -c $ROOT/metadata/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
 
+slight -c $ROOT/locate/main/slightfile.toml secret -k "INSTANCE" -v "locate_1"
+slight -c $ROOT/locate/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
+
 slight -c $ROOT/manifest/main/slightfile.toml secret -k "INSTANCE" -v "manifest_1"
 slight -c $ROOT/resource/main/slightfile.toml secret -k "INSTANCE" -v "resource_1"
 slight -c $ROOT/manifestverifier/main/slightfile.toml secret -k "INSTANCE" -v "manifestverifier_1"
@@ -42,6 +45,9 @@ slight -c $ROOT/resolver-rest-api/slightfile.toml secret -k "RESOLVERINSTANCE" -
 slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "INSTANCE" -v "metadataverifier_1"
 slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "METADATAINSTANCE" -v "metadata_1"
 
+slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "INSTANCE" -v "locateverifier_1"
+slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "LOCATEINSTANCE" -v "locate_1"
+
 slight -c $ROOT/streamer/slightfile.toml  secret -k "FILEPATH" -v "./streamer/static"
 slight -c $ROOT/streamer/slightfile.toml  secret -k "STREAMER_API" -v "$STREAMER_API_URL"
 
@@ -54,11 +60,15 @@ nohup slight -c $ROOT/resource/main/slightfile.toml run $ROOT/target/wasm32-wasi
 
 nohup slight -c $ROOT/metadata/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/metadata.wasm & 
 
+nohup slight -c $ROOT/locate/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/locate.wasm & 
+
 nohup slight -c $ROOT/manifestverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/manifestverifier.wasm &
 
 nohup slight -c $ROOT/resourceverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resourceverifier.wasm &
 
 nohup slight -c $ROOT/metadataverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/metadataverifier.wasm &
+
+nohup slight -c $ROOT/locateverifier/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/locateverifier.wasm &
 
 nohup slight -c $ROOT/resolver/main/slightfile.toml run $ROOT/target/wasm32-wasi/debug/resolver.wasm &
 

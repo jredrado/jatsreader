@@ -21,6 +21,8 @@ use serde::{Deserialize, Serialize};
 use minicbor::{Encode,Decode};
 use nanoserde::{ToJSON,SerJson};
 
+use selectors::attr::CaseSensitivity;
+
 use crate::format::PartialDisplay;
 
 /// An HTML node.
@@ -534,7 +536,7 @@ impl crate::format::PartialDisplay for ProcessingInstruction {
 }
 
 // From https://docs.rs/selectors/0.22.0/src/selectors/attr.rs.html
-
+/* 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CaseSensitivity {
     CaseSensitive,
@@ -573,3 +575,5 @@ impl CaseSensitivity {
         }
     }
 }
+
+*/

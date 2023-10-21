@@ -11,6 +11,12 @@ pub struct NodeString {
     #[n(0)] pub inner: String
 }
 
+impl NodeString {
+
+    pub fn as_str(&self) -> &str {
+        &self.inner
+    }
+}
 
 impl Deref for NodeString {
     type Target = str;

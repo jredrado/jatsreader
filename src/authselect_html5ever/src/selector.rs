@@ -48,7 +48,8 @@ impl Selector {
 
         if let Some(id) = element.id {
             let m = &*element.doc.borrow();                    
-            let doc = &*element.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+            let db = element.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let doc = &*db.borrow();
 
             for node_id in id.descendants(doc){
                 let e = ElementRef {
@@ -60,7 +61,8 @@ impl Selector {
                 if self.matches_with_scope(&e, None) {
 
                     if let Some(node) = doc.get(node_id) {
-                        let n = &*element.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                        let nb = element.computation.borrow_mut().unauth::<Node>(&node.get());
+                        let n = &*nb.borrow();
                         if n.is_element() {
                            result.push(n.clone())
                         }    

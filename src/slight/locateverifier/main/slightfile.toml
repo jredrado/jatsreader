@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "Ue1HQQzuAXMEG"
+value = "QVsMzksEK03cumlBBhlyYcg"
 
-[[capability]]
-resource = "keyvalue.filesystem"
-name = "storage_2"
+[[secret_settings]]
+name = "LOCATEINSTANCE"
+value = "QZpcLoZyDF3A"
 
 [[capability]]
 resource = "messaging.mosquitto"
@@ -19,4 +19,3 @@ MOSQUITTO_PORT = "1883"
 [[capability]]
 resource = "configs.usersecrets"
 name = "config-store"
-

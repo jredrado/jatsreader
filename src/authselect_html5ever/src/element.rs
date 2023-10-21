@@ -54,12 +54,14 @@ where
     fn value (&self) -> Option<Node> {
         match self.id{
             Some(id)=> {
-                    let m = &*self.doc.borrow();                    
-                    let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+                    let m = &*self.doc.borrow();   
+                    let b = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let doc = &*b.borrow();
                     match doc.get(id) {
                             Some (node) =>  {                                                
                                         //let e = unauth_node!(self,&node.get());
-                                        let e = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                        let eb= self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let e = &*eb.borrow();
                                         //TO FIX Review this to avoid cloning
                                         Some(e.clone())
                                     }
@@ -138,8 +140,9 @@ impl<C> Element for ElementRef<C>
     fn parent_element(&self) -> Option<Self> {
         match self.id {
             Some(id) => {
-                            let m = &*self.doc.borrow();                    
-                            let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+                            let m = &*self.doc.borrow();            
+                            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);        
+                            let doc = &*db.borrow();
                             match doc.get(id) {
                             Some (node) =>  { 
                                                 match node.parent() {
@@ -181,14 +184,17 @@ impl<C> Element for ElementRef<C>
         match (self.id,other.id) {
             (Some(id),Some(id_other)) => {
                     let m = &*self.doc.borrow();                    
-                    let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+                    let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let doc = &*db.borrow();
                     match (doc.get(id),doc.get(id_other)) {
                             (Some (node),Some(node_other)) =>  {
                                                 
                                         //let e = unauth_node!(self,&node.get());
-                                        let e = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                        let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let e = &*eb.borrow();
                                         //let e_other = unauth_node!(self,&node_other.get());
-                                        let e_other = &*self.computation.borrow_mut().unauth::<Node>(&node_other.get()).borrow();
+                                        let eob = self.computation.borrow_mut().unauth::<Node>(&node_other.get());
+                                        let e_other = &*eob.borrow();
                                         e == e_other
                                     }
                             (_,_) => false
@@ -209,14 +215,16 @@ impl<C> Element for ElementRef<C>
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
             let m = &*self.doc.borrow();                    
-            let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let doc = &*db.borrow();
             //Avoid the node itself
             let mut iter = id.preceding_siblings(doc).skip(1);
             
             iter.find( |sibling| {
                                     if let Some(node) = doc.get(*sibling) {
                                         //let ae = unauth_node!(self,&node.get());
-                                        let ae = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                        let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let ae = &*aeb.borrow();
                                         //Fix is_element
                                         //Rewrite htmlelement as Node enumeration
                                         true
@@ -237,13 +245,15 @@ impl<C> Element for ElementRef<C>
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
             let m = &*self.doc.borrow();                    
-            let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let doc = &*db.borrow();
 
             let mut iter = id.following_siblings(doc).skip(1);
             iter.find( |sibling| {
                                     if let Some(node) = doc.get(*sibling) {
                                         //let ae = unauth_node!(self,&node.get());
-                                        let ae = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                        let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let ae = &*aeb.borrow();
                                         //Fix is_element
                                         //Rewrite htmlelement as Node enumeration
                                         true
@@ -270,11 +280,13 @@ impl<C> Element for ElementRef<C>
         match self.id{
             Some(id)=> {
                     let m = &*self.doc.borrow();                    
-                    let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+                    let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let doc = &*db.borrow();
                     match doc.get(id) {
                             Some (node) =>  {                                                
                                         //let e = unauth_node!(self,&node.get());
-                                        let e = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                        let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let e = &*eb.borrow();
                                         if e.is_element() {
                                             //println!("Name checking {:?} == {:?}",e.as_element().unwrap().name(), name);
                                             e.as_element().unwrap().name() == name
@@ -301,8 +313,8 @@ impl<C> Element for ElementRef<C>
         if let Some(node) = self.value(){
             if let Some(e) =  node.as_element(){
                 e.attrs.iter().any(|(key, value)| {
-                    !matches!(*ns, NamespaceConstraint::Specific(url) if *url != key.ns)
-                        && *local_name == key.local
+                    !matches!(*ns, NamespaceConstraint::Specific(url) if *url != *key.ns)
+                        && *local_name == *key.local
                         && operation.eval_str(value)
                 })
             }else {false}
@@ -360,14 +372,16 @@ impl<C> Element for ElementRef<C>
     fn is_empty(&self) -> bool {
 
         let m = &*self.doc.borrow();                    
-        let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+        let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+        let doc = &*db.borrow();
 
         let element_or_text = | id |  {
                         
                         match doc.get(id) {
                                 Some (node) =>  {                                                
                                             //let e = unauth_node!(self,&node.get());
-                                            let e = &*self.computation.borrow_mut().unauth::<Node>(&node.get()).borrow();
+                                            let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                            let e = &*eb.borrow();
                                             e.is_element() || e.is_text()
                                         }
                                 None=> false
@@ -388,14 +402,16 @@ impl<C> Element for ElementRef<C>
         match self.id {
             Some(id) => {
                 let m = &*self.doc.borrow();                    
-                let doc = &*self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m).borrow();
+                let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                let doc = &*db.borrow();
                 match doc.get(id) {
                  Some (node) =>  { 
                         match node.parent() {
                             Some(parentId)  =>  {
                                                 if let Some(parent) = doc.get(parentId){
                                                     //let e = unauth_node!(self,&parent.get());
-                                                    let e = &*self.computation.borrow_mut().unauth::<Node>(&parent.get()).borrow();
+                                                    let eb = self.computation.borrow_mut().unauth::<Node>(&parent.get());
+                                                    let e = &*eb.borrow();
                                                     e.is_document()
                                                 }else {false}
                                                 
