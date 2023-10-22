@@ -606,7 +606,7 @@ fn main() -> Result<()> {
         .get("/metadata/:id","handle_metadata")?        
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
-        .get("/urs/:locator","handle_urs")?
+        .get("/urs/:locator","handle_urs")?   
         .get("/static/*","handle_file")?
         .post("/add", "handle_add")?
         .post("/addstorage","handle_add_storage")?;
