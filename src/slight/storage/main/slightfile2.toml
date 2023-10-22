@@ -2,7 +2,7 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "D7z2Z0Sx01wmQ"
+value = "iQDPUHNWmBOee"
 
 [[capability]]
 resource = "keyvalue.filesystem"

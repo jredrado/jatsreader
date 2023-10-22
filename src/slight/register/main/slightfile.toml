@@ -2,23 +2,23 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "STORAGEINSTANCE"
-value = "UjCn4KCrFckoZ"
+value = "JbPCEp4CK8cOI"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "DRleyrnAL5tqrJg"
+value = "-RYSYzA7n3cogBQ"
 
 [[secret_settings]]
 name = "RESOLVER"
-value = "sTr6sNJ7srlQSFw"
+value = "GdXQnvsjENb7lhA"
 
 [[secret_settings]]
 name = "STREAMER"
-value = "sbQOkCEak9A1zzA"
+value = "ycvPi-UUBvOoxig"
 
 [[secret_settings]]
 name = "STREAMER_API"
-value = "9TMvClTWOOUj6NatSP9bMtaseO0WrwZ4Wu6huVTDk4mgG6Oh0VrUYuD_5j3xIoAR5JuTRtK0kWvX0asdPqDhBsSw"
+value = "moLK-UgPl9HiltGCPwFQu7nSlcJhIw3x7pDEUV8jluH54ltG6IRUT9f7lDYg_AA_wi4fWmzhUUePnz_2HfVVKwO0"
 
 [[capability]]
 resource = "messaging.mosquitto"
