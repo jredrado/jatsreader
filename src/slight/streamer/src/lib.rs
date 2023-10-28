@@ -21,9 +21,11 @@ wit_error_rs::impl_error!(KeyvalueError);
 use manifestverifier::ManifestVerifierClient;
 use resourceverifier::ResourceVerifierClient;
 use metadataverifier::MetadataVerifierClient;
+use locateverifier::{LocateVerifierClient,SimplifiedLocator};
 
 use resolver::{ResolverClient,StreamerInfo};
 use register::RegisterClient;
+
 
 use std::collections::HashMap;
 
@@ -606,7 +608,7 @@ fn main() -> Result<()> {
         .get("/metadata/:id","handle_metadata")?        
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
-        .get("/urs/:locator","handle_urs")?   
+        .get("/locate/:id/:locator","handle_locator")?   
         .get("/static/*","handle_file")?
         .post("/add", "handle_add")?
         .post("/addstorage","handle_add_storage")?;
@@ -772,19 +774,78 @@ fn handle_add_storage(request: Request) -> Result<Response, HttpError> {
 }
 
 #[register_handler]
-fn handle_urs(request: Request) -> Result<Response, HttpError> {
+fn handle_locator(request: Request) -> Result<Response, HttpError> {
 
-    let locator = request.params.into_iter().find(|x| x.0 == "locator").unwrap_or(("".into(), "".into()));
+    let binding = ("".into(), "".into());
 
-    //let client = ResolverClient::new("resolver_1").map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+    let id = request.params.iter().find(|x| x.0 == "id").unwrap_or(&binding);
+    let locator = request.params.iter().find(|x| x.0 == "locator").unwrap_or(&binding);
 
-    //let streamers = client.get_streamers(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+    let reference = RelativeReference::try_from(request.uri.as_str()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
-    //let manifests : Vec<StreamerInfo> = streamers.iter().map(|s| StreamerInfo{id:s.id.clone(),endpoint:format!("{}/pub/{}/manifest.json",&s.endpoint,&id.1)}).collect();
+    let policy = Policy::new(&id.1).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
 
+    let locator_decoded = hex::decode(&locator.1).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+    let locator_decoded_str = std::str::from_utf8(&locator_decoded).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+
+    let s_locator : SimplifiedLocator = serde_json::from_str(locator_decoded_str).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+
+    println!("SimplifiedLocator {:?}",&s_locator);
+    
+    let locate = if reference.has_query() {
+        let query = reference.query().ok_or( HttpError::UnexpectedError("No query but it seems there is one".to_string()) )?;
+
+        let qs = QString::from(query.as_str());
+        let rservice_param = qs.get("rservice");
+        let lservice_param = qs.get("lservice");
+
+        if let (Some(rservice),Some(lservice)) = (rservice_param, lservice_param) {
+            println!("{} {} ",&rservice,&lservice);
+            
+            let rclient = ResolverClient::new(rservice).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+            let storages = rclient.get_streamers(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+            //Pick the first storage
+            let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+            let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+            lclient.locate_with(id.1.to_owned(),lservice.to_string(),storage.endpoint.to_owned(),
+                                s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+                                ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+
+        }else {
+
+            let rclient = ResolverClient::new(&policy.resolver_provider).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+            let storages = rclient.get_streamers(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+            //Pick the first storage
+            let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+            let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;            
+            lclient.locate_with(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
+                            s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+                            ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+        }
+
+    } else {
+
+        let rclient = ResolverClient::new(&policy.resolver_provider).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        let storages = rclient.get_streamers(id.1.to_owned()).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+        //Pick the first storage
+        let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+
+        let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
+        lclient.locate_with(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
+                            s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+                            ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
+
+    };
+
+    
     Ok(Response {
         headers: Some(request.headers),
-        body: Some(locator.1.as_bytes().to_vec()),
+        body: Some(locate.as_bytes().to_vec()),
         status: 200,
     })
 }

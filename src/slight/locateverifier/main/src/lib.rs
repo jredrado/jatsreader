@@ -1,5 +1,7 @@
 use anyhow::Result;
 
+pub use authselect::SimplifiedLocator;
+
 use messaging::*;
 wit_bindgen_rust::import!("../../wit/messaging.wit");
 wit_error_rs::impl_error!(messaging::MessagingError);

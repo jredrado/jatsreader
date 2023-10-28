@@ -20,6 +20,8 @@ slight-http-server-macro = { git = "https://github.com/deislabs/spiderlightning"
 manifestverifier = { path = "../manifestverifier/main" }
 resourceverifier = { path = "../resourceverifier/main" }
 metadataverifier = { path = "../metadataverifier/main" }
+locateverifier = { path = "../locateverifier/main" }
+
 
 resolver = { path = "../resolver/main" }
 register = { path = "../register/main"}
@@ -32,3 +34,5 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 uriparse = "0.6.4"
 qstring = "0.7.2"
+
+hex = { version = "0.4" }

@@ -59,6 +59,9 @@ impl Policy {
         })
     }
 
+    pub fn resolve_storage(storages: &Vec<StreamerInfo>) -> Result<&StreamerInfo> {
+        storages.get(0).ok_or(anyhow::Error::msg("Unable to resolve storage"))
+    }
 }
 
 impl Default for Policy {
