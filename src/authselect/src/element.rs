@@ -276,6 +276,9 @@ impl<C> ElementRef<C>
         }
 
         for selector_str in selector_list {
+
+            println!("Selector {}",&selector_str);
+            
             let selectors = Selector::parse(selector_str).unwrap();
 
             let mut result_nodeset = Vec::new();
@@ -310,8 +313,15 @@ impl<C> ElementRef<C>
 
         let mut result = Vec::new();
 
+        println!("Select nodes with range");
+
         if let  Some(from_id) = self.select_ids_with_path(&range.start.css_selector).get(0) {
+
+            println!("From id {:?}",&from_id);
+
             if let Some(to_id) = self.select_ids_with_path(&range.end.css_selector).get(0) {
+
+                println!("From id {:?}",&to_id);
 
                 if let Some(root) = self.id {
                     let arena_ref = (*self.doc).unauth();
@@ -346,8 +356,13 @@ impl<C> ElementRef<C>
 
         let mut result = String::new();
 
+        println!("Select nodes with range fmt {:?}",&range);
+
         if let  Some(from_id) = self.select_ids_with_path(&range.start.css_selector).get(0) {
+            println!("From id {:?}",&from_id);
+
             if let Some(to_id) = self.select_ids_with_path(&range.end.css_selector).get(0) {
+                println!("To id {:?}",&to_id);
 
                 if let Some(root) = self.id {
                     let arena_ref = (*self.doc).unauth();

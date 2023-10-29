@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use resourceverifier::ResourceVerifierClient;
+use locateverifier::LocateVerifierClient;
 use register::RegisterClient;
 
 fn main() -> Result<()> {
@@ -10,15 +10,30 @@ fn main() -> Result<()> {
 
     let epubbytes = include_bytes!("../../../../../assets/9123624.epub");
 
-    let id = client.register(epubbytes.to_vec())?;
+    let id = client.register_with(epubbytes.to_vec(),"storage_1".to_string())?;
 
     println!("ID: {}",id);
 
     
-    let rclient = ResourceVerifierClient::new("resourceverifier_1")?;
-    let resource = rclient.resource(id,b"EPUB/9123624.xml".to_vec())?;
+    let lclient = LocateVerifierClient::new("locateverifier_1")?;
 
-    println!("Resource : \n {:?}",std::str::from_utf8(&resource.1));
+    /*
+    {
+        "href" : "/EPUB/9123624.xml",
+        "media_type": "text/xml",
+        "from_css_selector": "article body sec[0] p[0]",
+        "to_css_selector": "article body sec[0] p[2]"
+    }
+    */
+
+    let locate = lclient.locate_with(id,"EPUB/9123624.xml".to_string(),"text/xml".to_string(),
+                            "article body sec p[0]".to_string(), 
+                            "article body sec[0] p[2]".to_string(),
+                            "locate_1".to_string(),
+                            "storage_1".to_string()
+    )?;
+
+    println!("Locate : \n {:?}",&locate);
 
     Ok(())
 }

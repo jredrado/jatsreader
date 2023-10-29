@@ -22,5 +22,6 @@ members = [
     "metadataverifier/main",
     "locate/main",
     "locateverifier/main",
+    "locateverifier/test",
     "streamer"
 ]

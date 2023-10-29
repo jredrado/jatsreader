@@ -1,12 +1,13 @@
 
 
 use serde::{Deserialize, Serialize};
-use authcomp::{AuthT,Computation,AuthType,ProofStream};
+use authcomp::{AuthT,UnAuth,Computation,AuthType,ProofStream};
 
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::num::NonZeroUsize;
 use std::iter::Map;
+use std::fmt::Debug;
 
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::matching;
@@ -20,17 +21,20 @@ use crate::selector::{PseudoElement,NonTSPseudoClass};
 use html5ever::{LocalName, Namespace};
 
 use authdoc::Node;
+use crate::Selector;
 
 #[derive(Debug,Clone)]
 pub struct ElementRef<C>
     where   
             C:AuthType<Node>,
             C:Computation,
+            C:Debug,
+            C:Clone,
             C:AuthType<Arena<<C as AuthType<Node>>::AuthT>>
 {
     pub id: Option<NodeId>,
     pub doc: Rc<RefCell<AuthT<Arena <AuthT<Node,C>>,C>>>,
-    pub computation : Rc<RefCell<C>>
+    //pub computation : Rc<RefCell<C>>
 }
 
 
@@ -38,16 +42,18 @@ impl<'a,C> ElementRef<C>
 where 
     C:AuthType<Node>,
     C:Computation,
+    C:Debug,
+    C:Clone,
     C:AuthType<Arena<<C as AuthType<Node>>::AuthT>>
 {
 
     pub fn new (id: Option<NodeId>, 
                 doc : AuthT<Arena <AuthT<Node,C>>,C>, 
-                computation: C ) -> Self {
+                /*computation: C */) -> Self {
             ElementRef {
                 id,
                 doc: Rc::new(RefCell::new(doc)),
-                computation: Rc::new(RefCell::new(computation))
+                //computation: Rc::new(RefCell::new(computation))
             }
     }
 
@@ -55,12 +61,14 @@ where
         match self.id{
             Some(id)=> {
                     let m = &*self.doc.borrow();   
-                    let b = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    //let b = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let b = m.unauth();
                     let doc = &*b.borrow();
                     match doc.get(id) {
                             Some (node) =>  {                                                
                                         //let e = unauth_node!(self,&node.get());
-                                        let eb= self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        //let eb= self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let eb = (&node.get()).unauth();
                                         let e = &*eb.borrow();
                                         //TO FIX Review this to avoid cloning
                                         Some(e.clone())
@@ -72,9 +80,40 @@ where
         }
     }
 
+    pub fn select(&self, selector_str: &str) -> Vec<Rc<RefCell<Node>>>  {
+        let selectors = Selector::parse(selector_str).unwrap();
+
+        let arena_ref = (*self.doc).borrow().unauth();
+        let arena = &arena_ref.borrow();
+
+        if let Some(node_id) = self.id {
+            return
+                node_id.descendants(arena).filter_map (  |node_id| {
+                    if let Some(arena_node) = arena.get(node_id) {
+                        let auth_node = arena_node.get();
+                        let node = auth_node.unauth();
+                        if (*node).borrow().is_element() {
+                            let element_ref = ElementRef::<C> {
+                                id: Some(node_id),
+                                doc: Rc::clone(&self.doc)
+                            };
+                            if selectors.matches_with_scope(&element_ref,None) {
+                                return Some(Rc::clone(&node))
+                            }
+                        }
+                    }
+                    None
+                }).collect()
+        }
+
+        Vec::new()
+    }
+
+    /*
     pub fn get_computation(&self) -> Rc<RefCell<C>> {
             self.computation.clone()
     }
+    */
 
     /*
     pub fn descendants (&self) -> Option<Map< Descendants<'_, <C as AuthType<Node>>::AuthT>,Box<dyn Fn(NodeId)->ElementRef<C>>>>{
@@ -109,13 +148,15 @@ impl<'a,C> Default for ElementRef<C>
     where
         C:AuthType<Node>,
         C:Computation,
+        C:Debug,
+        C:Clone,
         C:AuthType<Arena<<C as AuthType<Node>>::AuthT>>
 {
     fn default() -> Self { 
         ElementRef::<C> {
             id: None,
             doc: Rc::new(RefCell::new(<C as AuthType<Arena<<C as AuthType<Node>>::AuthT>>>::AuthT::default())),
-            computation: Rc::new(RefCell::new(C::new(None)))
+            //computation: Rc::new(RefCell::new(C::new(None)))
         }
     }
 }
@@ -127,7 +168,7 @@ impl<C> Element for ElementRef<C>
             C:Computation,
             //C:Computation<Node>,
             C:AuthType<Arena<<C as AuthType<Node>>::AuthT>>,
-            C:std::fmt::Debug,
+            C:Debug,
             C:Clone
 
 {
@@ -141,7 +182,8 @@ impl<C> Element for ElementRef<C>
         match self.id {
             Some(id) => {
                             let m = &*self.doc.borrow();            
-                            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);        
+                            //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);  
+                            let db = m.unauth();
                             let doc = &*db.borrow();
                             match doc.get(id) {
                             Some (node) =>  { 
@@ -150,7 +192,7 @@ impl<C> Element for ElementRef<C>
                                                                             Some ( ElementRef { 
                                                                                         id:Some(parentId),
                                                                                         doc: self.doc.clone(),
-                                                                                        computation: self.computation.clone()
+                                                                                        //computation: self.computation.clone()
                                                                                         }
                                                                                 )
                                                                         }
@@ -184,16 +226,19 @@ impl<C> Element for ElementRef<C>
         match (self.id,other.id) {
             (Some(id),Some(id_other)) => {
                     let m = &*self.doc.borrow();                    
-                    let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let db = m.unauth();
                     let doc = &*db.borrow();
                     match (doc.get(id),doc.get(id_other)) {
                             (Some (node),Some(node_other)) =>  {
                                                 
                                         //let e = unauth_node!(self,&node.get());
-                                        let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        //let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let eb = (&node.get()).unauth();
                                         let e = &*eb.borrow();
                                         //let e_other = unauth_node!(self,&node_other.get());
-                                        let eob = self.computation.borrow_mut().unauth::<Node>(&node_other.get());
+                                        //let eob = self.computation.borrow_mut().unauth::<Node>(&node_other.get());
+                                        let eob = (&node_other.get()).unauth();
                                         let e_other = &*eob.borrow();
                                         e == e_other
                                     }
@@ -215,7 +260,8 @@ impl<C> Element for ElementRef<C>
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
             let m = &*self.doc.borrow();                    
-            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let db = m.unauth();
             let doc = &*db.borrow();
             //Avoid the node itself
             let mut iter = id.preceding_siblings(doc).skip(1);
@@ -223,7 +269,8 @@ impl<C> Element for ElementRef<C>
             iter.find( |sibling| {
                                     if let Some(node) = doc.get(*sibling) {
                                         //let ae = unauth_node!(self,&node.get());
-                                        let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        //let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let aeb = (&node.get()).unauth();
                                         let ae = &*aeb.borrow();
                                         //Fix is_element
                                         //Rewrite htmlelement as Node enumeration
@@ -234,7 +281,7 @@ impl<C> Element for ElementRef<C>
                 ElementRef::<C> {
                     id: Some(nodeid),
                     doc: self.doc.clone(),
-                    computation: self.computation.clone()
+                    //computation: self.computation.clone()
                 }
             })
         }else {None}
@@ -245,14 +292,16 @@ impl<C> Element for ElementRef<C>
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
             let m = &*self.doc.borrow();                    
-            let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let db = m.unauth();
             let doc = &*db.borrow();
 
             let mut iter = id.following_siblings(doc).skip(1);
             iter.find( |sibling| {
                                     if let Some(node) = doc.get(*sibling) {
                                         //let ae = unauth_node!(self,&node.get());
-                                        let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        //let aeb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let aeb = (&node.get()).unauth();
                                         let ae = &*aeb.borrow();
                                         //Fix is_element
                                         //Rewrite htmlelement as Node enumeration
@@ -263,7 +312,7 @@ impl<C> Element for ElementRef<C>
                 ElementRef::<C> {
                     id: Some(nodeid),
                     doc: self.doc.clone(),
-                    computation: self.computation.clone()
+                    //computation: self.computation.clone()
                 }
             })
         }else {None}
@@ -280,12 +329,14 @@ impl<C> Element for ElementRef<C>
         match self.id{
             Some(id)=> {
                     let m = &*self.doc.borrow();                    
-                    let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                    let db = m.unauth();
                     let doc = &*db.borrow();
                     match doc.get(id) {
                             Some (node) =>  {                                                
                                         //let e = unauth_node!(self,&node.get());
-                                        let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        //let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                        let eb = (&node.get()).unauth();
                                         let e = &*eb.borrow();
                                         if e.is_element() {
                                             //println!("Name checking {:?} == {:?}",e.as_element().unwrap().name(), name);
@@ -372,7 +423,8 @@ impl<C> Element for ElementRef<C>
     fn is_empty(&self) -> bool {
 
         let m = &*self.doc.borrow();                    
-        let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+        //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+        let db = m.unauth();
         let doc = &*db.borrow();
 
         let element_or_text = | id |  {
@@ -380,7 +432,8 @@ impl<C> Element for ElementRef<C>
                         match doc.get(id) {
                                 Some (node) =>  {                                                
                                             //let e = unauth_node!(self,&node.get());
-                                            let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                            //let eb = self.computation.borrow_mut().unauth::<Node>(&node.get());
+                                            let eb = (&node.get()).unauth();
                                             let e = &*eb.borrow();
                                             e.is_element() || e.is_text()
                                         }
@@ -402,7 +455,8 @@ impl<C> Element for ElementRef<C>
         match self.id {
             Some(id) => {
                 let m = &*self.doc.borrow();                    
-                let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+                let db = m.unauth();
                 let doc = &*db.borrow();
                 match doc.get(id) {
                  Some (node) =>  { 
@@ -410,7 +464,8 @@ impl<C> Element for ElementRef<C>
                             Some(parentId)  =>  {
                                                 if let Some(parent) = doc.get(parentId){
                                                     //let e = unauth_node!(self,&parent.get());
-                                                    let eb = self.computation.borrow_mut().unauth::<Node>(&parent.get());
+                                                    //let eb = self.computation.borrow_mut().unauth::<Node>(&parent.get());
+                                                    let eb = (&parent.get()).unauth();
                                                     let e = &*eb.borrow();
                                                     e.is_document()
                                                 }else {false}

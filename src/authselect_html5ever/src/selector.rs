@@ -11,7 +11,7 @@ use selectors::{matching, parser, visitor};
 
 use crate::ElementRef;
 use authdoc::Node;
-use authcomp::{Computation,AuthType};
+use authcomp::{UnAuth,Computation,AuthType};
 use indextree::Arena;
 
 /// Wrapper around CSS selectors.
@@ -48,20 +48,22 @@ impl Selector {
 
         if let Some(id) = element.id {
             let m = &*element.doc.borrow();                    
-            let db = element.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            //let db = element.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
+            let db = m.unauth();
             let doc = &*db.borrow();
 
             for node_id in id.descendants(doc){
-                let e = ElementRef {
+                let e : ElementRef<C> = ElementRef {
                             id: Some(node_id),
                             doc: element.doc.clone(),
-                            computation: element.computation.clone()
+                            //computation: element.computation.clone()
                         };
 
                 if self.matches_with_scope(&e, None) {
 
                     if let Some(node) = doc.get(node_id) {
-                        let nb = element.computation.borrow_mut().unauth::<Node>(&node.get());
+                        //let nb = element.computation.borrow_mut().unauth::<Node>(&node.get());
+                        let nb = (&node.get()).unauth();
                         let n = &*nb.borrow();
                         if n.is_element() {
                            result.push(n.clone())

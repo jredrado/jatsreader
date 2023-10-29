@@ -659,8 +659,12 @@ impl<C> Api<C>
             let raw_resources_ref = unauth_doc.raw_resources.unauth();
             let raw_resources = (&*raw_resources_ref.borrow());
 
+            println!("Locate {:?}",&locator);
+
             if locator.media_type == "text/html" || locator.media_type == "text/xml" {
                 if let Some(result) = raw_resources.get(&C::auth(locator.href.as_bytes().to_owned())){
+                    println!("Resource {:?}",&result.1);
+
                     if let Some(element_ref) = &result.1 {
                         let range = DOMRange {
                             start: DOMIndex {

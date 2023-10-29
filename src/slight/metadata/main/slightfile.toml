@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "t5JbCBNc20lkG5A"
+value = "oQmT5fJMRPV0rlA"
 
 [[secret_settings]]
 name = "STORAGEINSTANCE"
-value = "xWOCOIdPKrglV"
+value = "nDlCmxiVFhCaY"
 
 [[capability]]
 resource = "configs.usersecrets"
@@ -17,5 +17,5 @@ resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_HOST = "localhost"
 MOSQUITTO_PORT = "1883"
+MOSQUITTO_HOST = "localhost"

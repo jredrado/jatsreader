@@ -208,7 +208,8 @@ impl<C> EPubParser<C>
                 if let Ok(link) = publication.publication.search_link_by_href(href_name){
                     if let Some(type_link) = &(&*link.borrow()).type_link{
                         let link_type_ref = type_link.unauth();
-                        if &*link_type_ref.borrow() == "application/xhtml+xml" {
+                        let l_type = &*link_type_ref.borrow();
+                        if l_type == "application/xhtml+xml" || l_type == "text/xml" {
 
                             let mut auth_document = AuthDocument::<C>::default();
 
