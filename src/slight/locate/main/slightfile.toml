@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "lHp3HghCROlE"
+value = "V3cEimbicA3I"
 
 [[secret_settings]]
 name = "STORAGEINSTANCE"
-value = "nDlCmxiVFhCaY"
+value = "NzYHau_YmmtyC"
 
 [[capability]]
 resource = "configs.usersecrets"

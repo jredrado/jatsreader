@@ -97,3 +97,5 @@ nohup slight -c $ROOT/streamer/slightfile.toml run $ROOT/target/wasm32-wasi/debu
 #slight -c $ROOT/resourceverifier/test/slightfile.toml run $ROOT/target/wasm32-wasi/debug/testresourceverifier.wasm 
 #echo "Test resolver"
 #slight -c $ROOT/resolver/test/slightfile.toml run $ROOT/target/wasm32-wasi/debug/testresolver.wasm 
+
+#slight -c $ROOT/locateverifier/test/slightfile.toml run $ROOT/target/wasm32-wasi/debug/testlocateverifier.wasm 

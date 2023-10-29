@@ -24,7 +24,7 @@ use authcomp::{Computation,AuthType,AuthT,AuthContainer,AuthTContainer,ProofStre
 use authcomp::{Encode,Decode,Serialize,Deserialize,DeserializeOwned,DecodeOwned};
 use authcomp::{UnAuth,UnAuthMut};
 
-use authselect::ElementRef;
+use authselect_html5ever::ElementRef;
 use authdoc::Node;
 
 use nanoserde::ToJSON;
@@ -36,7 +36,7 @@ use typed_key::Key;
 #[derive(Debug,Default)]
 pub struct PublicationWithInternal<C> 
     where     
-        C:Computation,  
+        C:Computation + Clone + Debug,  
         C:AuthType<String>,
         //C:AuthType<Vec<AuthT<String,C>>>,
         //C:AuthType<Vec<AuthT<Link<C>,C>>>,
@@ -89,7 +89,7 @@ pub struct PublicationWithInternal<C>
 #[derive(Debug,Default,Serialize,Deserialize,Clone,PartialEq,Encode,Decode,ToJSON)]
 pub struct Publication<C> 
     where   
-        C:Computation,
+        C:Computation + Clone + Debug,
         C:AuthType<String>,
         //C:AuthType<Vec<AuthT<String,C>>>,
         //C:AuthType<Vec<AuthT<Link<C>,C>>>,
@@ -254,7 +254,7 @@ pub type ALink<C> = AuthT<Link<C>,C>;
 #[derive(Debug)]
 pub enum PublicationMembers<C>
 where    
-    C:Computation,
+    C:Computation + Clone + Debug,
     C:AuthType<String>,
     C:AuthType<Vec<MediaOverlayNode<C>>>,
     C:AuthType<Metadata<C>>,
@@ -303,7 +303,7 @@ where
 
 impl<C> Publication<C> 
     where   
-        C:Computation,
+        C:Computation + Clone + Debug,
         C:AuthType<String>,
         //C:AuthType<Vec<AuthT<String,C>>>,
         //C:AuthType<Vec<AuthT<Link<C>,C>>>,
@@ -848,7 +848,7 @@ impl<C> Publication<C>
 
 impl<C> core::ops::Index<usize> for PublicationWithInternal<C> 
     where       
-        C:Computation,
+        C:Computation + Clone + Debug,
         C:AuthType<String>,
         //C:AuthType<Vec<AuthT<String,C>>>,
         //C:AuthType<Vec<AuthT<Link<C>,C>>>,
@@ -954,7 +954,7 @@ impl <C> Link<C>
 
 impl<C> PublicationWithInternal<C> 
     where       
-        C:Computation,
+        C:Computation + Clone + Debug,
         C:AuthType<String>,
         //C:AuthType<Vec<AuthT<String,C>>>,
         //C:AuthType<Vec<AuthT<Link<C>,C>>>,

@@ -1,7 +1,10 @@
 
 
 use serde::{Deserialize, Serialize};
-use authcomp::{AuthT,UnAuth,Computation,AuthType,ProofStream};
+use authcomp::{AuthT,UnAuth,Computation,AuthType,ProofStream,Encode,Decode};
+use authparser::AuthDocument;
+
+use nanoserde::ToJSON;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -13,7 +16,7 @@ use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstrain
 use selectors::matching;
 use selectors::{Element, OpaqueElement};
 
-use indextree::{NodeId,Arena,Descendants};
+use indextree::{NodeId,Arena,Descendants,NodeEdge};
 
 use crate::selector::Simple;
 use crate::selector::{PseudoElement,NonTSPseudoClass};
@@ -21,9 +24,14 @@ use crate::selector::{PseudoElement,NonTSPseudoClass};
 use html5ever::{LocalName, Namespace};
 
 use authdoc::Node;
-use crate::Selector;
 
-#[derive(Debug,Clone)]
+use crate::Selector;
+use crate::Range;
+use crate::DOMRange;
+
+use splitty::*;
+
+#[derive(Debug,Serialize,Deserialize,Clone,PartialEq,Encode,Decode,ToJSON)]
 pub struct ElementRef<C>
     where   
             C:AuthType<Node>,
@@ -32,8 +40,9 @@ pub struct ElementRef<C>
             C:Clone,
             C:AuthType<Arena<<C as AuthType<Node>>::AuthT>>
 {
-    pub id: Option<NodeId>,
-    pub doc: Rc<RefCell<AuthT<Arena <AuthT<Node,C>>,C>>>,
+    #[n(0)] pub id: Option<NodeId>,
+    #[n(1)] pub doc: Rc<AuthDocument<C>>,
+    //#[n(1)] pub doc: Rc<RefCell<AuthT<Arena <AuthT<Node,C>>,C>>>,
     //pub computation : Rc<RefCell<C>>
 }
 
@@ -52,7 +61,7 @@ where
                 /*computation: C */) -> Self {
             ElementRef {
                 id,
-                doc: Rc::new(RefCell::new(doc)),
+                doc: Rc::new(doc),
                 //computation: Rc::new(RefCell::new(computation))
             }
     }
@@ -60,7 +69,7 @@ where
     fn value (&self) -> Option<Node> {
         match self.id{
             Some(id)=> {
-                    let m = &*self.doc.borrow();   
+                    let m = &*self.doc;   
                     //let b = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
                     let b = m.unauth();
                     let doc = &*b.borrow();
@@ -83,7 +92,7 @@ where
     pub fn select(&self, selector_str: &str) -> Vec<Rc<RefCell<Node>>>  {
         let selectors = Selector::parse(selector_str).unwrap();
 
-        let arena_ref = (*self.doc).borrow().unauth();
+        let arena_ref = (*self.doc).unauth();
         let arena = &arena_ref.borrow();
 
         if let Some(node_id) = self.id {
@@ -107,6 +116,149 @@ where
         }
 
         Vec::new()
+    }
+
+    pub fn select_ids_with_path(&self, selector_str: &str) -> Vec<NodeId>  {
+
+        let mut selector_list = split_unquoted_char(selector_str, ' ')
+            .unwrap_quotes(true);
+        
+        let arena_ref = (*self.doc).unauth();
+        let arena = &arena_ref.borrow();        
+
+        let mut root_nodes = Vec::new();
+        if let Some(id) = self.id {
+            root_nodes.insert(0,id);
+        }
+
+        for selector_str in selector_list {
+
+            println!("Selector {}",&selector_str);
+            
+            let selectors = Selector::parse(selector_str).unwrap();
+
+            let mut result_nodeset = Vec::new();
+
+            for node_id in root_nodes {
+                    
+                for node_id in node_id.children(arena) {
+                        if let Some(arena_node) = arena.get(node_id) {
+                            let auth_node = arena_node.get();
+                            let node = auth_node.unauth();
+                            let n = (*node).borrow();
+                            if n.is_element() {
+
+                                println!("Node {:?}",&n);
+
+                                let element_ref = ElementRef::<C> {
+                                    id: Some(node_id),
+                                    doc: Rc::clone(&self.doc)
+                                };
+                                if selectors.matches_with_scope(&element_ref,None) {
+
+                                    println!("Match {:?} {:?}",&selector_str,&n);
+
+                                    result_nodeset.push(node_id);
+                                }
+                            }
+                        }
+                }
+                
+            }
+
+            root_nodes = result_nodeset;
+        }
+
+        root_nodes
+    }
+
+    pub fn select_nodes_with_range(&self, range:&DOMRange) -> Vec<Rc<RefCell<Node>>> {
+
+        let mut result = Vec::new();
+
+        println!("Select nodes with range");
+
+        if let  Some(from_id) = self.select_ids_with_path(&range.start.css_selector).get(0) {
+
+            println!("From id {:?}",&from_id);
+
+            if let Some(to_id) = self.select_ids_with_path(&range.end.css_selector).get(0) {
+
+                println!("From id {:?}",&to_id);
+
+                if let Some(root) = self.id {
+                    let arena_ref = (*self.doc).unauth();
+                    let arena = &arena_ref.borrow();     
+
+                    let range = Range::new(arena,root,*from_id,*to_id);
+
+                    for node_edge in range {
+                        match node_edge {
+                            NodeEdge::Start(node_id) => {
+                                    
+                                    if let Some(arena_node) = arena.get(node_id) {
+                                        let auth_node = arena_node.get();
+                                        let node = auth_node.unauth();
+                                                                                
+                                        result.push(Rc::clone(&node));
+                                    }
+                                    
+                            }
+                            NodeEdge::End(node_id) => {
+       
+                            }
+                        };
+                    }
+
+        }}}
+
+        return result;
+    }
+
+    pub fn select_nodes_with_range_fmt(&self, range:&DOMRange) -> String {
+
+        let mut result = String::new();
+
+        println!("Select nodes with range fmt {:?}",&range);
+
+        if let  Some(from_id) = self.select_ids_with_path(&range.start.css_selector).get(0) {
+            println!("From id {:?}",&from_id);
+
+            if let Some(to_id) = self.select_ids_with_path(&range.end.css_selector).get(0) {
+                println!("To id {:?}",&to_id);
+
+                if let Some(root) = self.id {
+                    let arena_ref = (*self.doc).unauth();
+                    let arena = &arena_ref.borrow();     
+
+                    let range = Range::new(arena,root,*from_id,*to_id);
+
+                    for node_edge in range {
+                        match node_edge {
+                            NodeEdge::Start(node_id) => {
+                                    
+                                    if let Some(arena_node) = arena.get(node_id) {
+                                        let auth_node = arena_node.get();
+                                        let node = auth_node.unauth();
+
+                                        result.push_str(&std::format!("{:+}",*node.borrow()));                                                                       
+                                    }
+                                    
+                            }
+                            NodeEdge::End(node_id) => {
+                                    if let Some(arena_node) = arena.get(node_id) {
+                                        let auth_node = arena_node.get();
+                                        let node = auth_node.unauth();
+                                        
+                                        result.push_str(&std::format!("{:-}",*node.borrow()));
+                                    }
+                            }
+                        };
+                    }
+
+        }}}
+
+        return result;
     }
 
     /*
@@ -155,7 +307,7 @@ impl<'a,C> Default for ElementRef<C>
     fn default() -> Self { 
         ElementRef::<C> {
             id: None,
-            doc: Rc::new(RefCell::new(<C as AuthType<Arena<<C as AuthType<Node>>::AuthT>>>::AuthT::default())),
+            doc: Rc::new(<C as AuthType<Arena<<C as AuthType<Node>>::AuthT>>>::AuthT::default()),
             //computation: Rc::new(RefCell::new(C::new(None)))
         }
     }
@@ -181,7 +333,7 @@ impl<C> Element for ElementRef<C>
     fn parent_element(&self) -> Option<Self> {
         match self.id {
             Some(id) => {
-                            let m = &*self.doc.borrow();            
+                            let m = &*self.doc;            
                             //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);  
                             let db = m.unauth();
                             let doc = &*db.borrow();
@@ -225,7 +377,7 @@ impl<C> Element for ElementRef<C>
     fn is_same_type(&self, other: &Self) -> bool {
         match (self.id,other.id) {
             (Some(id),Some(id_other)) => {
-                    let m = &*self.doc.borrow();                    
+                    let m = &*self.doc;                    
                     //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
                     let db = m.unauth();
                     let doc = &*db.borrow();
@@ -259,7 +411,7 @@ impl<C> Element for ElementRef<C>
     fn prev_sibling_element(&self) -> Option<Self> {
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
-            let m = &*self.doc.borrow();                    
+            let m = &*self.doc;                    
             //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
             let db = m.unauth();
             let doc = &*db.borrow();
@@ -291,7 +443,7 @@ impl<C> Element for ElementRef<C>
     fn next_sibling_element(&self) -> Option<Self> {
         if let Some(id) = self.id {
             //let doc = &*self.doc.borrow();
-            let m = &*self.doc.borrow();                    
+            let m = &*self.doc;                    
             //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
             let db = m.unauth();
             let doc = &*db.borrow();
@@ -328,7 +480,7 @@ impl<C> Element for ElementRef<C>
     fn has_local_name(&self, name: &LocalName) -> bool {
         match self.id{
             Some(id)=> {
-                    let m = &*self.doc.borrow();                    
+                    let m = &*self.doc;                    
                     //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
                     let db = m.unauth();
                     let doc = &*db.borrow();
@@ -422,7 +574,7 @@ impl<C> Element for ElementRef<C>
 
     fn is_empty(&self) -> bool {
 
-        let m = &*self.doc.borrow();                    
+        let m = &*self.doc;                    
         //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
         let db = m.unauth();
         let doc = &*db.borrow();
@@ -454,7 +606,7 @@ impl<C> Element for ElementRef<C>
         
         match self.id {
             Some(id) => {
-                let m = &*self.doc.borrow();                    
+                let m = &*self.doc;                    
                 //let db = self.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
                 let db = m.unauth();
                 let doc = &*db.borrow();

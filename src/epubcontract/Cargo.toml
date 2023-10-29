@@ -13,7 +13,9 @@ crate-type = ["cdylib","lib"]
 authcomp = { path = "../authcomp", version = "0.2.0"}
 authdoc = { path = "../authdoc", version = "0.2.0"}
 authparser = { path = "../authparser", version = "0.2.0"}
-authselect = { path = "../authselect", version = "0.2.0"}
+# authselect = { path = "../authselect", version = "0.2.0"}
+
+authselect_html5ever = { path = "../authselect_html5ever", version = "0.2.0"}
 
 corepack = "~0.4.0"
 

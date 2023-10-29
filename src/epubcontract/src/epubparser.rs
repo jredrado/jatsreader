@@ -3,7 +3,9 @@ use authcomp::{Encode,Decode,Serialize,Deserialize,DeserializeOwned,DecodeOwned}
 use authcomp::{UnAuth,UnAuthMut,AuthUpdate};
 
 use authdoc::Node;
-use authselect::ElementRef;
+//use authselect::ElementRef;
+use authselect_html5ever::ElementRef;
+
 use indextree::Arena;
 use nanoserde::SerJson;
 
@@ -53,7 +55,7 @@ const MEDIAOVERLAY_URL : &str = "media-overlay?resource=";
 #[derive(Debug)]
 pub struct EPubParser<C>
     where       
-        C:Computation,
+        C:Computation + Clone + Debug,
         C:AuthType<String>,
         C:AuthType<Vec<MediaOverlayNode<C>>>,
         C:AuthType<Metadata<C>>,

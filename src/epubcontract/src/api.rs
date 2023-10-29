@@ -6,7 +6,7 @@ use authcomp::{Encode,Decode,Serialize,Deserialize,DeserializeOwned,DecodeOwned}
 use authcomp::UnAuth;
 use authcomp::ToJSON;
 
-use authselect::ElementRef;
+
 use authdoc::Node;
 use indextree::Arena;
 use nanoserde::SerJson;
@@ -44,7 +44,10 @@ use core::marker::PhantomData;
 
 pub type ID = HashType;
 //pub type EPUB<C> = AuthT<EPubDoc<C>,C>;
-use authselect::{DOMRange,DOMIndex,SimplifiedLocator};
+
+//use authselect::{ElementRef,DOMRange,DOMIndex,SimplifiedLocator};
+use authselect_html5ever::{ElementRef,DOMRange,DOMIndex,SimplifiedLocator};
+
 
 #[derive(Debug,Serialize,Deserialize,Clone,PartialEq,Encode,Decode)]
 pub enum ApiResponse {
@@ -663,7 +666,6 @@ impl<C> Api<C>
 
             if locator.media_type == "text/html" || locator.media_type == "text/xml" {
                 if let Some(result) = raw_resources.get(&C::auth(locator.href.as_bytes().to_owned())){
-                    println!("Resource {:?}",&result.1);
 
                     if let Some(element_ref) = &result.1 {
                         let range = DOMRange {

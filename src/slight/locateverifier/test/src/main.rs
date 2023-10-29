@@ -27,8 +27,8 @@ fn main() -> Result<()> {
     */
 
     let locate = lclient.locate_with(id,"EPUB/9123624.xml".to_string(),"text/xml".to_string(),
-                            "article body sec p[0]".to_string(), 
-                            "article body sec[0] p[2]".to_string(),
+                            "article body sec:nth-child(1) p:nth-child(1)".to_string(), 
+                            "article body sec:nth-child(1) p:nth-child(2)".to_string(),
                             "locate_1".to_string(),
                             "storage_1".to_string()
     )?;

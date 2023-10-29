@@ -16,7 +16,7 @@ use authcomp::{AuthTNoProofs, NoProofs};
 use authcomp::{AuthTProver, Prover};
 use authcomp::{AuthTVerifier, Verifier};
 use authcomp::ProofStream;
-use authselect::SimplifiedLocator;
+use authselect_html5ever::SimplifiedLocator;
 
 use epubcontract::{Api, ApiError, ApiResponse, EPubParser, Publication};
 use tracing::{debug,info};

@@ -21,7 +21,9 @@ serde = { version = "1.0", features = ["derive"] }
 rmp-serde = "1.1.1"
 
 authcomp = { path = "../../../authcomp", version = "0.2.0"}
-authselect = { path = "../../../authselect", version = "0.2.0"}
+# authselect = { path = "../../../authselect", version = "0.2.0"}
+authselect_html5ever = { path = "../../../authselect_html5ever", version = "0.2.0"}
+
 epubcontract = { path = "../../../epubcontract", version= "0.2.0" }
 
 hex = { version = "0.4"}

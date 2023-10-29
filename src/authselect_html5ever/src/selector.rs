@@ -47,7 +47,7 @@ impl Selector {
         let mut result = Vec::<Node>::new();
 
         if let Some(id) = element.id {
-            let m = &*element.doc.borrow();                    
+            let m = &*element.doc;                    
             //let db = element.computation.borrow_mut().unauth::<Arena<<C as AuthType<Node>>::AuthT>>(m);
             let db = m.unauth();
             let doc = &*db.borrow();
