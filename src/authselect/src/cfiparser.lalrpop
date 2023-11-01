@@ -63,6 +63,7 @@ Csv: String = {
 };
 
 match {
+    r"\/",r" ",r"\^",r"\[",r"\]",r"\(",r"\)",r",",r";",r"=",
     r"[0-9]+",
 } else {
     r"[\s]+",
@@ -70,6 +71,17 @@ match {
     _
 }
 
+Slash : String = r"\/" => <>.to_string();
+Space : String	=	r" " => <>.to_string();	 
+Circumflex : String	=	r"\^" => <>.to_string();
+SquareBracketsLeft : String	=	r"\[" => <>.to_string();	 
+SquareBracketsRight : String =	r"\]" => <>.to_string();	 
+ParenthesesLeft	: String =	r"\("  => <>.to_string();	
+ParenthesesRight : String	=	r"\)"  => <>.to_string();	
+
+Comma : String	=	r","  => <>.to_string();
+Semicolon : String	=	r";"  => <>.to_string();
+Equal : String	=	r"="  => <>.to_string();
 
 Integer: String = r"[0-9]+" => <>.to_string();
 Value: String = r"[.]+" => <>.to_string();

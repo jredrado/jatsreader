@@ -19,3 +19,5 @@ pub use locator::TextContext;
 pub use locator::Locator;
 pub use locator::Location;
 pub use locator::SimplifiedLocator;
+
+pub use cfiparser::*;
