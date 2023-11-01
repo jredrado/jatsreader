@@ -2,6 +2,9 @@ mod element;
 mod cfi;
 mod range;
 mod locator;
+mod types;
+
+mod cfiparser;
 
 pub use element::ElementRef;
 pub use cfi::CFIComponent;

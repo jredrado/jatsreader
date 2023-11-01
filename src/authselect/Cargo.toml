@@ -24,3 +24,10 @@ simplecss = { git = "https://github.com/jredrado/simplecss.git", branch="master"
 serde = { version = "1.0", features = ["derive","rc"] }
 
 splitty = "0.1.0"
+
+lalrpop-util = {git ="https://github.com/lalrpop/lalrpop.git", tag="0.20.0", default-features=false, features = ["lexer"] }
+
+
+
+[build-dependencies]
+lalrpop = "0.20.0"

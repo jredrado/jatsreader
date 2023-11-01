@@ -1,0 +1,80 @@
+grammar;
+
+use super::types::*;
+use std::vec::Vec;
+
+pub Fragment: Fragment = {
+    "epubcfi(" <path: Path> <range: Range?> ")" => Fragment::new(path, range),
+};
+
+Path: Path = {
+    <step: Step> <local_path: LocalPath> => Path::new(step,local_path),
+};
+
+Range: Range = {
+    "," <start: LocalPath> "," <end: LocalPath> => Range::new(start, end),
+};
+
+LocalPath: LocalPath = {
+    <steps: Steps> <end: EndOfPath?> => LocalPath::new(steps,end),
+};
+
+pub Steps : Vec<Step> = Step* => <>.into();
+
+EndOfPath: EndOfPath = {
+    "!" <offset: Offset> => EndOfPath::redirected_path( RedirectedPath::new(Some(offset),None) ),
+    "!" <path: Path> => EndOfPath::redirected_path( RedirectedPath::new(None, Some(path))),
+    <offset: Offset> => EndOfPath::offset(offset),
+};
+
+Step: Step = {
+    "/" <integer: Integer> => Step::new(integer, None) ,
+    "/" <integer: Integer> "[" <assertion: Assertion> "]" => Step::new(integer, Some(assertion)),
+};
+
+Offset: Offset = {
+    ":" <integer: Integer> => Offset::SimpleOffset(integer),
+    "@" <num1: Number> ":" <num2: Number> => Offset::OffsetWithReference(num1, num2),
+    "~" <num: Number> => Offset::IdAssertion(num, None),
+    "~" <num1: Number> "@" <num2: Number> ":" <num3: Number> => Offset::IdAssertion(num1, Some((num2, num3))),
+};
+
+Number: String = {
+    <integer: Integer> => integer,
+    <integer: Integer> "." <fraction: Integer> => format!("{}.{}", integer, fraction),
+};
+
+
+
+Assertion: String = {
+    <value: Value> => value,
+    <value: Value> "," <value2: Value> => format!("{},{}", value, value2),
+    "," <value: Value> => format!(",{}", value),
+    <param: Parameter> => param,
+};
+
+Parameter: String = {
+    ";" <value: ValueNoSpace> "=" <csv: Csv> => format!("{}={}", value, csv),
+};
+
+Csv: String = {
+    <value: Value> => value,
+    <value: Value> "," <csv: Csv> => format!("{},{}", value, csv),
+};
+
+match {
+    r"[0-9]+",
+} else {
+    r"[\s]+",
+    r"[.]+",
+    _
+}
+
+
+Integer: String = r"[0-9]+" => <>.to_string();
+Value: String = r"[.]+" => <>.to_string();
+ValueNoSpace : String = r"[^\s]+" => <>.to_string();
+
+
+
+
