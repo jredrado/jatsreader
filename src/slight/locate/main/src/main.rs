@@ -128,6 +128,7 @@ fn main() -> Result<()> {
                 match result {
                     Some(ApiResponse::String(data)) => {
     
+                        println!("Response {:?}",&data);
                         Response::Locate(data.to_owned(),proofs)
                     }
                     None => { anyhow::bail!("Locate with cfi Unexpected result: {:?}", result) }

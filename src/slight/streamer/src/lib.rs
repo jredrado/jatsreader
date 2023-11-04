@@ -21,7 +21,7 @@ wit_error_rs::impl_error!(KeyvalueError);
 use manifestverifier::ManifestVerifierClient;
 use resourceverifier::ResourceVerifierClient;
 use metadataverifier::MetadataVerifierClient;
-use locateverifier::{LocateVerifierClient,SimplifiedLocator};
+use locateverifier::{LocateVerifierClient,SimplifiedLocatorCFI};
 
 use resolver::{ResolverClient,StreamerInfo};
 use register::RegisterClient;
@@ -788,7 +788,7 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
     let locator_decoded = hex::decode(&locator.1).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
     let locator_decoded_str = std::str::from_utf8(&locator_decoded).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
 
-    let s_locator : SimplifiedLocator = serde_json::from_str(locator_decoded_str).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
+    let s_locator : SimplifiedLocatorCFI = serde_json::from_str(locator_decoded_str).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
 
     println!("SimplifiedLocator {:?}",&s_locator);
     
@@ -809,8 +809,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
             let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
             let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
-            lclient.locate_with(id.1.to_owned(),lservice.to_string(),storage.endpoint.to_owned(),
-                                s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+            lclient.locate_with_cfi(id.1.to_owned(),lservice.to_string(),storage.endpoint.to_owned(),
+                                s_locator.href, s_locator.media_type, s_locator.cfi
                                 ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
         }else {
@@ -822,8 +822,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
             let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
             let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;            
-            lclient.locate_with(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
-                            s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+            lclient.locate_with_cfi(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
+                            s_locator.href, s_locator.media_type, s_locator.cfi
                             ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
         }
 
@@ -836,8 +836,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
         let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
         let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
-        lclient.locate_with(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
-                            s_locator.href, s_locator.media_type, s_locator.from_css_selector, s_locator.to_css_selector
+        lclient.locate_with_cfi(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
+                            s_locator.href, s_locator.media_type, s_locator.cfi
                             ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
     };
