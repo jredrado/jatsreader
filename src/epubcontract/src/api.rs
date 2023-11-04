@@ -46,8 +46,10 @@ pub type ID = HashType;
 //pub type EPUB<C> = AuthT<EPubDoc<C>,C>;
 
 //use authselect::{ElementRef,DOMRange,DOMIndex,SimplifiedLocator};
-use authselect_html5ever::{ElementRef,DOMRange,DOMIndex,SimplifiedLocator};
+//use authselect_html5ever::{ElementRef,DOMRange,DOMIndex,SimplifiedLocator};
+use authselect::*;
 
+use logos::Logos;
 
 #[derive(Debug,Serialize,Deserialize,Clone,PartialEq,Encode,Decode)]
 pub enum ApiResponse {
@@ -730,6 +732,47 @@ impl<C> Api<C>
         
                 
     }
+    
+    pub fn locate_with_cfi( doc: & AuthT<Publication<C>,C>,locator: SimplifiedLocatorCFI, proof_stream : Option<ProofStream> ) -> Result<C> 
+    where <C as AuthType<Vec<u8>>>::AuthT: Ord
+        {
+
+            let real_work = || {
+                let unauth_doc_ref = doc.unauth();
+                let unauth_doc = &*unauth_doc_ref.borrow();
+                
+                let raw_resources_ref = unauth_doc.raw_resources.unauth();
+                let raw_resources = (&*raw_resources_ref.borrow());
+
+                println!("Locate {:?}",&locator);
+
+                if locator.media_type == "text/html" || locator.media_type == "text/xml" {
+                    if let Some(result) = raw_resources.get(&C::auth(locator.href.as_bytes().to_owned())){
+
+                        if let Some(element_ref) = &result.1 {
+                            let mut lexer = authselect::Token::lexer(&locator.cfi);
+
+                            let p = FragmentParser::new();
+                            let r = p.parse(&locator.cfi,lexer).map_err(|e| ApiError::String(String::from("No results")) ) ?;
+
+                            let result = element_ref.select_cfi_fragment_fmt(&r);
+                            return Ok(ApiResponse::String(result));
+                        }
+
+                    }
+                }
+
+                Err(ApiError::String(String::from("No results")))
+            };
+
+            let comp = match proof_stream {
+                Some(p) => C::run_with_proofs (p,real_work),
+                None => C::run (real_work),
+
+            };
+
+            Ok(comp)
+        }    
     
 }
 

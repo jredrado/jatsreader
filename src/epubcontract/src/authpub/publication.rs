@@ -24,7 +24,7 @@ use authcomp::{Computation,AuthType,AuthT,AuthContainer,AuthTContainer,ProofStre
 use authcomp::{Encode,Decode,Serialize,Deserialize,DeserializeOwned,DecodeOwned};
 use authcomp::{UnAuth,UnAuthMut};
 
-use authselect_html5ever::ElementRef;
+use authselect::ElementRef;
 use authdoc::Node;
 
 use nanoserde::ToJSON;

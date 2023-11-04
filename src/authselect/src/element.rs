@@ -16,6 +16,8 @@ use indextree::{NodeId,Arena,NodeEdge};
 use simplecss::*;
 
 use crate::cfi::{CFIComponent,CFIComponentList};
+use crate::types::*;
+
 use std::format;
 
 use crate::Range;
@@ -623,6 +625,113 @@ impl<C> ElementRef<C>
         }}}
 
         return result;
+    }
+
+    pub fn select_cfi_fragment_fmt (&self, cfi_fragment: &Fragment) -> String  {
+
+        let arena_ref = (*self.doc).unauth();
+        let arena = &arena_ref.borrow();        
+
+        let mut result = String::new();
+
+        if let Some(node_id) = self.id {
+
+            let mut current_node = node_id;
+            //print(&format!("Root: {:?}",current_node));
+
+            let mut root_node = self.select_steps(current_node,&cfi_fragment.path.local_path.steps);
+
+            let (start_node,end_node) = 
+                if let (Some(rnode),Some(range)) = (root_node,&cfi_fragment.range) {
+                    (   
+                        self.select_steps(rnode,&range.start.steps), 
+                        self.select_steps(rnode,&range.end.steps)
+                    )
+                } else { (root_node,root_node) };
+
+
+            //Traverse and format the nodes
+            if let (Some(root_node_f),Some(start_node_f),Some(end_node_f)) = (root_node,start_node,end_node){
+
+                let range = Range::new(arena,root_node_f,start_node_f,end_node_f);
+
+                for node_edge in range {
+                        match node_edge {
+                            NodeEdge::Start(node_id) => {
+                                    
+                                    if let Some(arena_node) = arena.get(node_id) {
+                                        let auth_node = arena_node.get();
+                                        let node = auth_node.unauth();
+
+                                        result.push_str(&std::format!("{:+}",*node.borrow()));                                                                       
+                                    }
+                                    
+                            }
+                            NodeEdge::End(node_id) => {
+                                    if let Some(arena_node) = arena.get(node_id) {
+                                        let auth_node = arena_node.get();
+                                        let node = auth_node.unauth();
+                                        
+                                        result.push_str(&std::format!("{:-}",*node.borrow()));
+                                    }
+                            }
+                        };
+                    }
+                }
+        }
+
+        return result
+
+    }
+
+    pub fn select_steps (&self,root_node:NodeId, steps : &Vec<Step>) -> Option<NodeId> {
+        let arena_ref = (*self.doc).unauth();
+        let arena = &arena_ref.borrow();      
+
+        let mut current_node = root_node;
+
+        for step in steps {
+            let node_index :usize = step.integer.parse().ok()?;
+
+            let (even,index) = if node_index % 2 == 0  {(true,(node_index / 2)-1)}else {(false,node_index / 2)}; //odd -> text children
+
+            //print(&format!("Even,index: {:?},{:?},{:?}",even,index,cfi_component.node_index));
+
+            let result_node = if even {
+                        current_node    
+                        .children(&arena)
+                        .filter (  |node_id| {
+                                if let Some(arena_node) = arena.get(*node_id) {
+                                    let auth_node = arena_node.get();
+                                    let node = auth_node.unauth();
+                                    return (*node).borrow().is_element();
+                                }
+                                false
+                            })
+                        .nth(index)
+            } else {
+                        current_node
+                        .children(&arena)
+                        .filter (  |node_id| {
+                                if let Some(arena_node) = arena.get(*node_id) {
+                                    let auth_node = arena_node.get();
+                                    let node = auth_node.unauth();
+                                    return (*node).borrow().is_text();
+                                }
+                                false
+                            })
+                        .nth(index)
+            };
+
+            //Update the current node
+            if result_node.is_some() {
+                current_node = result_node.unwrap();
+            }else {return None}
+
+        }
+
+        return None   
+        
     }
 }
 

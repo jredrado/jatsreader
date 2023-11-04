@@ -4,6 +4,7 @@ mod range;
 mod locator;
 mod types;
 
+mod lexer;
 mod cfiparser;
 
 pub use element::ElementRef;
@@ -19,5 +20,8 @@ pub use locator::TextContext;
 pub use locator::Locator;
 pub use locator::Location;
 pub use locator::SimplifiedLocator;
+pub use locator::SimplifiedLocatorCFI;
+
 
 pub use cfiparser::*;
+pub use lexer::Token;

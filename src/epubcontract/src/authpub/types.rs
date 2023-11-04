@@ -5,7 +5,7 @@ use std::vec::Vec;
 use std::string::String;
 use std::rc::Rc;
 use core::cell::RefCell;
-use authselect_html5ever::ElementRef;
+use authselect::ElementRef;
 
 pub type AString<C> = AuthT<String,C>;
 pub type AFloat<C> = AuthT<f32,C>;

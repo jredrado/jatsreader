@@ -1,92 +1,101 @@
-grammar;
+
+
+grammar<'source>(input: &'source str);
 
 use super::types::*;
 use std::vec::Vec;
+use anyhow::Result;
+
+use super::lexer::Token;
+
+//Lexer
+extern {
+
+    enum Token<'source> {
+        SLASH => Token::Slash,
+        COLON => Token::Colon,
+        AT => Token::At,
+        TILDE => Token::Tilde,
+        COMMA => Token::Comma,
+        SEMICOLON => Token::Semicolon,
+        EQUALS => Token::Equals,
+        OPENBRACKET => Token::OpenBracket,
+        CLOSEBRACKET => Token::CloseBracket,
+        OPENPAREN => Token::OpenParen,
+        CLOSEPAREN => Token::CloseParen,
+        CIRCUNFLEX => Token::Circumflex,
+        EXCLAMATION => Token::Exclamation,
+        INTEGER => Token::Integer(<&'source str>),
+        ZERO => Token::Zero,
+        VALUESPACE => Token::ValueSpace(<&'source str>),
+        VALUENOSPACE => Token::ValueNoSpace(<&'source str>),
+        NUMBER => Token::Number(<&'source str>),
+        EPUBCFI => Token::EpubCFI
+
+  }
+}
 
 pub Fragment: Fragment = {
-    "epubcfi(" <path: Path> <range: Range?> ")" => Fragment::new(path, range),
+    EPUBCFI OPENPAREN <path: Path> <range: Range?> CLOSEPAREN => Fragment::new(path, range),
 };
 
 Path: Path = {
-    <step: Step> <local_path: LocalPath> => Path::new(step,local_path),
+   <local_path: LocalPath> => Path::new(local_path),
 };
 
 Range: Range = {
-    "," <start: LocalPath> "," <end: LocalPath> => Range::new(start, end),
+    COMMA <start: LocalPath> COMMA <end: LocalPath> => Range::new(start, end),
 };
 
 LocalPath: LocalPath = {
     <steps: Steps> <end: EndOfPath?> => LocalPath::new(steps,end),
 };
 
-pub Steps : Vec<Step> = Step* => <>.into();
+pub Steps : Vec<Step> = Step+ => <>.into();
 
 EndOfPath: EndOfPath = {
-    "!" <offset: Offset> => EndOfPath::redirected_path( RedirectedPath::new(Some(offset),None) ),
-    "!" <path: Path> => EndOfPath::redirected_path( RedirectedPath::new(None, Some(path))),
+    EXCLAMATION <offset: Offset> => EndOfPath::redirected_path( RedirectedPath::new(Some(offset),None) ),
+    EXCLAMATION <path: Path> => EndOfPath::redirected_path( RedirectedPath::new(None, Some(path))),
     <offset: Offset> => EndOfPath::offset(offset),
 };
 
 Step: Step = {
-    "/" <integer: Integer> => Step::new(integer, None) ,
-    "/" <integer: Integer> "[" <assertion: Assertion> "]" => Step::new(integer, Some(assertion)),
+    SLASH <integer: Integer> => Step::new(integer, None) ,
+    SLASH <integer: Integer> OPENBRACKET <assertion: Assertion> CLOSEBRACKET => Step::new(integer, Some(assertion)),
 };
 
 Offset: Offset = {
-    ":" <integer: Integer> => Offset::SimpleOffset(integer),
-    "@" <num1: Number> ":" <num2: Number> => Offset::OffsetWithReference(num1, num2),
-    "~" <num: Number> => Offset::IdAssertion(num, None),
-    "~" <num1: Number> "@" <num2: Number> ":" <num3: Number> => Offset::IdAssertion(num1, Some((num2, num3))),
+    COLON <integer: Integer> => Offset::SimpleOffset(integer),
+    AT <num1: Number> COLON <num2: Number> => Offset::OffsetWithReference(num1, num2),
+    TILDE <num: Number> => Offset::IdAssertion(num, None),
+    TILDE <num1: Number> AT <num2: Number> COLON <num3: Number> => Offset::IdAssertion(num1, Some((num2, num3))),
 };
-
-Number: String = {
-    <integer: Integer> => integer,
-    <integer: Integer> "." <fraction: Integer> => format!("{}.{}", integer, fraction),
-};
-
 
 
 Assertion: String = {
     <value: Value> => value,
-    <value: Value> "," <value2: Value> => format!("{},{}", value, value2),
-    "," <value: Value> => format!(",{}", value),
+    <value: Value> COMMA <value2: Value> => format!("{},{}", value, value2),
+    COMMA <value: Value> => format!(",{}", value),
     <param: Parameter> => param,
 };
 
 Parameter: String = {
-    ";" <value: ValueNoSpace> "=" <csv: Csv> => format!("{}={}", value, csv),
+    SEMICOLON <value: ValueNoSpace> EQUALS <csv: Csv> => format!("{}={}", value, csv),
 };
 
 Csv: String = {
     <value: Value> => value,
-    <value: Value> "," <csv: Csv> => format!("{},{}", value, csv),
+    <value: Value> COMMA <csv: Csv> => format!("{},{}", value, csv),
 };
 
-match {
-    r"\/",r" ",r"\^",r"\[",r"\]",r"\(",r"\)",r",",r";",r"=",
-    r"[0-9]+",
-} else {
-    r"[\s]+",
-    r"[.]+",
-    _
-}
+Number: String = NUMBER => <>.to_string();
 
-Slash : String = r"\/" => <>.to_string();
-Space : String	=	r" " => <>.to_string();	 
-Circumflex : String	=	r"\^" => <>.to_string();
-SquareBracketsLeft : String	=	r"\[" => <>.to_string();	 
-SquareBracketsRight : String =	r"\]" => <>.to_string();	 
-ParenthesesLeft	: String =	r"\("  => <>.to_string();	
-ParenthesesRight : String	=	r"\)"  => <>.to_string();	
+Integer: String = INTEGER => <>.to_string();
+Value: String =  {
+            VALUESPACE => <>.to_string(),
+            VALUENOSPACE => <>.to_string()
+};
 
-Comma : String	=	r","  => <>.to_string();
-Semicolon : String	=	r";"  => <>.to_string();
-Equal : String	=	r"="  => <>.to_string();
-
-Integer: String = r"[0-9]+" => <>.to_string();
-Value: String = r"[.]+" => <>.to_string();
-ValueNoSpace : String = r"[^\s]+" => <>.to_string();
-
-
+ValueNoSpace : String = VALUENOSPACE => <>.to_string();
 
 

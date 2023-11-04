@@ -47,6 +47,13 @@ pub struct SimplifiedLocator {
 }
 
 #[derive(Debug,Default,Serialize,Deserialize,Clone,PartialEq,Encode,Decode)]
+pub struct SimplifiedLocatorCFI {
+    #[n(0)] pub href : String,
+    #[n(1)] pub media_type : String,
+    #[n(2)] pub cfi : String
+}
+
+#[derive(Debug,Default,Serialize,Deserialize,Clone,PartialEq,Encode,Decode)]
 pub struct Locator {
     #[n(0)] pub href : String,
     #[n(1)] pub media_type : String,

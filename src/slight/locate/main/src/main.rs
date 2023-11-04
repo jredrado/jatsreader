@@ -14,7 +14,7 @@ wit_error_rs::impl_error!(ConfigsError);
 use authcomp::{Computation, HashType};
 use authcomp::{AuthTNoProofs, NoProofs};
 use authcomp::{AuthTProver, Prover};
-use authselect_html5ever::SimplifiedLocator;
+use authselect::SimplifiedLocator;
 
 use epubcontract::{Api, ApiError, ApiResponse, EPubParser, Publication};
 

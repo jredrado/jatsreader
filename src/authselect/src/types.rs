@@ -1,26 +1,25 @@
 // Estructuras de datos
 #[derive(Debug, PartialEq, Clone)]
 pub struct Fragment {
-    path: Path,
-    range: Option<Range>,
+    pub path: Path,
+    pub range: Option<Range>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Path {
-    step: Step,
-    local_path: Box<LocalPath>,
+    pub local_path: Box<LocalPath>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Range {
-    start: LocalPath,
-    end: LocalPath,
+    pub start: LocalPath,
+    pub end: LocalPath,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct LocalPath {
-    steps: Vec<Step>,
-    end: Option<Box<EndOfPath>>,
+    pub steps: Vec<Step>,
+    pub end: Option<Box<EndOfPath>>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -31,14 +30,14 @@ pub enum EndOfPath {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct RedirectedPath {
-    offset: Option<Offset>,
-    path: Option<Box<Path>>,
+    pub offset: Option<Offset>,
+    pub path: Option<Box<Path>>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Step {
-    integer: String,
-    assertion: Option<String>,
+    pub integer: String,
+    pub assertion: Option<String>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -56,8 +55,8 @@ impl Fragment {
 }
 
 impl Path {
-    pub fn new(step: Step, local_path: LocalPath) -> Self {
-        Path { step, local_path: Box::new(local_path) }
+    pub fn new( local_path: LocalPath) -> Self {
+        Path { local_path: Box::new(local_path) }
     }
 }
 

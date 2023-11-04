@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-pub use authselect_html5ever::SimplifiedLocator;
+pub use authselect::SimplifiedLocator;
 
 use messaging::*;
 wit_bindgen_rust::import!("../../wit/messaging.wit");

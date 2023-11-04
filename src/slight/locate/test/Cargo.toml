@@ -20,3 +20,5 @@ slight-http-handler-macro = { git = "https://github.com/deislabs/spiderlightning
 locate= { path="../../locate/main" }
 
 authselect = {path="../../../authselect" }
+
+logos = {version="0.12.0", features=["export_derive"], default-features=false}
