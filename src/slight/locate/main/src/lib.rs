@@ -72,5 +72,22 @@ impl LocateClient {
         }
 
     }    
+
+    pub fn locate_with_cfi(&self,key: String,href: String, mediatype:String, cfi:String, storage:String) -> Result<(String,Vec<u8>)> {
+
+        let request = Request::LocateWithCFI(key,href,mediatype,cfi,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::Locate(value,proofs) => Ok((value,proofs)),
+            _ => anyhow::bail!("Locate Lib CFI Unexpected response: {:?}", response)
+        }
+
+    }    
  
 }

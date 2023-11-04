@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "FILEPATH"
-value = "Ohj1aGJBxYwfbNRzxL3aWW2U"
+value = "2PZbCkEGI8AxfSQzftBsUR6E"
 
 [[secret_settings]]
 name = "STREAMER_API"
-value = "CCl0bCp0TRSJehRhcLp1TtI-UCFh6iiOBHwBFHWt4KIWSeuRnbi5sAJUU8Gs25XAFjHYTeHexdBaSIwVkMrBvT4Y"
+value = "ANsPANb5HeITBgjP5RDuWkgU7xu7QEzPQo-zEPkHsx8IBgja-1qtFA8XCBocT7GHFgpR5REb7wIIXxnKTqf40Wxw"
 
 [[capability]]
 resource = "keyvalue.filesystem"

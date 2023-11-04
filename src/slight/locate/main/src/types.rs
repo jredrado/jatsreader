@@ -10,7 +10,8 @@ pub const TOPIC_OUTPUTS :&str = "locate-outputs";
 #[derive(Debug,Serialize,Deserialize)]
 pub enum Request {
     Locate(String,String,String,String,String), //key, HREF, MediaType, from, to
-    LocateWith(String,String,String,String,String,String) //With storage
+    LocateWith(String,String,String,String,String,String), //With storage
+    LocateWithCFI(String,String,String,String,String) //key, HREF, MediaType, cfi, storage
 }
 
 #[derive(Debug,Serialize,Deserialize)]

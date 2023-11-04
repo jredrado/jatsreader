@@ -26,14 +26,21 @@ fn main() -> Result<()> {
     }
     */
 
-    let locate = lclient.locate_with(id,"EPUB/9123624.xml".to_string(),"text/xml".to_string(),
-                            "article body sec:nth-child(1) p:nth-child(1)".to_string(), 
-                            "article body sec:nth-child(1) p:nth-child(2)".to_string(),
+    let locate = lclient.locate_with_cfi(id.clone(),"EPUB/9123624.xml".to_string(),"text/xml".to_string(),
+                            "epubcfi(/2/2/2/1)".to_string(), 
                             "locate_1".to_string(),
                             "storage_1".to_string()
     )?;
 
     println!("Locate : \n {:?}",&locate);
+
+    let locate1 = lclient.locate_with_cfi(id,"EPUB/9123624.xml".to_string(),"text/xml".to_string(),
+                            "epubcfi(/4/2,/2/1,/6/2)".to_string(), 
+                            "locate_1".to_string(),
+                            "storage_1".to_string()
+        )?;
+
+    println!("Locate : \n {:?}",&locate1);
 
     Ok(())
 }

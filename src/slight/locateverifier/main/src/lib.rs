@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-pub use authselect::SimplifiedLocator;
+pub use authselect::{SimplifiedLocator,SimplifiedLocatorCFI};
 
 use messaging::*;
 wit_bindgen_rust::import!("../../wit/messaging.wit");
@@ -60,6 +60,24 @@ impl LocateVerifierClient {
     pub fn locate_with(&self,id:String,href:String,mediatype:String,from:String,to:String,locate:String,storage: String) -> Result<String> {
 
         let request = Request::LocateVerifierWith(id,href,mediatype,from,to,locate,storage);
+        let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
+
+        self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;
+
+        let raw_response = self.outputs.receive(&self.outputs_token)?;
+
+        let response : Response = rmp_serde::from_read(raw_response.as_slice())?;
+
+        match response {
+            Response::LocateVerifier(data) => Ok(data),
+            _ => anyhow::bail!("Locate lib Unexpected response: {:?}", response)
+        }
+
+    }    
+
+    pub fn locate_with_cfi(&self,id:String,href:String,mediatype:String,cfi:String,locate:String,storage: String) -> Result<String> {
+
+        let request = Request::LocateVerifierWithCFI(id,href,mediatype,cfi,locate,storage);
         let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
 
         self.inputs.publish(&raw_request, &format!("{}-{}",&self.instance,TOPIC_INPUTS))?;

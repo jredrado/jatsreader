@@ -774,6 +774,20 @@ impl<C> Api<C>
             Ok(comp)
         }    
     
+        pub fn api_locate_verifier_cfi (doc: &ID, locator: SimplifiedLocatorCFI,proofs: ProofStream) -> Result<C>
+        where
+            AuthTVerifier<Publication<C>> : Is< Type=<C as AuthType<Publication<C>>>::AuthT>,
+            <C as AuthType<Vec<u8>>>::AuthT: Ord
+        {
+
+            let aepub_verifier = AuthTVerifier::<Publication<C>>::from(doc);
+            let aepub : &<C as AuthType<Publication<C>>>::AuthT = aepub_verifier.into_ref();
+
+            Api::locate_with_cfi(aepub, locator,Some(proofs))
+            
+                    
+        }
+    
 }
 
 

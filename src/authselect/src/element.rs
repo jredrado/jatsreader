@@ -629,55 +629,82 @@ impl<C> ElementRef<C>
 
     pub fn select_cfi_fragment_fmt (&self, cfi_fragment: &Fragment) -> String  {
 
+
+
+        println!("select_cfi_frament_fmt");
+
         let arena_ref = (*self.doc).unauth();
         let arena = &arena_ref.borrow();        
+
+        macro_rules! printN {
+            ($i:ident) => {  
+                            if let Some(n_id) = $i {
+                                if let Some(arena_node) = arena.get(n_id) {
+                                    let auth_node = arena_node.get();
+                                    let node = auth_node.unauth();
+
+                                    println!("{:+}",*node.borrow());  
+                                }
+                            }
+                        };
+        }
 
         let mut result = String::new();
 
         if let Some(node_id) = self.id {
 
-            let mut current_node = node_id;
-            //print(&format!("Root: {:?}",current_node));
+            if let Some(root_arena_node) = arena.get(node_id){
+                if let Some(current_node) = root_arena_node.first_child(){
+            
+                    println!("Root: {:?}",current_node);
+                    
 
-            let mut root_node = self.select_steps(current_node,&cfi_fragment.path.local_path.steps);
+                    let mut root_node = self.select_steps(current_node,&cfi_fragment.path.local_path.steps);
 
-            let (start_node,end_node) = 
-                if let (Some(rnode),Some(range)) = (root_node,&cfi_fragment.range) {
-                    (   
-                        self.select_steps(rnode,&range.start.steps), 
-                        self.select_steps(rnode,&range.end.steps)
-                    )
-                } else { (root_node,root_node) };
+                    println!("Root result: {:?}",root_node);
+                    printN!(root_node);
+
+                    let (start_node,end_node) = 
+                        if let (Some(rnode),Some(range)) = (root_node,&cfi_fragment.range) {
+                            (   
+                                self.select_steps(rnode,&range.start.steps), 
+                                self.select_steps(rnode,&range.end.steps)
+                            )
+                        } else { (root_node,root_node) };
 
 
-            //Traverse and format the nodes
-            if let (Some(root_node_f),Some(start_node_f),Some(end_node_f)) = (root_node,start_node,end_node){
+                    //Traverse and format the nodes
+                    if let (Some(root_node_f),Some(start_node_f),Some(end_node_f)) = (root_node,start_node,end_node){
 
-                let range = Range::new(arena,root_node_f,start_node_f,end_node_f);
+                        println!("Range");
 
-                for node_edge in range {
-                        match node_edge {
-                            NodeEdge::Start(node_id) => {
-                                    
-                                    if let Some(arena_node) = arena.get(node_id) {
-                                        let auth_node = arena_node.get();
-                                        let node = auth_node.unauth();
+                        let range = Range::new(arena,root_node_f,start_node_f,end_node_f);
 
-                                        result.push_str(&std::format!("{:+}",*node.borrow()));                                                                       
+                        for node_edge in range {
+                                match node_edge {
+                                    NodeEdge::Start(node_id) => {
+                                            
+                                            if let Some(arena_node) = arena.get(node_id) {
+                                                let auth_node = arena_node.get();
+                                                let node = auth_node.unauth();
+
+                                                result.push_str(&std::format!("{:+}",*node.borrow()));                                                                       
+                                            }
+                                            
                                     }
-                                    
-                            }
-                            NodeEdge::End(node_id) => {
-                                    if let Some(arena_node) = arena.get(node_id) {
-                                        let auth_node = arena_node.get();
-                                        let node = auth_node.unauth();
-                                        
-                                        result.push_str(&std::format!("{:-}",*node.borrow()));
+                                    NodeEdge::End(node_id) => {
+                                            if let Some(arena_node) = arena.get(node_id) {
+                                                let auth_node = arena_node.get();
+                                                let node = auth_node.unauth();
+                                                
+                                                result.push_str(&std::format!("{:-}",*node.borrow()));
+                                            }
                                     }
+                                };
                             }
-                        };
-                    }
+                        }
                 }
+            }
         }
 
         return result
@@ -688,16 +715,30 @@ impl<C> ElementRef<C>
         let arena_ref = (*self.doc).unauth();
         let arena = &arena_ref.borrow();      
 
+        macro_rules! printN {
+            ($i:ident) => {  
+                            if let Some(n_id) = $i {
+                                if let Some(arena_node) = arena.get(n_id) {
+                                    let auth_node = arena_node.get();
+                                    let node = auth_node.unauth();
+
+                                    println!("{:+}",*node.borrow());  
+                                }
+                            }
+                        };
+        }
+
         let mut current_node = root_node;
+        let mut result_node = None;
 
         for step in steps {
             let node_index :usize = step.integer.parse().ok()?;
 
             let (even,index) = if node_index % 2 == 0  {(true,(node_index / 2)-1)}else {(false,node_index / 2)}; //odd -> text children
 
-            //print(&format!("Even,index: {:?},{:?},{:?}",even,index,cfi_component.node_index));
+            println!("Even,index: {:?},{:?},{:?}",even,index,node_index);
 
-            let result_node = if even {
+            result_node = if even {
                         current_node    
                         .children(&arena)
                         .filter (  |node_id| {
@@ -723,6 +764,9 @@ impl<C> ElementRef<C>
                         .nth(index)
             };
 
+            println!("Result node {:?}",result_node);
+            printN!(result_node);
+
             //Update the current node
             if result_node.is_some() {
                 current_node = result_node.unwrap();
@@ -730,7 +774,7 @@ impl<C> ElementRef<C>
 
         }
 
-        return None   
+        return result_node   
         
     }
 }

@@ -16,7 +16,7 @@ use authcomp::{AuthTNoProofs, NoProofs};
 use authcomp::{AuthTProver, Prover};
 use authcomp::{AuthTVerifier, Verifier};
 use authcomp::ProofStream;
-use authselect::SimplifiedLocator;
+use authselect::{SimplifiedLocator,SimplifiedLocatorCFI};
 
 use epubcontract::{Api, ApiError, ApiResponse, EPubParser, Publication};
 use tracing::{debug,info};
@@ -125,7 +125,44 @@ fn main() -> Result<()> {
 
             }
 
-             
+            Request::LocateVerifierWithCFI(key,href,mediatype,cfi,locate,storage) => {
+
+                let locate_client_with = locate::LocateClient::new(&locate)?;
+                let locate = locate_client_with.locate_with_cfi(key.clone(),href.clone(),mediatype.clone(),cfi.clone(),storage)?;
+
+                let proofs: ProofStream =authcomp::from_bytes(&locate.1).expect("Unable to get proofs");
+    
+                let id = hex::decode(key).map_err(|e| anyhow!(e.to_string()))?;
+
+                let s = HashType {
+                    data: id.try_into().expect("Unable to get id"),
+                };
+
+                let locator = SimplifiedLocatorCFI {
+                    href: href,
+                    media_type: mediatype,
+                    cfi: cfi
+                };
+
+                let rcomputation = Api::<Verifier<ApiResponse, ApiError>>::api_locate_verifier_cfi(
+                    &s,
+                    locator,
+                    proofs,
+                );
+        
+                match rcomputation {
+                    Ok(comp) => {
+                        if let Some(ApiResponse::String(sdata)) = comp.get() {
+                            Response::LocateVerifier(sdata.to_owned())
+                        }else {
+                            anyhow::bail!("Locate _ Unexpected result: {:?}", comp) 
+                        }
+                    }                    
+                    _ => { anyhow::bail!("Locate _ Unexpected result: {:?}", rcomputation)  }
+                }
+
+
+            }
         };
 
         let raw_output = rmp_serde::to_vec(&output)?;

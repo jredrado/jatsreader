@@ -14,7 +14,7 @@ wit_error_rs::impl_error!(ConfigsError);
 use authcomp::{Computation, HashType};
 use authcomp::{AuthTNoProofs, NoProofs};
 use authcomp::{AuthTProver, Prover};
-use authselect::SimplifiedLocator;
+use authselect::{SimplifiedLocator,SimplifiedLocatorCFI};
 
 use epubcontract::{Api, ApiError, ApiResponse, EPubParser, Publication};
 
@@ -100,6 +100,38 @@ fn main() -> Result<()> {
                     }
                     None => { anyhow::bail!("Locate Unexpected result: {:?}", result) }
                     _ => { anyhow::bail!("Locate _ Unexpected result: {:?}", result)  }
+                }
+
+            }
+
+            Request::LocateWithCFI(key,href,mediatype,cfi,storage) => {
+                let storage_client_with = storage::StorageClient::new(&storage)?;
+                let source = storage_client_with.get(key)?;
+
+
+                let authpub : AuthTProver<Publication<Prover<ApiResponse, ApiError>>> = authcomp::from_bytes(&source)
+                                                                                            .expect("Unable to decode");
+
+                let locator = SimplifiedLocatorCFI {
+                    href: href,
+                    media_type: mediatype,
+                    cfi: cfi
+                };
+
+                let comp = Api::<Prover<ApiResponse, ApiError>>::locate_with_cfi(&authpub, locator, None)
+                    .expect("Unable to locate with cfi");
+        
+                let result = Computation::get(&comp);
+        
+                let proofs = authcomp::to_vec(Computation::get_proofs(&comp));
+                
+                match result {
+                    Some(ApiResponse::String(data)) => {
+    
+                        Response::Locate(data.to_owned(),proofs)
+                    }
+                    None => { anyhow::bail!("Locate with cfi Unexpected result: {:?}", result) }
+                    _ => { anyhow::bail!("Locate with cfi _ Unexpected result: {:?}", result)  }
                 }
 
             }

@@ -2,19 +2,19 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "bRW4FTnvAmOVbXgUOfQ_fpF2w"
+value = "C0XWCKL25UUiEQEJFtBepA28R"
 
 [[secret_settings]]
 name = "RESOURCEINSTANCE"
-value = "ASus4C15bGSBFMg"
+value = "NvECUUqwwgUdGMw"
 
 [[capability]]
 resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_PORT = "1883"
 MOSQUITTO_HOST = "localhost"
+MOSQUITTO_PORT = "1883"
 
 [[capability]]
 resource = "configs.usersecrets"
