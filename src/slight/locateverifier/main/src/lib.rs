@@ -77,6 +77,9 @@ impl LocateVerifierClient {
 
     pub fn locate_with_cfi(&self,id:String,href:String,mediatype:String,cfi:String,locate:String,storage: String) -> Result<String> {
 
+
+        println!("locate_with_cfi {} {} {} {} {}",&href,&mediatype,&cfi,&locate,&storage);
+        
         let request = Request::LocateVerifierWithCFI(id,href,mediatype,cfi,locate,storage);
         let raw_request = rmp_serde::to_vec(&(self.client_id,request))?;
 

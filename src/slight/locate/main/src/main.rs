@@ -131,7 +131,7 @@ fn main() -> Result<()> {
                         println!("Response {:?}",&data);
                         Response::Locate(data.to_owned(),proofs)
                     }
-                    None => { anyhow::bail!("Locate with cfi Unexpected result: {:?}", result) }
+                    None => { Response::Locate("".to_owned(),proofs) }
                     _ => { anyhow::bail!("Locate with cfi _ Unexpected result: {:?}", result)  }
                 }
 

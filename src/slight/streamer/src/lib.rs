@@ -809,8 +809,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
             let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
             let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e|HttpError::UnexpectedError(e.to_string()))?;
-            lclient.locate_with_cfi(id.1.to_owned(),lservice.to_string(),storage.endpoint.to_owned(),
-                                s_locator.href, s_locator.media_type, s_locator.cfi
+            lclient.locate_with_cfi(id.1.to_owned(), s_locator.href, s_locator.media_type, s_locator.cfi,
+                                lservice.to_string(),storage.endpoint.to_owned()
                                 ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
         }else {
@@ -822,8 +822,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
             let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
             let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;            
-            lclient.locate_with_cfi(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
-                            s_locator.href, s_locator.media_type, s_locator.cfi
+            lclient.locate_with_cfi(id.1.to_owned(),s_locator.href, s_locator.media_type, s_locator.cfi,
+                            policy.locator_service,storage.endpoint.to_owned()
                             ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
         }
 
@@ -836,8 +836,8 @@ fn handle_locator(request: Request) -> Result<Response, HttpError> {
         let storage = Policy::resolve_storage(&storages).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
 
         let lclient = LocateVerifierClient::new(&policy.locator_verifier_service).map_err( |e| HttpError::UnexpectedError(e.to_string()))?;
-        lclient.locate_with_cfi(id.1.to_owned(),policy.locator_service,storage.endpoint.to_owned(),
-                            s_locator.href, s_locator.media_type, s_locator.cfi
+        lclient.locate_with_cfi(id.1.to_owned(),s_locator.href, s_locator.media_type, s_locator.cfi,
+                            policy.locator_service,storage.endpoint.to_owned()
                             ).map_err( |e| HttpError::UnexpectedError(e.to_string()))?
 
     };

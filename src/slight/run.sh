@@ -19,7 +19,7 @@ slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER_API" -v "$STRE
 slight -c $ROOT/metadata/main/slightfile.toml secret -k "INSTANCE" -v "metadata_1"
 slight -c $ROOT/metadata/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
 
-slight -c $ROOT/locate/main/slightfile.toml secret -k "INSTANCE" -v "locate_1"
+slight -c $ROOT/locate/main/slightfile.toml secret -k "INSTANCE" -v "locator_1"
 slight -c $ROOT/locate/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
 
 slight -c $ROOT/manifest/main/slightfile.toml secret -k "INSTANCE" -v "manifest_1"
@@ -45,8 +45,8 @@ slight -c $ROOT/resolver-rest-api/slightfile.toml secret -k "RESOLVERINSTANCE" -
 slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "INSTANCE" -v "metadataverifier_1"
 slight -c $ROOT/metadataverifier/main/slightfile.toml secret -k "METADATAINSTANCE" -v "metadata_1"
 
-slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "INSTANCE" -v "locateverifier_1"
-slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "LOCATEINSTANCE" -v "locate_1"
+slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "INSTANCE" -v "locatorverifier_1"
+slight -c $ROOT/locateverifier/main/slightfile.toml secret -k "LOCATEINSTANCE" -v "locator_1"
 
 slight -c $ROOT/streamer/slightfile.toml  secret -k "FILEPATH" -v "./streamer/static"
 slight -c $ROOT/streamer/slightfile.toml  secret -k "STREAMER_API" -v "$STREAMER_API_URL"
