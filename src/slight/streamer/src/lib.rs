@@ -609,6 +609,7 @@ fn main() -> Result<()> {
         .get("/raw/:id/*","handle_raw_resource")?        
         .get("/opds2/publications.json","handle_opds2")?
         .get("/locate/:id/:locator","handle_locator")?   
+        .get("/resolve/:id","handle_resolve")?   
         .get("/static/*","handle_file")?
         .post("/add", "handle_add")?
         .post("/addstorage","handle_add_storage")?;
@@ -1151,6 +1152,28 @@ fn handle_file(request: Request) -> Result<Response, HttpError> {
         body: Some(data),
         status: 200,
     })
+}
+#[register_handler]
+fn handle_resolve(request: Request) -> Result<Response,HttpError> {
+
+    let binding = ("".into(), "".into());
+    let id = request.params.iter().find(|x| x.0 == "id").unwrap_or(&binding);
+    let host = request.headers.iter().find(|x| x.0 == "host").unwrap_or(&binding);
+
+    let message = format!("
+        {{
+        \"endpoint\":\"https://{}/pub/{}/manifest.json\"
+        }}",&host.1,&id.1);
+
+    let mut headers = request.headers.clone();
+    headers.push((String::from("Content-Type"),String::from("application/json")));
+
+    Ok(Response {
+        headers: Some(headers),
+        body: Some(message.into()),
+        status: 200,
+    })
+
 }
 
 #[register_handler]
