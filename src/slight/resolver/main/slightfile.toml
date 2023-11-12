@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "3b97BkretSvlAMg"
+value = "nQ7iezN3oG7cjkg"
 
 [[secret_settings]]
 name = "DHTINSTANCE"
-value = "UcKpSzebGrmZDYMST8vw"
+value = "P2ahkuw38H87wOgeXZGI"
 
 [[capability]]
 resource = "keyvalue.filesystem"
