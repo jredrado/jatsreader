@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1d1 20130915//EN" "JATS-journalpublishing1.dtd">
+<article>
+  <front>
+    <journal-meta>
+    <journal-id journal-id-type="publisher-id">UNIV NAVARRA, SERVICIO PUBLICACIONES</journal-id>
+      <journal-title-group>
+        <journal-title>Estudios sobre Educación</journal-title>
+      </journal-title-group>
+      <issn publication-format="print">2386-6292</issn>
+
+    </journal-meta>
+    <article-meta>
+      <title-group>
+        <article-title>Anaí, una forma de publicación en la web. A better way for web development</article-title>
+      </title-group>
+      <contrib-group><contrib contrib-type="author">
+          <name>
+            <surname>Redrado</surname>
+            <given-names>Jesús</given-names>
+          </name>
+          <email>jredrado@unav.es</email>
+          <xref rid="aff0" ref-type="aff">1</xref>
+      </contrib>
+      <contrib contrib-type="author">
+        <name>
+            <surname>Echarri</surname>
+            <given-names>Luis</given-names>
+        </name>
+        <email>lecharri@unav.es</email>
+        <xref rid="aff0" ref-type="aff">1</xref>
+      </contrib>
+      <aff id="aff0"><institution>Miembro del Grupo de Innovación Educativa, Grupo de Innovación Educativa. Universidad de Navarra, Vicerrectora de Infraestructuras e Innovación Educativa. Universidad de Navarra, Universidad de Navarra</institution>
+        </aff>
+      </contrib-group>
+
+      <pub-date publication-format="print" date-type="pub"
+       iso-8601-date="2002-12-01">
+        <day>1</day>
+        <month>12</month>
+        <year>2002</year>
+      </pub-date>
+
+      <permissions/>
+
+      <abstract>
+        <title>Abstract</title>
+        <p>El presente artículo presenta la estrategia de creación de contenidos para la web desarrollada en la Universidad de Navarra. El objetivo de esta estrategia es lograr un sistema de creación de contenidos descentralizado, gracias al cual un profesor o una persona de administración o servicios, con conocimientos informáticos medios e incluso escasos pueda desarrollar contenidos de calidad.</p>
+        <p>palabras clave: publicación en la web, sistemas de gestión de documentación, xml, formación continua, tic.</p>
+        <p>The article present the strategy adopted by the University of Navarra for the creation of its web content. The objective of the strategy is to promote a decentralized system of web content development. This would enable faculty and administrative staff with an average or minimal knowledge to develop high quality materials for the web.</p>
+      </abstract>
+      <kwd-group>
+        <title>Keywords</title>
+        <kwd>web publishing</kwd>
+        <kwd>document management systems</kwd>
+        <kwd>xml</kwd>
+        <kwd>continuing education</kwd>
+        <kwd>information and communication technologies Ee003</kwd>
+      </kwd-group>
+      </article-meta>
+  </front>
+  <body>
+    <sec>
+      <title/>
+      <p/>
+      <p>The article present the strategy adopted by the University of Navarra for the creation of its web content. The objective of the strategy is to promote a decentralized system of web content development. This would enable faculty and administrative staff with an average or minimal knowledge to develop high quality materials for the web.</p>
+      <p>keywords: web publishing, document management systems, xml, continuing education, information and communication technologies.</p>
+    </sec>
+    <sec>
+      <title>Ee003</title>
+      <p/>
+      <p>Miembro </p>
+    </sec>
+    <sec>
+      <title>Introducción. La web</title>
+      <p/>
+      <p>El conjunto de páginas web de una universidad se está consolidando como una herramienta fundamental para estructurar la información que enriquece y hace posible la actividad de la institución y para asegurar una proyección al exterior de calidad. Además, las páginas web de departamentos y asignaturas se van confirmando como el elemento nuclear de una docencia enriquecida con elementos tecnológicos. La realización fácil y cómoda de páginas web, en las que la información se presente de una manera clara y fácil de encontrar, es fundamental para que esta herramienta llegue a desarrollar todas sus prometedoras posibilidades. Este es el objetivo en el que se viene trabajando en la Universidad de Navarra, a través del equipo investigador del Vicerrectorado de Innovación Educativa, y que se tratará de exponer a continuación.</p>
+      <p>Uno de los aspectos más influyentes en la realización de la web es la tecnología. Para que el conjunto de la web de una universidad alcance el desarrollo y la calidad imprescindibles, es importante contar con una tecnología de realización de las páginas web que haga posible que un usuario medio, con conocimientos de informática bajos, pueda llegar a crear sitios web de calidad. De esta manera se puede abordar el desarrollo de un conjunto de páginas web que se mantengan vivas, al día, en evolución constante y todo esto usando unos recursos proporcionados.</p>
+      <p>A pesar de la gran evolución que ha experimentado el mundo de los ordenadores en la última década, existen todavía muchas barreras que es necesario superar, entre ellas dos son especialmente importantes:</p>
+      <p>s La consecución de una interfaz de usuario que haga realmente fácil el uso del software es todavía un reto pendiente de alcanzar. Las grandes compañías de software están realizando grandes esfuerzos en este campo, pero todavía queda mucho camino por recorrer. s La sensación de robustez, homogeneidad y seguridad de las aplicaciones informáticas todavía está lejos de conseguirse. Si bien la generalización del uso de las redes de comunicación y en particular de Internet ha cambiado radicalmente la experiencia de los usuarios de ordenadores, y posiblemente la cambiará mucho más en un futuro cercano; este cambio, más que simplificar y facilitar el uso de la informática, ha introducido un mayor grado de complejidad. Estas barreras también dificultan de forma muy importante la creación de sitios web en la universidad por los profesores o personas directamente interesadas.</p>
+      <p>Es indudable que desde que Tim Berners-Lee pusiera en práctica en el CERN el mecanismo de hipertexto que ahora todo el mundo conoce como Wold Wide Web, ésta ha evolucionado muchísimo y se ha convertido en el mecanismo de comunicación más importante de las últimas décadas. Un instrumento que ha transformado los negocios, la educación y la vida cotidiana de muchos de nosotros.</p>
+      <p>En el momento actual, existen varios indicadores que apuntan a un cambio en el panorama de la web: La web se ha convertido en una auténtica telaraña de información; ocurre que la mayoría de los sitios web no se encuentran actualizados. s Es difícil encontrar la información adecuada en la web de una forma eficiente. En las búsquedas se obtiene una gran cantidad de información de muy baja calidad. Como indican algunos autores, Berners-Lee y cols. <italic>(2001)</italic>, la siguiente generación de la web deberá abordar como reto fundamental, el organizar la información de forma que pueda ser interpretada automáticamente de forma más eficaz. s Como sugiere <xref rid="b5" ref-type="bibr">1</xref>, la mayoría de los usuarios están cansados de las páginas web con diseños inconsistentes, por las que es difícil la navegación y se presentan con frecuencia llenas de gráficos espectaculares y animaciones que más que ayudar a resaltar la información, dificultan encontrarla. s Por otro lado, los usuarios generalmente no actualizan las versiones de sus navegadores porque las actualizaciones no les aportan ventajas significativas, porque no saben cómo actualizarlo, o porque el software ocupa cada vez más espacio y es más costoso de actualizar. Como consecuencia, no es raro encontrar páginas web que muchos usuarios no pueden ver correctamente.</p>
+      <p>La aparición y generalización de nuevos dispositivos como los PDA, etc. hará necesario un nuevo esfuerzo para adaptar la web de forma que pueda ser utilizada desde ellos.</p>
+    </sec>
+    <sec>
+      <title>Problemas de la web</title>
+      <p/>
+      <p>A pesar de las ventajas y bondades que ha demostrado esta tecnología y del espectacular desarrollo de la web, este sistema presenta también algunos inconvenientes:</p>
+      <p>s Debido a la carencia de estructura es muy difícil tratar automáticamente un contenido ya que no se puede interpretar con certeza su significado. s Escaso aprovechamiento del trabajo de creación de contenidos. Muchas organizaciones publican los mismos contenidos en diferentes formatos; p. ej., es muy común tener dos versiones de los mismos contenidos: la versión para la impresión en papel y la versión para la web. Lo ideal es que el mismo contenido pueda adoptar distintos formatos de forma automática. s Dificultad para aplicar sistemas de búsqueda eficaces. La dificultad para averiguar la semántica de los contenidos hace más costoso el desarrollo de buscadores eficientes. s Evolución rápida del estándar HTML 2.0, 3.2, 4.0, XHTML... Este tipo de especificaciones, como toda la tecnología, evoluciona muy rápidamente sin que los creadores de contenido (especialmente los no especializados) sean conscientes de ello ni de sus implicaciones. Separar los datos de los contenidos de su presentación ayuda a liberar al creador de un sitio web de la necesidad de mantenerse al día en la evolución de estos lenguajes. s Gran diversidad en la calidad técnica y estética de los contenidos. Dados estos condicionantes, generalmente, sólo personas expertas pueden llegar a crear contenidos de alta calidad. Crear contenidos con HTML es complejo y exige mucho tiempo. En estos momentos coexisten contenidos de muy diverso nivel de calidad. Un objetivo interesante es ayudar a que contenidos de creación habitual, hechos por personal no especializado (p. ej. un profesor con conocimientos medios de informática) puedan ser trasladados a la web con una alta calidad.</p>
+    </sec>
+    <sec>
+      <title>Webs de interés docente</title>
+      <p/>
+      <p>Una web de interés docente debe reunir un contenido bien elegido, un diseño instruccional adecuado y una elaboración técnica proporcionada, que esté al servicio de ese contenido y ese diseño.</p>
+      <p>En muchas ocasiones esta necesidad de habilidades multidisciplinares para la creación de una buena web docente se resuelve con la colaboración de un equipo de personas que reúna a expertos en las tres áreas. Este modelo de creación de contenido, si bien parece lógico y adecuado para obtener el mejor resultado posible, tiene algunos problemas importantes. Como las personas responsables de escribir el contenido normalmente son distintas de las que hacen los archivos informáticos de las páginas web surgen problemas de coordinación y agilidad de cambio de la web.</p>
+      <p>Esta forma de trabajar suele ocasionar que: s Si los expertos informáticos dejan el equipo, los responsables del contenido quedan totalmente inermes para hacer cualquier cambio. s La actualización del contenido se ve entorpecida por los problemas de comunicación que suelen surgir.</p>
+      <p/>
+      <p>Mantener un equipo de expertos en la realización de sitios web suficientemente numeroso como para atender a las necesidades continuamente crecientes de una universidad, es caro. s El software requerido para realizar los sitios web suele ser difícil de aprender por los que elaboran los contenidos y exige un perfil de usuario más elevado que el que la mayoría de los profesores y las personas de administración y servicios tiene. En el mundo universitario esto se traduce en que cuando un profesor decide iniciar un proyecto que incluye la creación de contenido para la web tiene generalmente tres alternativas:</p>
+      <p>1. Aprender las herramientas de creación del contenido (editores de páginas web, HTML, editores de imágenes, etc.), lo cual supone un esfuerzo muy importante y generalmente el resultado obtenido -por lo que a la calidad de las páginas web se refiere-suele ser bastante modesto, desde el punto de vista del diseño y de la facilidad de uso de la web.</p>
+      <p>2. Conseguir la colaboración de algún alumno ayudante o de algún becario con la suficiente formación tecnológica que se ocupe de la elaboración del contenido, o contar con algún especialista que se lo haga.</p>
+      <p>3. Si cuenta con la financiación suficiente podrá contratar los servicios de alguna empresa que se encargue de la elaboración de dicho contenido.</p>
+      <p>El principal problema de la segunda y tercera alternativas es que la actualización del contenido se hace muy problemática, bien porque los alumnos o becarios que han ayudado en la realización del proyecto han terminado su etapa escolar y dejan de prestar colaboración, o bien porque el presupuesto necesario para seguir contando con los servicios de una empresa externa acaba siendo prohibitivo.</p>
+    </sec>
+    <sec>
+      <title>La estrategia de creación de contenidos</title>
+      <p/>
+      <p>Teniendo en cuenta todo lo expuesto anteriormente los principales puntos que nos tuvimos en cuenta en nuestra estrategia de elaboración de contenidos fueron los siguientes:</p>
+      <p>s Que un profesor o una persona de administración y servicios con conocimientos informáticos medios o escasos pueda llegar a crear un sitio web. s Desarrollar un sistema que permita ir aumentando la cantidad y la calidad de las publicaciones en la web de la Universidad. s Facilitar que un número creciente de profesores use un sitio web desarrollado y controlado por él mismo, como apoyo para la docencia de sus asignaturas. s Reducir el tiempo y el esfuerzo necesarios para la formación del profesorado y de las personas de administración y servicios en este campo de actividad. s Proporcionar coherencia de navegación y unidad de diseño a todo el sitio web de la Universidad.</p>
+      <p>s Conseguir descentralizar la creación de contenidos y dotar por tanto a los profesores y departamentos de autonomía en este aspecto.</p>
+    </sec>
+    <sec>
+      <title>¿Cómo se materializa esta estrategia? Utilización de un editor estructurado</title>
+      <p/>
+      <p>La investigación sobre la aplicación de editores estructurados y lenguajes basados en etiquetas, a la creación de documentación, comenzó en los años 60, y llegó a alcanzar cierta madurez a finales de los 70 y comienzos de los 80. Estos esfuerzos llevaron a la creación del SGML (Structured Generalized Markup Language) como un estándar del ISO en 1986 como describe <italic>Goldfarb (1995)</italic>.</p>
+      <p>Los aspectos clave que estas investigaciones desarrollaron fueron: la separación entre el contenido y la presentación del mismo; la utilización de un sistema de etiquetas que sirva para identificar cada elemento de un documento; y la utilización de un modelo formal que permita determinar las relaciones entre los distintos elementos de un documento.</p>
+      <p>Como consecuencia del avance de estas técnicas comenzaron las investigaciones sobre herramientas de software capaces de ayudar a la elaboración de documentos utilizando lenguajes estructurados basados en etiquetas. Algunos resultados de estas investigaciones se materializaron en editores estructurados como puede verse en y Cowan, D.D., Mackie, E.W., Pianosi, G.M. y Smit, G. de V. (1991). Los principales retos de un editor estructurado son dos: Conseguir que el documento sea creado de acuerdo a las reglas establecidas en el modelo.<xref rid="b6" ref-type="bibr">2</xref>  Una interfaz visual, atractiva, en la que puedan realizarse operaciones actualmente comunes en un procesador de textos: cortar y pegar, deshacer, convertir el texto a negrita, crear listas, tablas, imágenes, etc. Este objetivo es actualmente el más complicado de conseguir. SGML es un lenguaje complejo; resulta complicado realizar herramientas basadas en SGML. Esta es la principal razón por la que el uso de SGML no se generalizó salvo en editoriales o empresas que creaban una gran cantidad de documentos como se muestra en <xref rid="b4" ref-type="bibr">3</xref>.</p>
+      <p>La llegada de XML [http://www.w3.org/XML/] cambió radicalmente este panorama. XML es un subconjunto de SGML suficiente para la mayoría de las aplicaciones y que elimina los aspectos más complicados de SGML. Es mucho más sencillo desarrollar herramientas basadas en XML que en SGML. El desarrollo de XML comenzó en 1996 y se convirtió en una recomendación del W3C en 1998.</p>
+      <p>Paralelamente al desarrollo de XML han mejorado las técnicas para conseguir una representación visual más efectiva. CSS2 (Cascade Style Sheets versión 2) ha permitido estandarizar un lenguaje de presentación eficaz para este tipo de documentos.</p>
+      <p>Todas estas condiciones han hecho posible que en la actualidad dispongamos de numerosos editores estructurados basados en XML capaces de cumplir con todos los requisitos de un procesador de textos a los que todos estamos acostumbrados. Entre ellos destacan: XMetal [http:// www.softquad.com/], Framemaker [http://www.adobe.com/products/framemaker/], Arbortext Epic [http://www.arbortext.com/], XMLSpy [http://www.xmlspy.com/], Tagless Editor [http:// www.i4i.com/] o XMLMind XML Editor [http://www.xmlmind.com/xmleditor/]. Una evaluación de todos estos productos escapa a los límites de este artículo, pero es necesario señalar que el factor más determinante es la forma en que el documento es presentado al usuario junto con la comodidad para realizar las acciones más comunes en la tarea de creación del documento.</p>
+      <p>En un primer momento, primavera de 2001, desarrollamos un prototipo de editor estructurado con el objetivo de evaluar las características que debía cumplir el software así como para valorar la aceptación de un editor estructurado entre los profesores. Posteriormente, coincidiendo con el lanzamiento de XMLMind XML Editor [http://www.xmlmind.com/xmleditor/] decidimos utilizarlo como base para el sistema Anaí.</p>
+      <p/>
+      <p>Anaí es un conjunto de herramientas destinadas a la elaboración de contenido principalmente para su utilización en la web.</p>
+      <p>En este momento, Anaí consta de dos componentes principales: s Un editor estructurado, XMLMind XML Editor, para la creación del contenido. s Una herramienta de publicación que convierte los documentos creados con el editor estructurado en páginas HTML, PDF, etc.</p>
+    </sec>
+    <sec>
+      <title>Proceso de elaboración del contenido</title>
+      <p/>
+      <p>El proceso de creación del contenido puede dividirse básicamente en tres fases: s Creación de un documento en formato XML en el que el profesor edita el contenido de una forma similar a como lo haría con un procesador de textos. Previamente ha elegido la plantilla que corresponde al tipo de web que quiere realizar.</p>
+      <p>s Una vez elegida la plantilla y creado el documento, del mismo contenido se pueden generar diversas presentaciones, esto es, se pueden conseguir distintos tipos de páginas HTML o documentos PDF, etc., a partir de un mismo contenido. </p>
+    </sec>
+    <sec>
+      <title>Figura 1.</title>
+      <p/>
+      <p>Ejemplo de un tipo de plantilla en la que se han señalado las distintas áreas de la interfaz de usuario.</p>
+      <p>s Publicación del resultado obtenido en la web. Una vez que está conforme con el resultado obtenido, el profesor puede publicarlo en la web.</p>
+    </sec>
+    <sec>
+      <title>Figura 3.</title>
+      <p/>
+      <p>Figura 3.</p>
+      <p>Ejemplo, sin datos reales, de la primera página de una web de asignatura.</p>
+    </sec>
+    <sec>
+      <title>Figura 2.</title>
+      <p/>
+      <p>Ejemplo de interfaz usada para crear las páginas HTML de una web de asignatura. </p>
+    </sec>
+    <sec>
+      <title>Creación de una plantilla</title>
+      <p/>
+    </sec>
+    <sec>
+      <title>Escenarios de aplicación</title>
+      <p/>
+      <p>En este apartado se enumeran algunos escenarios donde es posible y beneficiosa la aplicación de esta tecnología.</p>
+      <p>El principal objetivo de esta estrategia es la elaboración de la web de la Universidad, tanto por lo que se refiere a la parte institucional como al contenido básico de las asignaturas y departamentos. Actualmente la web de la Universidad está siendo elaborada por un gran número de personas de cada uno de los departamentos implicados cuyos conocimientos de la web son relativamente escasos.</p>
+      <p>La creación de cursos para enseñanza online es otra de las áreas que más puede beneficiarse de esta estrategia. Con ella se puede conseguir:</p>
+      <p>s Facilidad para su publicación, liberando al creador de una gran parte de las tareas de presentación del contenido y garantizando de esa forma una imagen de marca uniforme. s Facilidad para la obtención de diversos formatos de presentación de una misma fuente: PDF, XHTML, diversos HTML, etc. s Posibilidad de la utilización de metadatos, esto es, datos que sirven para descripción del contenido del curso, y que pueden ser posteriormente tratados automáticamente en sistemas de clasificación y búsqueda. s Cumplimiento de los estándares relacionados con la creación de contenidos online: IMS [http://www.imsproject.org/], SCORM [http://www.adlnet.org/]. También puede ser útil esta estrategia en la cada vez más frecuente publicación de tesis en formatos electrónicos, y en la creación de grandes repositorios de tesis doctorales. Una iniciativa de estas características es la Networked Digital Library of Theses and Dissertations [http://www.ndltd.org/] en la que están involucradas un gran número de universidades.</p>
+      <p>El mercado de los libros publicados en soporte electrónico está adquiriendo cada vez más auge especialmente debido al abaratamiento del coste del libro. Los dispositivos de bolsillo (PDAs, Handhelds, etc.) dan la posibilidad actualmente de poder disfrutar de las ventajas de los libros tradicionales: poder llevarlos a cualquier sitio, reducido tamaño, etc. Es de esperar que la generalización de estos dispositivos permita una mayor difusión de los libros en formato electrónico. Con la estrategia que presentamos se facilita la edición de este tipo de libros.</p>
+      <p>Uno de los problemas de la mayoría del software usado actualmente para la evaluación por ordenador en la enseñanza es la nula o pequeña posibilidad de reutilización de los bancos de preguntas. La utilización de esta tecnología permite que los profesores puedan elaborar sus exámenes, pruebas de autoevaluación, etc., utilizando un entorno cómodo y que posteriormente puedan ser utilizadas de forma automática en diferentes herramientas y soportes, incluyendo el papel. Este sistema puede utilizarse para crear preguntas y exámenes que cumplan la especificación Question and Test Interoperability [http://www.imsproject.org/] del IMS. Anaí permite realizar también presentaciones interactivas, animaciones, simulaciones sencillas, etc. utilizando un subconjunto de SMIL [http://www.w3.org/AudioVideo/], estandarizado por el W3C. En general, pueden obtenerse resultados satisfactorios en cualquier área que implique una cierta gestión documental.</p>
+    </sec>
+    <sec>
+      <title>Otras opciones</title>
+      <p/>
+      <p>Existen diversas formas de alcanzar estos mismos objetivos. Entre ellas destacan: 1. La utilización de un procesador de textos tradicional junto con una herramienta de conversión automática. Esta solución ha sido adoptada por muchas organizaciones especialmente por ser la más obvia, sencilla y, a corto plazo, barata. Su principal inconveniente es que el usuario, esto es, el creador del contenido tiene la responsabilidad de crear un documento válido siguiendo unas determinadas reglas. Está comprobado que este esquema genera muchos errores y la necesidad de personal que ayude a corregirlos. No se consigue la automatización del proceso de publicación del contenido. 2. Los sistemas de gestión de contenido que normalmente incluyen una herramienta más o menos sofisticada que permite la creación de documentos. En general, carecen de la flexibilidad y capacidad de personalización que ofrece un editor estructurado, pero no obstante un editor de estas características puede integrarse como un componente más de un sistema de gestión de contenido.</p>
+    </sec>
+    <sec>
+      <title>Conclusiones</title>
+      <p/>
+      <p>La utilización de un editor estructurado ha resultado eficaz para la creación de la web de la Universidad de Navarra. Reduce considerablemente el esfuerzo realizado en la formación de profesores así como el tiempo que éstos deben dedicar a la creación de las páginas web de sus asignaturas.</p>
+      <p>La utilización de estándares de identidad gráfica corporativa ha sido bien acogida y proporciona coherencia a toda la web de la Universidad.</p>
+    </sec>
+
+  </body>
+  <back>
+    <ref-list>
+      <title>References</title><ref id="b6">
+        <element-citation publication-type="misc">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Quint</surname>
+              <given-names>V</given-names>
+            </name>
+            <name>
+              <surname>Vatton</surname>            
+              <given-names>I</given-names>
+            </name>
+          </person-group>
+          <source>Grif: an Interactive System for Structured Document Manipulation</source>
+          <year>1986</year>
+        </element-citation>
+        </ref>
+      <ref id="b3">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Goldfarb</surname>            
+              <given-names>C F</given-names>
+            </name>
+          </person-group>
+          <source>The SGML handbook</source>
+          <year>1990</year>
+          <publisher-loc>Oxford</publisher-loc>
+          <publisher-name>Clarendon Press</publisher-name>
+        </element-citation>
+        </ref>
+      <ref id="b5">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Nielsen</surname>            
+              <given-names>J</given-names>
+            </name>
+          </person-group>
+          <source>Designing Web Usability: The Practice of Simplicity</source>
+          <year>2000</year>
+          <publisher-loc>Indianapolis, Indiana</publisher-loc>
+          <publisher-name>New Riders Publishing</publisher-name>
+        </element-citation>
+        </ref>
+      <ref id="b4">
+        <element-citation publication-type="journal">
+          <article-title>News you can reuse. Content repurposing at The Wall Street Journal</article-title>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Karben</surname>            
+              <given-names>A</given-names>
+            </name>
+          </person-group>
+          <source>Markup Languages: Theory Practice</source>
+          <fpage>35</fpage>
+          <lpage>45</lpage>
+          <year>1999</year>
+          <publisher-name>MIT Press</publisher-name>
+        </element-citation>
+        </ref>
+      <ref id="b0">
+        <element-citation publication-type="journal">
+          <article-title>The Semantic Web</article-title>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Berners-Lee</surname>            
+              <given-names>T</given-names>
+            </name>
+            <name>
+              <surname>Hendler</surname>            
+              <given-names>J</given-names>
+            </name>
+            <name>
+              <surname>Lassila</surname>            
+              <given-names>O</given-names>
+            </name>
+          </person-group>
+          <source>Scientific American</source>
+          <volume>284</volume>
+          <issue>5</issue>
+          <fpage>34</fpage>
+          <lpage>43</lpage>
+          <year>2001</year>
+        </element-citation>
+        </ref>
+      <ref id="b2">
+        <element-citation publication-type="journal">
+          <article-title>Interactively Editing Structured Documents</article-title>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Furuta</surname>            
+              <given-names>R</given-names>
+            </name>
+            <name>
+              <surname>Quint</surname>            
+              <given-names>V</given-names>
+            </name>
+            <name>
+              <surname>André</surname>            
+              <given-names>J</given-names>
+            </name>
+          </person-group>
+          <source>Dissemination and Design</source>
+          <volume>1</volume>
+          <issue>1</issue>
+          <fpage>19</fpage>
+          <lpage>44</lpage>
+          <year>1988</year>
+          <publisher-name>Electronic Publishing-Origination</publisher-name>
+        </element-citation>
+        </ref>
+      <ref id="b7">
+        <element-citation publication-type="inproceedings">
+          <person-group person-group-type="author">
+            <name>
+              <surname>En Van Vliet</surname>            
+              <given-names>J C</given-names>
+            </name>
+          </person-group>
+          <source>Text Processing and Document Manipulation</source>
+          <fpage>200</fpage>
+          <lpage>213</lpage>
+          <publisher-name>University Press</publisher-name>
+          <conf-loc>Cambridge</conf-loc>
+        </element-citation>
+        </ref>
+      <ref id="b1">
+        <element-citation publication-type="journal">
+          <article-title>Rita-an Editor and User Interface for Manipulating Structured Documents</article-title>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Cowan</surname>            
+              <given-names>D D</given-names>
+            </name>
+            <name>
+              <surname>Mackie</surname>            
+              <given-names>E W</given-names>
+            </name>
+            <name>
+              <surname>Pianosi</surname>            
+              <given-names>G M</given-names>
+            </name>
+            <name>
+              <surname>Smit</surname>            
+              <given-names>G</given-names>
+            </name>
+            <name>
+              <surname>De</surname>            
+              <given-names>V</given-names>
+            </name>
+          </person-group>
+          <source>Electronic PublishingOrigination, Dissemination and Design</source>
+          <volume>4</volume>
+          <fpage>125</fpage>
+          <lpage>150</lpage>
+          <year>1991</year>
+        </element-citation>
+        </ref>
+    </ref-list>
+  </back>
+</article>

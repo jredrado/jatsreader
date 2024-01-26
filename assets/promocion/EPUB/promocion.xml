@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2 20190208//EN"
+                  "JATS-archivearticle1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+<front>
+<journal-meta>
+<journal-id></journal-id>
+<journal-title-group>
+</journal-title-group>
+<issn></issn>
+<publisher>
+<publisher-name></publisher-name>
+</publisher>
+</journal-meta>
+<article-meta>
+</article-meta>
+</front>
+<body>
+<disp-quote>
+  <p><bold>PROMOCIÓN DEL USO DEL WEB DOCENTE EN LA UNIVERSIDAD
+  DE</bold></p>
+</disp-quote>
+<p><bold>NAVARRA: ESTRATEGIA SEGUIDA Y EVALUACIÓN</bold></p>
+<disp-quote>
+  <p>J. REDRADO, L. ECHARRI PRIM, C. NAVAL, P. SÁNCHEZ DE MIGUEL y G.
+  PÉREZ BERUETE</p>
+  <p>Servicio de Innovación Educativa – Universidad de Navarra,</p>
+  <p>Edificio Central. Campus Universitario s/n, 31080 Pamplona,
+  SPAIN.</p>
+</disp-quote>
+<p>E-mail:
+<italic><underline>ieducativa@unav.es</underline></italic></p>
+<disp-quote>
+  <p>This paper presents the strategy adopted by the University of
+  Navarre in school year 2001-2002 and 2002-2003 to promote the use of
+  websites for academic purposes.</p>
+  <p>Data on the outcome of the project implementation are also
+  provided.</p>
+  <p>The project implementation had several components. First, we
+  developed an econtent creation tool called Anai that is user-friendly.
+  This allows people with very few computer skills to develop
+  high-quality websites that have versatile features like weblogs,
+  assessment systems, discussion tools, etc. Second, we organized
+  several training sessions on the use of these tools.</p>
+  <p>Today, the number of professors using websites for academic
+  purposes has increased significantly. At least 60% of the courses
+  offered in the University of Navarre have a website. Nevertheless,
+  among the professors, the level and extent of the use of the web vary
+  considerably. 1) The content of most websites is limited to providing
+  basic information about a course, such as course description,
+  objectives, syllabus, criteria of evaluation, etc. 2) Some websites
+  contain teaching notes, handouts and ideas to support students. The
+  content is presented using a variety of formats such as Microsoft
+  Word, Adobe PDF and Microsoft PowerPoint. 3) Very few courses use
+  tools like forums, weblogs, assessment systems or digital video.</p>
+  <p>The key elements to ensure the effective implementation of the
+  project include the following: user-friendly tools, institutional
+  support and sustained efforts to train the users.</p>
+  <p><bold>KEYWORDS</bold>: creation of e-content, e-content tools,
+  university, training, use of websites.</p>
+</disp-quote>
+<p>1. Interés del uso de la web docente en la enseñanza de las
+asignaturas en la universidad</p>
+<p>El uso de la web como complemento a la enseñanza presencial se ha ido
+extendiendo en los últimos años como una herramienta eficaz de creación
+de ámbitos de información y planificación, relación o trabajo que
+enriquecen la forma tradicional de trabajar de los profesores y los
+alumnos en las asignaturas.</p>
+<p>Llevamos ya varios años en los que es muy frecuente encontrar en la
+bibliografía experiencias y desarrollos teóricos relacionados con estas
+webs docentes. Desde el comienzo del desarrollo de la web en internet,
+muchos profesores (cfr. Adell, J., 1993) prepararon páginas con
+información sobre sus asignaturas, contenidos, actividades, etc. Con el
+tiempo estas webs han ido adquiriendo diversos niveles de desarrollo,
+como Harmon y Jones (1999) señalan en su propuesta de clasificar las
+webs docentes en cinco niveles de complejidad.</p>
+<p>Se mantiene muy viva la discusión sobre el valor más o menos
+relevante de estas webs en la innovación universitaria, las condiciones
+que deben cumplir según los distintos estilos docentes y de aprendizaje
+que se empleen, sus posibilidades reales, etc. y, se puede concluir, que
+en la situación actual el tema se encuentra necesitado de mucho más
+estudio y experiencia; pero esto no quita para que presente ya algunas
+ventajas y potencialidades que justifican el que una universidad le
+dedique atención y esfuerzo.</p>
+<p>En la Universidad de Navarra se ha promovido activamente en los tres
+últimos cursos académicos que cada asignatura tenga su web.</p>
+<p>Son diversas las razones por las que se ha impulsado la utilización
+de webs en las asignaturas. Por una parte, porque se considera que
+preparar una web docente es útil para facilitar datos fundamentales
+tales como: profesor, horarios, objetivos, programas, criterios de
+evaluación, etc., y por otra parte, porque estas webs son una base muy
+apropiada para que los profesores enriquezcan sus actividades
+docentes.</p>
+<p>Que una asignatura disponga de una web, aunque sea sencilla, ofrece
+la posibilidad de mejorar de forma notable la calidad de la comunicación
+entre profesor y alumnos. Asegurar una información de calidad es parte
+fundamental del proceso docente.</p>
+<p>Uno de los elementos básicos a tener en cuenta para conseguir un
+resultado satisfactorio a medio plazo con este tipo de webs, es que su
+realización no dependa de un servicio centralizado o de unas personas
+ajenas a la asignatura, sino que sean los mismos profesores y los
+miembros de cada departamento los que pongan en marcha o, al menos,
+mantengan la web. Es decir, el reto fundamental está en capacitar
+adecuadamente, y, si fuera necesario motivar, a los profesores, para que
+las webs de las asignaturas funcionen con autonomía.</p>
+<p>Desde el Servicio de Innovación educativa de la Universidad se
+preparó una estrategia y unas herramientas adecuadas para cumplir estos
+objetivos.</p>
+<p>Parte importante de la estrategia ha consistido en que la
+implantación del proceso fuera gradual, sin imposiciones o exigencias
+externas. Se ha tratado de promover que sean los mismos profesores y
+departamentos los que soliciten la ayuda necesaria para realizar estas
+webs.</p>
+<p>2. Problemas para la realización de una Web docente</p>
+<disp-quote>
+  <p>Una web de interés docente debe reunir varios requisitos:</p>
+</disp-quote>
+<list list-type="bullet">
+  <list-item>
+    <p>un contenido apropiado,</p>
+  </list-item>
+  <list-item>
+    <p>un diseño instructivo adecuado y</p>
+  </list-item>
+  <list-item>
+    <p>una elaboración técnica proporcionada, que esté al servicio de
+    ese contenido y ese diseño.</p>
+  </list-item>
+</list>
+<p>Hacer una web docente exige, por tanto, diversas capacidades. El
+profesor que aborda este trabajo debe ser capaz, tanto de elegir y
+organizar bien el contenido que quiere transmitir, como de convertirlo
+en un producto informático visible a través de internet.</p>
+<p>En muchas ocasiones, esta necesidad de capacidades multidisciplinares
+para la creación de una buena web docente, se resuelve buscando la
+colaboración de un equipo de personas que reúna a expertos en las tres
+áreas. Mientras una persona se encarga del diseño y propone un modelo de
+web, otras personas distintas son las que aportan los contenidos y un
+experto es el encargado de ponerlos en la web.</p>
+<p>Esta forma de trabajar, teóricamente adecuada, tiene importantes
+dificultades. Como las personas que suelen preparar el contenido
+normalmente son distintas de las que hacen los archivos informáticos de
+las páginas web, surgen problemas de coordinación y agilidad a la hora
+de introducir cambios en la web.</p>
+<disp-quote>
+  <p>Así puede ocurrir que:</p>
+</disp-quote>
+<list list-type="bullet">
+  <list-item>
+    <p>Si los expertos informáticos dejan el equipo, los responsables
+    del contenido encuentran difícil realizar cualquier cambio.</p>
+  </list-item>
+  <list-item>
+    <p>Mantener al día el contenido exige una agilidad de comunicación
+    que no siempre se logra.</p>
+  </list-item>
+  <list-item>
+    <p>Es caro mantener un equipo de expertos en la realización de
+    sitios web que atienda las necesidades continuamente crecientes de
+    una universidad. • El software requerido para realizar los sitios
+    web suele ser difícil de aprender para los que elaboran los
+    contenidos, y exige un perfil de usuario más elevado que el que la
+    mayoría de los profesores y las personas de administración y
+    servicios tiene.</p>
+  </list-item>
+</list>
+<p>En el mundo universitario esto se traduce en que cuando un profesor
+decide iniciar un proyecto que incluye la creación de contenido para la
+web tiene generalmente tres alternativas:</p>
+<list list-type="order">
+  <list-item>
+    <label>1)</label>
+    <p>Aprender las herramientas de creación de los contenidos (editores
+    de páginas web, HTML, editores de imágenes, etc.), lo cual supone un
+    esfuerzo muy importante y generalmente el resultado obtenido -en lo
+    que a la calidad de las páginas web se refiere- suele ser bastante
+    modesto, tanto desde el punto de vista del diseño, como de la
+    facilidad de uso de la web hecha.</p>
+  </list-item>
+  <list-item>
+    <label>2)</label>
+    <p>Conseguir la colaboración de algún alumno ayudante ó becario con
+    la suficiente formación tecnológica que se ocupe de la elaboración
+    de la página, o contar con algún especialista que lo haga.</p>
+  </list-item>
+  <list-item>
+    <label>3)</label>
+    <p>Si cuenta con la financiación suficiente podrá contratar los
+    servicios de alguna empresa que se encargue de la elaboración de
+    dicho contenido.</p>
+  </list-item>
+</list>
+<p>El principal problema de la segunda y tercera alternativas es que la
+actualización del contenido se hace complicada, bien porque los alumnos
+o becarios que han ayudado en la realización del proyecto han terminado
+su etapa de estudios y dejan de prestar colaboración, o bien porque el
+presupuesto necesario para seguir contando con los servicios de una
+empresa externa, acaba siendo prohibitivo.</p>
+<list list-type="order">
+  <list-item>
+    <label>3.</label>
+    <p>Estrategia de realización de webs en la Universidad de
+    Navarra</p>
+  </list-item>
+</list>
+<p>Considerando lo expuesto anteriormente, los principales puntos que
+nos propusimos en nuestra estrategia de elaboración de las webs de las
+asignaturas fueron:</p>
+<list list-type="bullet">
+  <list-item>
+    <p>Preparar un sistema de trabajo que permitiera que un profesor con
+    conocimientos informáticos medios o escasos pudiera llegar a crear y
+    mantener un sitio web.</p>
+  </list-item>
+  <list-item>
+    <p>Conseguir que todas las webs docentes tuvieran coherencia de
+    navegación y unidad de diseño, en los aspectos fundamentales.</p>
+  </list-item>
+  <list-item>
+    <p>Conseguir descentralizar la creación de contenidos y por tanto
+    dotar a los profesores y departamentos de autonomía en este
+    aspecto.</p>
+  </list-item>
+  <list-item>
+    <p>Desarrollar un sistema de formación de los profesores que hiciera
+    posible la implantación del proyecto.</p>
+  </list-item>
+</list>
+<list list-type="order">
+  <list-item>
+    <label>4.</label>
+    <p>¿Cómo se materializó esta estrategia?</p>
+  </list-item>
+</list>
+<p>Esta estrategia se materializó en el proyecto <bold>“Cada asignatura
+su web”</bold> que pretende lograr que todas las asignaturas que se
+imparten en la Universidad de Navarra tengan su propia web, realizada y
+gestionada por los propios profesores o por sus departamentos. Forma
+parte de un plan más general de uso de las tecnologías de la información
+y la comunicación en nuestra universidad.</p>
+<disp-quote>
+  <p>Para lograrlo:</p>
+</disp-quote>
+<list list-type="alpha-lower">
+  <list-item>
+    <label>a)</label>
+    <p>Se preparó una herramienta para editar páginas web de forma
+    sencilla que además mantiene la identidad gráfica de la universidad.
+    A esta herramienta le llamamos <bold>Sistema Anaí.</bold> Esta
+    herramienta es básicamente un editor estructurado visual basado en
+    XML. Con esta herramienta, el profesor puede confeccionar webs muy
+    variadas en cuanto a su número y tipo de páginas, estructura de
+    navegación, contenido de cada página, etc. Se describe con más
+    detalle en Redrado y cols. (2002).</p>
+  </list-item>
+  <list-item>
+    <label>b)</label>
+    <p>Se formó un grupo de personas con la finalidad de prestar
+    <bold>ayuda constante al profesor,</bold> siempre que la
+    necesite.</p>
+  </list-item>
+  <list-item>
+    <label>c)</label>
+    <p>Se organizaron <bold>sesiones</bold> para enseñar el uso de las
+    herramientas informáticas.</p>
+  </list-item>
+  <list-item>
+    <label>d)</label>
+    <p>El Servicio de Innovación Educativa mantiene una <bold>página
+    web</bold> en la que se encuentra información de todas las
+    herramientas disponibles en la Universidad (examinadores, foros,
+    etc.).</p>
+  </list-item>
+  <list-item>
+    <label>e)</label>
+    <p>Funciona una <bold>lista de distribución</bold> para intercambio
+    de experiencias sobre la innovación educativa en la Universidad.</p>
+  </list-item>
+</list>
+<p>5. Características de las webs de asignaturas realizados</p>
+<p>A fecha de 30 de septiembre de 2003 se analizaron, por medio de un
+programa automático, las webs de 740 asignaturas impartidas en la
+Universidad. Esta cifra supone un porcentaje muy alto de las asignaturas
+que tienen ya su web elaborada, aunque no alcanza la totalidad que
+estimamos rondará las 800.</p>
+<disp-quote>
+  <p>Los datos extraídos de este análisis son los siguientes:</p>
+</disp-quote>
+<list list-type="alpha-lower">
+  <list-item>
+    <label>a)</label>
+    <p><bold>Conceptos enlazados con mas frecuencia en las
+    asignaturas:</bold></p>
+  </list-item>
+</list>
+<p>Este dato da idea del número de páginas dedicadas individualmente a
+los conceptos recogidos. Que una web no tenga el concepto bibliografía
+enlazado no quiere decir que no tenga un apartado en el que se recoja
+esa información, sino que esa información no tiene enlace propio.</p>
+<table-wrap>
+  <table>
+    <colgroup>
+      <col width="80%" />
+      <col width="20%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Nº webs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Programa/Temario</td>
+        <td>504</td>
+      </tr>
+      <tr>
+        <td>Bibliografía</td>
+        <td>427</td>
+      </tr>
+      <tr>
+        <td>Evaluación</td>
+        <td>347</td>
+      </tr>
+      <tr>
+        <td>Objetivos</td>
+        <td>249</td>
+      </tr>
+      <tr>
+        <td>Presentación</td>
+        <td>201</td>
+      </tr>
+      <tr>
+        <td>Prácticas</td>
+        <td>175</td>
+      </tr>
+      <tr>
+        <td>Profesor</td>
+        <td>99</td>
+      </tr>
+      <tr>
+        <td>Asesoramiento</td>
+        <td>93</td>
+      </tr>
+      <tr>
+        <td>Problemas/Ejercicios/Soluciones</td>
+        <td>90</td>
+      </tr>
+      <tr>
+        <td>Avisos</td>
+        <td>77</td>
+      </tr>
+      <tr>
+        <td>Horario</td>
+        <td>76</td>
+      </tr>
+      <tr>
+        <td>Calendario/Plan</td>
+        <td>72</td>
+      </tr>
+      <tr>
+        <td>Enlaces</td>
+        <td>57</td>
+      </tr>
+      <tr>
+        <td>Metodología</td>
+        <td>51</td>
+      </tr>
+    </tbody>
+  </table>
+</table-wrap>
+<p>Como era de esperar, las páginas que con más frecuencia crean los
+profesores, son las dedicadas específicamente al programa o temario de
+la asignatura, a la bibliografía, a la evaluación y a los objetivos.
+También es bastante alto el número de páginas dedicadas a informar sobre
+las prácticas de la asignatura.</p>
+<p>Llama la atención que, proporcionalmente, es también bastante alto el
+número de páginas dedicadas específicamente al asesoramiento.</p>
+<list list-type="alpha-lower">
+  <list-item>
+    <label>b)</label>
+    <p><bold>Número de enlaces internos por asignatura</bold></p>
+  </list-item>
+</list>
+<disp-quote>
+  <p>Este dato da idea del número de páginas que forman la web</p>
+</disp-quote>
+<table-wrap>
+  <table>
+    <colgroup>
+      <col width="66%" />
+      <col width="34%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Número de enlaces internos</p>
+          </disp-quote>
+        </p></th>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Nº de asignaturas</p>
+          </disp-quote>
+        </p></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Más de 100</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>23</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td>51-100</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>30</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td>21-50</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>72</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td>11-20</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>80</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td>2-10</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>425</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td>Menos de 2</td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>98</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+    </tbody>
+  </table>
+</table-wrap>
+<p>Se observa que la mayor parte de las asignaturas tienen, por ahora,
+webs modestas formadas por menos de 10 páginas. Hemos encontrado que en
+98 asignaturas la información está concentrada en una o dos páginas.</p>
+<list list-type="alpha-lower">
+  <list-item>
+    <label>c)</label>
+    <p><bold>Principales tipos de documentos que se encuentran en las
+    webs de las asignaturas:</bold></p>
+  </list-item>
+</list>
+<p>Este dato nos informa del número total de ficheros principales de
+distinto tipo que se encuentran en las webs de las asignaturas. En
+cifras menores encontramos ficheros de muchos otros tipos (MatLab;
+vídeo; etc.):</p>
+<table-wrap>
+  <table>
+    <colgroup>
+      <col width="58%" />
+      <col width="42%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Tipo de documento enlazado</p>
+          </disp-quote>
+        </p></th>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Nº de ficheros total enlazados</p>
+          </disp-quote>
+        </p></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>HTML</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>6299</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>PDF</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>2401</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>Microsoft Word (DOC, RTF)</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>982</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>ZIP</p>
+          </disp-quote>
+        </p></td>
+        <td>176</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>Power Point (PPT,PPS)</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>158</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>Excel (XLS)</p>
+          </disp-quote>
+        </p></td>
+        <td>146</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>GIF</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>100</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>JPG</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>95</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>EXE</p>
+          </disp-quote>
+        </p></td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>TXT</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>24</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+    </tbody>
+  </table>
+</table-wrap>
+<p>Las páginas html son las más frecuentes, como es lógico, seguidas por
+pdf y doc en números también altos.</p>
+<list list-type="alpha-lower">
+  <list-item>
+    <label>d)</label>
+    <p><bold>Nº de asignaturas por tipos de ficheros que
+    contienen</bold></p>
+  </list-item>
+</list>
+<p>Nos indica el número de asignaturas en las que se encuentran enlaces
+a los tipos de ficheros recogidos en la tabla.</p>
+<table-wrap>
+  <table>
+    <colgroup>
+      <col width="50%" />
+      <col width="50%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Tipo de documento</p>
+          </disp-quote>
+        </p></th>
+        <th><p specific-use="wrapper">
+          <disp-quote>
+            <p>Asignaturas con ese tipo de documento</p>
+          </disp-quote>
+        </p></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>PDF</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>143</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>Microsoft Word</p>
+          </disp-quote>
+        </p></td>
+        <td>128</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>XLS</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>44</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>PowerPoint</p>
+          </disp-quote>
+        </p></td>
+        <td>29</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>ZIP</p>
+          </disp-quote>
+        </p></td>
+        <td>28</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>TXT</p>
+          </disp-quote>
+        </p></td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>JPG</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>9</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>GIF</p>
+          </disp-quote>
+        </p></td>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>9</p>
+          </disp-quote>
+        </p></td>
+      </tr>
+      <tr>
+        <td><p specific-use="wrapper">
+          <disp-quote>
+            <p>EXE</p>
+          </disp-quote>
+        </p></td>
+        <td>7</td>
+      </tr>
+    </tbody>
+  </table>
+</table-wrap>
+<p>Todas por supuesto tienen ficheros HTML que aquí no son recogidos.
+Los documentos más enlazados son pdf y word (doc).</p>
+<p>6. Conclusiones</p>
+<list list-type="bullet">
+  <list-item>
+    <p>La utilización de este sistema ha resultado eficaz para la
+    creación de webs de asignaturas en la Universidad de Navarra. Reduce
+    considerablemente el esfuerzo realizado en la formación de
+    profesores así como el tiempo que éstos deben dedicar a la creación
+    de las páginas web de sus asignaturas.</p>
+  </list-item>
+  <list-item>
+    <p>La utilización de estándares de identidad gráfica corporativa ha
+    sido bien acogida y proporciona coherencia a toda la web de la
+    Universidad.</p>
+  </list-item>
+  <list-item>
+    <p>El número de asignaturas que disponen de su web así como la
+    cantidad y calidad de los contenidos y de las herramientas que se
+    utilizan ha aumentado considerablemente en este tiempo.</p>
+  </list-item>
+  <list-item>
+    <p>Hasta este momento, unas 800 asignaturas de la Universidad de
+    Navarra tienen webs realizadas por los mismos profesores o
+    departamentos que imparten las asignaturas.</p>
+  </list-item>
+  <list-item>
+    <p>Las principales consecuencias positivas que se han seguido de
+    este plan son las siguientes:</p>
+  </list-item>
+</list>
+<p>Aumenta la motivación para el uso de las tecnologías de la
+información y la comunicación por parte del profesor, como medio para
+realizar una docencia de más calidad.</p>
+<p>Se amplía la formación básica en el uso de la web en un número
+creciente de profesores.</p>
+<p>El profesorado se implica más en la realización y mantenimiento de
+las páginas web de sus asignaturas.</p>
+<p>El alumno encuentra información de interés sobre la asignatura; se
+facilitan las actividades en las que es más protagonista de su propio
+aprendizaje y se estimulan distintos estilos de aprendizaje.</p>
+<p><bold>Bibliografía</bold></p>
+<list list-type="order">
+  <list-item>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Adell, J. (1993). World Wide Web: Un sistema hipermedia
+        distribuido para la docencia universitaria. Comunicación
+        presentada en el <italic>I Congreso sobre Nuevas Tecnologías de
+        la Educació</italic>n. Badajoz, diciembre de 1993. Publicado en
+        Blázquez, F., Cabero, J. y Loscertales, F. (Coord.). (1994).
+        <italic>Nuevas tecnologías de la Información y la Comunicación
+        para la Educació</italic>n. Sevilla: Ediciones Alfar, págs.
+        114-121. Online: http://nti.uji.es/docs/nti/badajoz.html</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Berners-Lee, T., Hendler, J. y Lassila, O. (2001). The
+        Semantic Web. Scientific American, 284(5):34-43.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Cowan, D.D., Mackie, E.W., Pianosi, G.M. y Smit, G. de V.
+        (1991). Rita-an Editor and User Interface for Manipulating
+        Structured Documents, [versión electrónica]. Electronic</p>
+      </disp-quote>
+    </p>
+  </list-item>
+</list>
+<p>Publishing Origination, Dissemination and Design, 4(3), 125-150.</p>
+<disp-quote>
+  <p>Disponible:http://cajun.cs.nott.ac.uk/compsci/epo/papers/volume4/issue3/ep048dc.pdf
+  [1991, septiembre].</p>
+</disp-quote>
+<list list-type="order">
+  <list-item>
+    <label>4.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Furuta, R., Quint, V. y André, J. (1988). Interactively
+        Editing Structured Documents, [versión electrónica]. Electronic
+        Publishing—Origination, Dissemination and Design
+        1(1),19-44.[1998,abril]Disponible:</p>
+      </disp-quote>
+    </p>
+  </list-item>
+</list>
+<disp-quote>
+  <p>http://cajun.cs.nott.ac.uk.compsci/epo/papers/volume1/issue1/eprxf001.pdf</p>
+</disp-quote>
+<list list-type="order">
+  <list-item>
+    <label>5.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Goldfarb, C.F. (1990). The SGML handbook. Oxford: Clarendon
+        Press.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>6.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Harmon, W. and Jones, M.G. (1999). The five levels of web use
+        in education: Factors to consider in planning online course.
+        <italic>Educational Technolog</italic>y, 39(6),</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>7.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>p. 28-32</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>8.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Karben, A. (1999). News you can reuse. Content repurposing at
+        The Wall Street Journal [versión electrónica]. Markup Languages:
+        Theory Practice. MIT Press. (1)1, 3545.Disponible:
+        http://mitpress.mit.edu/journals/MLANG/karben.pdf [1999,
+        winter].</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>9.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Nielsen, J. (2000). Designing Web Usability: The Practice of
+        Simplicity. Indianapolis, Indiana: New Riders Publishing.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>10.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Quint, V. y Vatton, I. (1986). Grif: an Interactive System
+        for Structured Document Manipulation. En van Vliet, J.C. (ed.),
+        Text Processing and Document Manipulation (pp. 200-213).
+        Cambridge: University Press.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>11.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Redrado, J.; Echarri, L. y Naval, C (2002). Anaí, una forma
+        de publicación en la web. Estudios sobre educación. Nº 3 Dic.
+        2002, 83-92. Servicio de Publicaciones de la Universidad de
+        Navarra.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+  <list-item>
+    <label>12.</label>
+    <p specific-use="wrapper">
+      <disp-quote>
+        <p>Santos, M. L. Criterios de Eficacia Comunicativa en el Diseño
+        de Materiales Hipermedia para Educación. Análisis de Casos en la
+        World Wide Web. Tesis doctoral. Universidad de Navarra, 2003.
+        Inédita.</p>
+      </disp-quote>
+    </p>
+  </list-item>
+</list>
+</body>
+<back>
+</back>
+</article>

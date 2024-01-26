@@ -2,31 +2,31 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "STORAGEINSTANCE"
-value = "m5l9xACRtbLZG"
+value = "2uZMC7_yQnPzS"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "cy-6_mmePxKOewR"
+value = "6epRIg-m968T54A"
 
 [[secret_settings]]
 name = "RESOLVER"
-value = "nQ7iezN3oG7cjkg"
+value = "9fD8-lb32KGL97Q"
 
 [[secret_settings]]
 name = "STREAMER"
-value = "tXNljOTws_RCPaQ"
+value = "6JXlvuPoUurG-Ow"
 
 [[secret_settings]]
 name = "STREAMER_API"
-value = "0W06B422__0cdH63ijPQ8Ud0MPfUY423EHhho5Ykje0HfnTRlHmi-QBvLZOWbBv8t3Jzj4o4GFWOu72WyyDnJJxM"
+value = "4_f_-NCl9-Pa_OGllAK3uYG4_d2jUqSU-VPrz1uEV4oHB_JTm40i_98btzfr9Xe7y31yTpPrw8uHBCYW9vwjhuNU"
 
 [[capability]]
 resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_HOST = "localhost"
 MOSQUITTO_PORT = "1883"
+MOSQUITTO_HOST = "localhost"
 
 [[capability]]
 resource = "configs.usersecrets"
