@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "LKrT0Z3dSCcFTnM6lTJLzzDe5"
+value = "_WWloexE24J2McxtoL9Otkcpl"
 
 [[secret_settings]]
 name = "METADATAINSTANCE"
-value = "FcEihV66Y80nN5w"
+value = "vbPDZiGB53FR17Q"
 
 [[capability]]
 resource = "messaging.mosquitto"

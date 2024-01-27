@@ -2,7 +2,7 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "RESOLVERINSTANCE"
-value = "7Ohc3NVthq8uJ3g"
+value = "sf537VnvZkNYjuQ"
 
 [[capability]]
 resource = "http"

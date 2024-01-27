@@ -20,6 +20,7 @@ trap handle_ctrlc SIGINT
 
 while true; do
     nohup slight -c $2 run $3
+    #killall slight # Restart all the services
     sleep $1
 done
 
