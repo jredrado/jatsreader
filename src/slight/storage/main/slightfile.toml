@@ -2,11 +2,11 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "bbb1M87MCcb-n"
+value = "qECGJf4nYntQDC0bo"
 
 [[capability]]
 resource = "keyvalue.filesystem"
-name = "storage_1"
+name = "MiBiblioteca"
 
 [[capability]]
 resource = "messaging.mosquitto"
@@ -19,4 +19,3 @@ MOSQUITTO_HOST = "localhost"
 [[capability]]
 resource = "configs.usersecrets"
 name = "config-store"
-

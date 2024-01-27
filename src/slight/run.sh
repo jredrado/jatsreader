@@ -18,8 +18,8 @@ STREAMER_API_URL=https://$STREAMERPORT-$HOSTNAME.$GITPOD_WORKSPACE_CLUSTER_HOST
 
 echo $STREAMER_API_URL
 
-slight -c $ROOT/storage/main/slightfile.toml secret -k "INSTANCE" -v "storage_1"
-slight -c $ROOT/storage/main/slightfile2.toml secret -k "INSTANCE" -v "storage_2"
+slight -c $ROOT/storage/main/slightfile.toml secret -k "INSTANCE" -v "MiBiblioteca"
+slight -c $ROOT/storage/main/slightfile2.toml secret -k "INSTANCE" -v "ServicioPublicacionesUNAV"
 
 slight -c $ROOT/register/main/slightfile.toml secret -k "INSTANCE" -v "register_1"
 
@@ -28,10 +28,10 @@ slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER" -v "streamer_
 slight -c $ROOT/register/main/slightfile.toml secret -k "STREAMER_API" -v "$STREAMER_API_URL"
 
 slight -c $ROOT/metadata/main/slightfile.toml secret -k "INSTANCE" -v "metadata_1"
-slight -c $ROOT/metadata/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
+slight -c $ROOT/metadata/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "MiBiblioteca"
 
 slight -c $ROOT/locate/main/slightfile.toml secret -k "INSTANCE" -v "locator_1"
-slight -c $ROOT/locate/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
+slight -c $ROOT/locate/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "MiBiblioteca"
 
 slight -c $ROOT/manifest/main/slightfile.toml secret -k "INSTANCE" -v "manifest_1"
 slight -c $ROOT/resource/main/slightfile.toml secret -k "INSTANCE" -v "resource_1"
@@ -43,9 +43,9 @@ slight -c $ROOT/resolver/main/slightfile.toml secret -k "INSTANCE" -v "resolver_
 
 slight -c $ROOT/resolver/main/slightfile.toml secret -k "DHTINSTANCE" -v "localhost:8004"
 
-slight -c $ROOT/register/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
-slight -c $ROOT/manifest/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
-slight -c $ROOT/resource/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "storage_1"
+slight -c $ROOT/register/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "MiBiblioteca"
+slight -c $ROOT/manifest/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "MiBiblioteca"
+slight -c $ROOT/resource/main/slightfile.toml secret -k "STORAGEINSTANCE" -v "MiBiblioteca"
 
 slight -c $ROOT/manifestverifier/main/slightfile.toml secret -k "MANIFESTINSTANCE" -v "manifest_1"
 

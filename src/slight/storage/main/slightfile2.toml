@@ -2,21 +2,20 @@ specversion = "0.2"
 
 [[secret_settings]]
 name = "INSTANCE"
-value = "oNqx46kmeQ9hn"
+value = "DYKHx2EDuDJL6BJtnYordrdeSi-DgIqQXWA"
 
 [[capability]]
 resource = "keyvalue.filesystem"
-name = "storage_2"
+name = "ServicioPublicacionesUNAV"
 
 [[capability]]
 resource = "messaging.mosquitto"
 name = "messages"
 
 [capability.configs]
-MOSQUITTO_PORT = "1883"
 MOSQUITTO_HOST = "localhost"
+MOSQUITTO_PORT = "1883"
 
 [[capability]]
 resource = "configs.usersecrets"
 name = "config-store"
-
